@@ -22,8 +22,8 @@ jobs:
     - name: Install dependencies
       run: dotnet restore
       
-    - name: Build
-      run: dotnet build BlazorGrid --configuration Release --no-restore
+    - name: Pack
+      run: dotnet pack BlazorGrid --configuration Release --no-restore
       
     - name: Test
       run: dotnet test BlazorGrid.Tests --no-restore --verbosity normal
@@ -32,4 +32,4 @@ jobs:
       uses: rohith/publish-nuget@v2.4.0
       with:
         # Filepath of the project to be packaged, relative to root of repository
-        PROJECT_FILE_PATH: 'BlazorGrid/bin/Release/netstandard2.1'
+        PROJECT_FILE_PATH: 'BlazorGrid/BlazorGrid/BlazorGrid/bin/Release/netstandard2.1'
