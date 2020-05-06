@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "hWP3MOawcA0EdKGUSFqlUYfqrqq4EfDXMjqoo238VWZK/03VLdqA9bIJax2nXkHZiCpx4CAbQVeIO/QnSBiXTQ==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Majid\\Documents\\Repos\\BlazorGrid\\BlazorGrid.Abstractions\\BlazorGrid.Abstractions.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Majid\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
+    "C:\\Users\\Majid\\.nuget\\packages\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}
