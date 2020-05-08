@@ -2,71 +2,73 @@
 <CascadingValue Value="Instance" IsFixed="true">
     @ChildContent
 </CascadingValue>
-<div class="data-grid grid-hover" style="grid-template-columns: @GridColumns">
-    <header class="grid-row grid-header">
-        @foreach (var c in Columns) {
-            var prop = c.SortablePropertyName;
-            var sorted = OrderByPropertyName != null && prop == OrderByPropertyName;
-            <div @onclick="_ => TryApplySorting(prop)" class="@c.CssClass @(prop == null ? " " : " sortable") @(sorted ? "sorted" : "" )">
-                @if (!c.AlignRight) {
-                    @c.Caption
-                }
-                @if(prop != null) {
-                    <i class="fa fa-sort-alpha-@(OrderByDescending ? "desc" : "asc") @(c.AlignRight ? "mr-2" : "ml-2") sorted-indicator @(sorted ? "" : "invisible")"></i>
-                }
-                @if (c.AlignRight) {
-                    @c.Caption
-                }
-            </div>
-        }
-    </header>
-    @if(Rows == null)
-    {
-        <div style="grid-column: span @Columns.Count()">
-            <div class="empty">
-                <div class="empty-title">
-                    <h2 class="loading"></h2>
+<div class="data-grid grid-hover">
+    <div class="grid-scrollview" style="grid-template-columns: @GridColumns">
+        <header class="grid-row grid-header">
+            @foreach (var c in Columns) {
+                var prop = c.SortablePropertyName;
+                var sorted = OrderByPropertyName != null && prop == OrderByPropertyName;
+                <div @onclick="_ => TryApplySorting(prop)" class="@c.CssClass @(prop == null ? " " : " sortable") @(sorted ? "sorted" : "" )">
+                    @if (!c.AlignRight) {
+                        @c.Caption
+                    }
+                    @if(prop != null) {
+                        <i class="fa fa-sort-alpha-@(OrderByDescending ? "desc" : "asc") @(c.AlignRight ? "mr-2" : "ml-2") sorted-indicator @(sorted ? "" : "invisible")"></i>
+                    }
+                    @if (c.AlignRight) {
+                        @c.Caption
+                    }
                 </div>
-                <div class="empty-subtitle">Loading</div>
-            </div>
-        </div>
-    }
-    else if(Rows.Count == 0)
-    {
-        <div style="grid-column: span @Columns.Count()">
-            <div class="empty">
-                <h5 class="empty-title">Keine Daten</h5>
-                @if(string.IsNullOrEmpty(QueryDebounced))
-                {
-                    <p class="empty-subtitle">In dieser Ansicht sind keine Daten vorhanden</p>
-                }
-                else
-                {
-                    <p class="empty-subtitle">Die Suche hat keine Ergebnisse zurückgegeben</p>
-                }
-            </div>
-        </div>
-    }
-    else
-    {
-        for (int i = 0; i < Rows.Count; i++)
+            }
+        </header>
+        @if(Rows == null)
         {
-            var index = i;
-            var r = Rows.ElementAt(i);
-            var clickable = OnClick.HasDelegate || href != null;
-            <div class="grid-row @(clickable ? "clickable" : "")" @onclick="_ => OnRowClicked(r, index)">
-                @foreach (var c in Columns) {
-                    <div class="@c.CssClass">@c.ChildContent(r)</div>
-                }
+            <div style="grid-column: span @Columns.Count()">
+                <div class="empty">
+                    <div class="empty-title">
+                        <h2 class="loading"></h2>
+                    </div>
+                    <div class="empty-subtitle">Loading</div>
+                </div>
             </div>
         }
-        <div style="grid-column: span @Columns.Count()">
-            <div class="empty pt-3">
-                <div class="empty-subtitle">Zeige @Rows.Count von @TotalCount Ergebnissen</div>
-                @if(Rows.Count < TotalCount){
-                    <button disabled="@IsLoadingMore" class="btn btn-secondary @(IsLoadingMore ? "loading" : "")" @onclick="() => LoadMoreAsync()">Mehr laden</button>
-                }
+        else if(Rows.Count == 0)
+        {
+            <div style="grid-column: span @Columns.Count()">
+                <div class="empty">
+                    <h5 class="empty-title">Keine Daten</h5>
+                    @if(string.IsNullOrEmpty(QueryDebounced))
+                    {
+                        <p class="empty-subtitle">In dieser Ansicht sind keine Daten vorhanden</p>
+                    }
+                    else
+                    {
+                        <p class="empty-subtitle">Die Suche hat keine Ergebnisse zurückgegeben</p>
+                    }
+                </div>
             </div>
-        </div>
-    }
+        }
+        else
+        {
+            for (int i = 0; i < Rows.Count; i++)
+            {
+                var index = i;
+                var r = Rows.ElementAt(i);
+                var clickable = OnClick.HasDelegate || href != null;
+                <div class="grid-row @(clickable ? "clickable" : "")" @onclick="_ => OnRowClicked(r, index)">
+                    @foreach (var c in Columns) {
+                        <div class="@c.CssClass">@c.ChildContent(r)</div>
+                    }
+                </div>
+            }
+            <div style="grid-column: span @Columns.Count()">
+                <div class="empty pt-3">
+                    <div class="empty-subtitle">Zeige @Rows.Count von @TotalCount Ergebnissen</div>
+                    @if(Rows.Count < TotalCount){
+                        <button disabled="@IsLoadingMore" class="btn btn-secondary @(IsLoadingMore ? "loading" : "")" @onclick="() => LoadMoreAsync()">Mehr laden</button>
+                    }
+                </div>
+            </div>
+        }
+    </div>
 </div>

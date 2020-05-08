@@ -1,9 +1,0 @@
-C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid.Abstractions\bin\Release\netstandard2.0\BlazorGrid.Abstractions.deps.json
-C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid.Abstractions\bin\Release\netstandard2.0\BlazorGrid.Abstractions.dll
-C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid.Abstractions\bin\Release\netstandard2.0\BlazorGrid.Abstractions.pdb
-C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid.Abstractions\obj\Release\netstandard2.0\BlazorGrid.Abstractions.csprojAssemblyReference.cache
-C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid.Abstractions\obj\Release\netstandard2.0\BlazorGrid.Abstractions.csproj.CoreCompileInputs.cache
-C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid.Abstractions\obj\Release\netstandard2.0\BlazorGrid.Abstractions.AssemblyInfoInputs.cache
-C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid.Abstractions\obj\Release\netstandard2.0\BlazorGrid.Abstractions.AssemblyInfo.cs
-C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid.Abstractions\obj\Release\netstandard2.0\BlazorGrid.Abstractions.dll
-C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid.Abstractions\obj\Release\netstandard2.0\BlazorGrid.Abstractions.pdb

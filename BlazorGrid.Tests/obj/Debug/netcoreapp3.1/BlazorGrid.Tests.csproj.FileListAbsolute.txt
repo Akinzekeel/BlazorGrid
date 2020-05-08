@@ -98,7 +98,6 @@ C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid.Tests\bin\Debug\netcoreapp3
 C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid.Tests\bin\Debug\netcoreapp3.1\BlazorGrid.Abstractions.dll
 C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid.Tests\bin\Debug\netcoreapp3.1\BlazorGrid.dll
 C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid.Tests\bin\Debug\netcoreapp3.1\BlazorGrid.pdb
-C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid.Tests\bin\Debug\netcoreapp3.1\BlazorGrid.Abstractions.pdb
 C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid.Tests\obj\Debug\netcoreapp3.1\BlazorGrid.Tests.csprojAssemblyReference.cache
 C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid.Tests\obj\Debug\netcoreapp3.1\BlazorGrid.Tests.csproj.CoreCompileInputs.cache
 C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid.Tests\obj\Debug\netcoreapp3.1\BlazorGrid.Tests.AssemblyInfoInputs.cache
@@ -107,3 +106,5 @@ C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid.Tests\obj\Debug\netcoreapp3
 C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid.Tests\obj\Debug\netcoreapp3.1\BlazorGrid.Tests.dll
 C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid.Tests\obj\Debug\netcoreapp3.1\BlazorGrid.Tests.pdb
 C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid.Tests\obj\Debug\netcoreapp3.1\BlazorGrid.Tests.genruntimeconfig.cache
+C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid.Tests\bin\Debug\netcoreapp3.1\Castle.Core.dll
+C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid.Tests\bin\Debug\netcoreapp3.1\Moq.dll
