@@ -22,11 +22,11 @@ jobs:
     - name: Install dependencies
       run: dotnet restore
       
-    - name: Pack
-      run: dotnet pack BlazorGrid --configuration Release --no-restore
-      
     - name: Test
       run: dotnet test BlazorGrid.Tests --no-restore --verbosity normal
+      
+    - name: Pack
+      run: dotnet pack BlazorGrid --configuration Release --no-restore
     
     - name: Publish to NuGet
-      run: dotnet nuget push /home/runner/work/BlazorGrid/BlazorGrid/BlazorGrid/bin/Release/*.nupkg -k ${{ secrets.NugetApiKey }} -s https://api.nuget.org/v3/index.json
+      run: dotnet nuget push "bin/Release/BlazorGrid.1.0.0.nupkg" --source "github" -k {{ secrets.NugetApiKey }}
