@@ -5,7 +5,7 @@
     <RazorLangVersion>3.0</RazorLangVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>Akinzekeel.BlazorGrid</PackageId>
-    <Version>0.1.0</Version>
+    <Version>0.1.1</Version>
     <Authors>Majid Iqbal</Authors>
     <Company />
     <Description>A light weight data grid component for Blazor, focused on remote data. Supports filtering, sorting, paging &amp; smart refresh</Description>
