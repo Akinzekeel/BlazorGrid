@@ -1,3 +1,5 @@
+![.NET Core](https://github.com/Akinzekeel/BlazorGrid/workflows/.NET%20Core/badge.svg)
+
 # BlazorGrid
 Coming from jQuery.DataTables to Blazor, I felt that wrapping the entire JavaScript library probably wasn't the best approach. The aforementioned library also included loads of features which I never used yet were always downloaded to the clients regardless.
 
