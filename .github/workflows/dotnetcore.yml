@@ -27,6 +27,6 @@ jobs:
     - name: Publish NuGet
       uses: rohith/publish-nuget@v2.4.0
       with:
-          PROJECT_FILE_PATH: 'bin/Release/*.nupkg'
+          PROJECT_FILE_PATH: 'BlazorGrid/bin/Release/*.nupkg'
           PACKAGE_NAME: 'Akinzekeel.BlazorGrid'
           NUGET_KEY: '{{ secrets.NugetApiKey }}'
