@@ -60,10 +60,10 @@
       }
     },
     "C:\\Users\\Majid\\Documents\\Repos\\BlazorGrid\\BlazorGrid\\BlazorGrid.csproj": {
-      "version": "1.0.0",
+      "version": "0.1.0",
       "restore": {
         "projectUniqueName": "C:\\Users\\Majid\\Documents\\Repos\\BlazorGrid\\BlazorGrid\\BlazorGrid.csproj",
-        "projectName": "BlazorGrid",
+        "projectName": "Akinzekeel.BlazorGrid",
         "projectPath": "C:\\Users\\Majid\\Documents\\Repos\\BlazorGrid\\BlazorGrid\\BlazorGrid.csproj",
         "packagesPath": "C:\\Users\\Majid\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\Majid\\Documents\\Repos\\BlazorGrid\\BlazorGrid\\obj\\",

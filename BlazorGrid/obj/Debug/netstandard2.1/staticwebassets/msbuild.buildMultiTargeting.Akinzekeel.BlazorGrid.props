@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\Akinzekeel.BlazorGrid.props" />
+</Project>

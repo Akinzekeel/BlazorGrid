@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>BlazorGrid</id>
+    <version>1.0.0</version>
+    <authors>BlazorGrid</authors>
+    <owners>BlazorGrid</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Package Description</description>
+    <dependencies>
+      <group targetFramework=".NETStandard2.1">
+        <dependency id="BlazorGrid.Abstractions" version="1.0.0" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.AspNetCore.Components" version="3.1.3" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.AspNetCore.Components.Web" version="3.1.3" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid\bin\Debug\netstandard2.1\BlazorGrid.dll" target="lib\netstandard2.1\BlazorGrid.dll" />
+    <file src="C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid\obj\Debug\netstandard2.1\staticwebassets\msbuild.BlazorGrid.Microsoft.AspNetCore.StaticWebAssets.props" target="build\Microsoft.AspNetCore.StaticWebAssets.props" />
+    <file src="C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid\obj\Debug\netstandard2.1\staticwebassets\msbuild.build.BlazorGrid.props" target="build\BlazorGrid.props" />
+    <file src="C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid\obj\Debug\netstandard2.1\staticwebassets\msbuild.buildMultiTargeting.BlazorGrid.props" target="buildMultiTargeting\BlazorGrid.props" />
+    <file src="C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid\obj\Debug\netstandard2.1\staticwebassets\msbuild.buildTransitive.BlazorGrid.props" target="buildTransitive\BlazorGrid.props" />
+    <file src="C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid\wwwroot\styles.css" target="staticwebassets\styles.css" />
+  </files>
+</package>
