@@ -109,3 +109,5 @@ C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid.Tests\obj\Debug\netcoreapp3
 C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid.Tests\bin\Debug\netcoreapp3.1\Castle.Core.dll
 C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid.Tests\bin\Debug\netcoreapp3.1\Moq.dll
 C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid.Tests\bin\Debug\netcoreapp3.1\BlazorGrid.Abstractions.pdb
+C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid.Tests\bin\Debug\netcoreapp3.1\package-lock.json
+C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid.Tests\bin\Debug\netcoreapp3.1\package.json

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "Pd7QIxlV7PUoi4RPftZjKNJmDK2gNRxt86dKPp8reL6U0fOsFjamqi3VJDM8nOn3bWu3Au67cMso6TYofmJdzA==",
+  "dgSpecHash": "bkbfqvXifOc+e6IX1ZvUiJwQosv9YI9q50ubydqdfh6j63pt5XkTUddaLKJk58tZs7NxDu7UqTBb4mlK9pYUtQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\Majid\\Documents\\Repos\\BlazorGrid\\BlazorGrid.Tests\\BlazorGrid.Tests.csproj",
   "expectedPackageFiles": [
@@ -111,7 +111,8 @@
     "C:\\Users\\Majid\\.nuget\\packages\\system.xml.readerwriter\\4.3.0\\system.xml.readerwriter.4.3.0.nupkg.sha512",
     "C:\\Users\\Majid\\.nuget\\packages\\system.xml.xdocument\\4.3.0\\system.xml.xdocument.4.3.0.nupkg.sha512",
     "C:\\Users\\Majid\\.nuget\\packages\\system.xml.xmldocument\\4.3.0\\system.xml.xmldocument.4.3.0.nupkg.sha512",
-    "C:\\Users\\Majid\\.nuget\\packages\\akinzekeel.blazorgrid\\0.1.5-alpha\\akinzekeel.blazorgrid.0.1.5-alpha.nupkg.sha512"
+    "C:\\Users\\Majid\\.nuget\\packages\\akinzekeel.blazorgrid\\0.1.8-alpha\\akinzekeel.blazorgrid.0.1.8-alpha.nupkg.sha512",
+    "C:\\Users\\Majid\\.nuget\\packages\\akinzekeel.blazorgrid.abstractions\\0.1.7-alpha\\akinzekeel.blazorgrid.abstractions.0.1.7-alpha.nupkg.sha512"
   ],
   "logs": []
 }

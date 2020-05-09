@@ -16,22 +16,22 @@ namespace BlazorGrid.Providers
             this.http = http;
         }
 
-        public async Task<T> GetAsync<T>(string BaseUrl, string RowId)
+        public virtual async Task<T> GetAsync<T>(string BaseUrl, string RowId)
         {
             var url = GetRequestUrl(BaseUrl, RowId);
             var response = await http.GetAsync(url);
-            return await DeserializeAsync<T>(response);
+            return await DeserializeJsonAsync<T>(response);
         }
 
-        public async Task<DataPageResult<T>> GetAsync<T>(string BaseUrl, int Offset, int Length, string OrderBy, bool OrderByDescending, string SearchQuery)
+        public virtual async Task<DataPageResult<T>> GetAsync<T>(string BaseUrl, int Offset, int Length, string OrderBy, bool OrderByDescending, string SearchQuery)
         {
             var url = GetRequestUrl(BaseUrl, Offset, Length, OrderBy, OrderByDescending, SearchQuery);
             var response = await http.GetAsync(url);
-            var result = await DeserializeAsync<DataPageResult<T>>(response);
+            var result = await DeserializeJsonAsync<DataPageResult<T>>(response);
             return result;
         }
 
-        private async Task<T> DeserializeAsync<T>(HttpResponseMessage response)
+        protected async Task<T> DeserializeJsonAsync<T>(HttpResponseMessage response)
         {
             if (!response.IsSuccessStatusCode)
             {

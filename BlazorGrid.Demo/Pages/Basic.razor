@@ -6,11 +6,23 @@
 <p>This is a basic example to show what the grid looks like with minimal configuration.</p>
 <p>This grid will pull live information from openexchangerates.org using a custom grid data provider.</p>
 
-<BlazorGrid TRow="ExchangeRate" SourceUrl="https://api.exchangeratesapi.io/latest">
-    <GridCol Caption="Currency" TRow="ExchangeRate">
+<BlazorGrid TRow="Employee" SourceUrl="Data/employees.json">
+    <GridCol Caption="#" FitToContent="true" TRow="Employee">
         @context.Id
     </GridCol>
-    <GridCol Caption="Rate" TRow="ExchangeRate">
-        @context.Rate
+    <GridCol Caption="#" FitToContent="true" TRow="Employee">
+        @if(!string.IsNullOrEmpty(context.Avatar))
+        {
+            <img src="@context.Avatar" style="width: 32px; height: 32px;" />
+        }
+    </GridCol>
+    <GridCol Caption="First name" TRow="Employee">
+        @context.FirstName
+    </GridCol>
+    <GridCol Caption="Last name" TRow="Employee">
+        @context.LastName
+    </GridCol>
+    <GridCol Caption="Email address" TRow="Employee">
+        <a href="mailto:@context.Email">@context.Email</a>
     </GridCol>
 </BlazorGrid>

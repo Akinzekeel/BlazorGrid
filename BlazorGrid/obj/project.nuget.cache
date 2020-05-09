@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "zEdIjDuqkxt7Ukbj0JxiCx+cEU6cUlkXym0w08//nUuhuVTiTRPIkEQDtR3hQsmj7r9RRrKeWFwocEA1Kz/A2w==",
+  "dgSpecHash": "Fx/Df7/N/HDCJ+V1G+8ru9CTtkh4HfhfGBOt2MEGfY+CFa7sIZ9F760wjVJs+AuuXVJyh7yg0nnJqbaxI+7mGA==",
   "success": true,
   "projectFilePath": "C:\\Users\\Majid\\Documents\\Repos\\BlazorGrid\\BlazorGrid\\BlazorGrid.csproj",
   "expectedPackageFiles": [
@@ -24,7 +24,8 @@
     "C:\\Users\\Majid\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\4.7.1\\system.runtime.compilerservices.unsafe.4.7.1.nupkg.sha512",
     "C:\\Users\\Majid\\.nuget\\packages\\system.text.encodings.web\\4.7.0\\system.text.encodings.web.4.7.0.nupkg.sha512",
     "C:\\Users\\Majid\\.nuget\\packages\\system.text.json\\4.7.1\\system.text.json.4.7.1.nupkg.sha512",
-    "C:\\Users\\Majid\\.nuget\\packages\\system.threading.tasks.extensions\\4.5.2\\system.threading.tasks.extensions.4.5.2.nupkg.sha512"
+    "C:\\Users\\Majid\\.nuget\\packages\\system.threading.tasks.extensions\\4.5.2\\system.threading.tasks.extensions.4.5.2.nupkg.sha512",
+    "C:\\Users\\Majid\\.nuget\\packages\\akinzekeel.blazorgrid.abstractions\\0.1.7-alpha\\akinzekeel.blazorgrid.abstractions.0.1.7-alpha.nupkg.sha512"
   ],
   "logs": []
 }
