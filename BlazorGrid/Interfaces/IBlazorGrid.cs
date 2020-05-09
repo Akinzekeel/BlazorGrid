@@ -2,6 +2,6 @@
 {
     public interface IBlazorGrid<TRow>
     {
-        void Add(IColumn<TRow> Column);
+        void Add(IGridCol<TRow> Column);
     }
 }

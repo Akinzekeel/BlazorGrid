@@ -1,3 +1,5 @@
+using System.Data;
+using System.ComponentModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +13,9 @@ using BlazorGrid.Abstractions.Models;
 
 namespace BlazorGrid
 {
-    public partial class BlazorGrid<TRow> : IBlazorGrid<TRow> where TRow : IRow
+    public partial class BlazorGrid<TRow> : IBlazorGrid<TRow> where TRow : IGridRow
     {
-        [Inject] public IDataProvider Provider { get; set; }
+        [Inject] public IGridProvider Provider { get; set; }
         [Inject] public NavigationManager Nav { get; set; }
         private IBlazorGrid<TRow> Instance => this;
         private bool IsLoadingMore { get; set; }
@@ -61,7 +63,7 @@ namespace BlazorGrid
         private string OrderByPropertyName { get; set; }
         private bool OrderByDescending { get; set; }
         private int TotalCount { get; set; }
-        private IList<IColumn<TRow>> Columns { get; set; } = new List<IColumn<TRow>>();
+        private IList<IGridCol<TRow>> Columns { get; set; } = new List<IGridCol<TRow>>();
         private Exception loadingError { get; set; }
 
         private bool ParametersSetCalled;
@@ -97,7 +99,7 @@ namespace BlazorGrid
 
             try
             {
-                var result = await Provider.GetAsync<DataPageResult<TRow>>(PagedSourceUrl());
+                var result = await Provider.GetAsync<TRow>(PagedSourceUrl());
 
                 TotalCount = result.TotalCount;
 
@@ -121,7 +123,7 @@ namespace BlazorGrid
             }
         }
 
-        public void Add(IColumn<TRow> Column)
+        public void Add(IGridCol<TRow> Column)
         {
             Columns.Add(Column);
         }
@@ -149,57 +151,70 @@ namespace BlazorGrid
             return LoadAsync(true);
         }
 
+private bool IsRefreshing;
         public async Task RefreshAsync()
         {
+            if (IsRefreshing) return;
+
             // Silently refresh the page that contains the row which
             // had been clicked
-            if (LastClickedRowIndex > -1)
+            IsRefreshing = true;
+
+            try
             {
-                var row = Rows[LastClickedRowIndex];
-                var url = SourceUrl.TrimEnd('/') + '/' + row.RowId + "?More=false";
-                var result = await Provider.GetAsync<TRow>(url);
-
-                if (result == null)
+                if (LastClickedRowIndex > -1)
                 {
-                    Rows.Remove(row);
-                    TotalCount--;
-                }
-                else
-                {
-                    Rows[LastClickedRowIndex] = result;
-                }
+                    var row = Rows[LastClickedRowIndex];
+                    var url = SourceUrl.TrimEnd('/') + '/' + row.RowId + "?More=false";
+                    var result = await Provider.GetAsync<TRow>(url);
+                    var updatedRow = result.Data.FirstOrDefault();
 
-                LastClickedRowIndex = -1;
-            }
-            else
-            {
-                var url = GetSourceFor(0, SourceUrl);
-                var result = await Provider.GetAsync<DataPageResult<TRow>>(url);
-                var newRow = result.Data.FirstOrDefault();
-
-                if (newRow != null)
-                {
-                    // A row has been added
-                    if (!Rows.Any(x => x.RowId == newRow.RowId))
+                    if (updatedRow == null)
                     {
-                        Rows.Insert(0, newRow);
+                        Rows.Remove(row);
                     }
                     else
                     {
-                        // The total count is unchanged but the row might have been
-                        // updated. Find & update it in our cache as well
-                        var i = Rows.FindIndex(0, Rows.Count, x => x.RowId == newRow.RowId);
-                        Rows[i] = newRow;
+                        Rows[LastClickedRowIndex] = updatedRow;
                     }
+
+                    LastClickedRowIndex = -1;
+                    TotalCount = result.TotalCount;
                 }
                 else
                 {
-                    // Looks like our row has been deleted
-                    Rows.RemoveAt(0);
-                }
-            }
+                    var url = GetSourceFor(0, SourceUrl);
+                    var result = await Provider.GetAsync<TRow>(url);
+                    var newRow = result.Data.FirstOrDefault();
 
-            await InvokeAsync(StateHasChanged);
+                    if (newRow != null)
+                    {
+                        // A row has been added
+                        if (!Rows.Any(x => x.RowId == newRow.RowId))
+                        {
+                            Rows.Insert(0, newRow);
+                        }
+                        else
+                        {
+                            // The total count is unchanged but the row might have been
+                            // updated. Find & update it in our cache as well
+                            var i = Rows.FindIndex(0, Rows.Count, x => x.RowId == newRow.RowId);
+                            Rows[i] = newRow;
+                        }
+                    }
+                    else
+                    {
+                        // Looks like our row has been deleted
+                        Rows.RemoveAt(0);
+                    }
+                }
+
+                await InvokeAsync(StateHasChanged);
+            }
+            finally
+            {
+                IsRefreshing = false;
+            }
         }
 
         private string GridColumns

@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>Akinzekeel.BlazorGrid.Abstractions</PackageId>
+    <Version>0.1.3</Version>
+    <Authors>Majid Iqbal</Authors>
+    <Company />
+    <Description>Common models &amp; interfaces for BlazorGrid</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/Akinzekeel/BlazorGrid</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Akinzekeel/BlazorGrid.Abstractions</RepositoryUrl>
+    <PackageReleaseNotes>Preview</PackageReleaseNotes>
+  </PropertyGroup>
+
+</Project>

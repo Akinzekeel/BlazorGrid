@@ -4,11 +4,11 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using BlazorGrid.Abstractions.Models;
-using BlazorGrid.Interfaces;
+using BlazorGrid.Abstractions.Interfaces;
 
 namespace BlazorGrid.Providers
 {
-    public class DefaultHttpProvider : IDataProvider
+    public class DefaultHttpProvider : IGridProvider
     {
         private readonly HttpClient http;
 
@@ -17,7 +17,7 @@ namespace BlazorGrid.Providers
             this.http = http;
         }
 
-        public async Task<T> GetAsync<T>(string requestUrl)
+        public async Task<DataPageResult<T>> GetAsync<T>(string requestUrl)
         {
             var result = await http.GetAsync(requestUrl);
 
@@ -34,7 +34,12 @@ namespace BlazorGrid.Providers
             }
 
             var content = await result.Content.ReadAsStringAsync();
-            return System.Text.Json.JsonSerializer.Deserialize<T>(content);
+            return System.Text.Json.JsonSerializer.Deserialize<DataPageResult<T>>(content);
+        }
+
+        public string GetRequestUrl(string BaseUrl, string RowId)
+        {
+            return BaseUrl.TrimEnd('/') + '/' + RowId + "?More=false";
         }
 
         public string GetRequestUrl(string BaseUrl, int Offset, int Length, string OrderBy, bool OrderByDescending, string SearchQuery)

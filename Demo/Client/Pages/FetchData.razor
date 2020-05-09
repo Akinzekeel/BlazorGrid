@@ -6,41 +6,17 @@
 
 <p>This component demonstrates fetching data from the server.</p>
 
-@if (forecasts == null)
-{
-    <p><em>Loading...</em></p>
-}
-else
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Temp. (C)</th>
-                <th>Temp. (F)</th>
-                <th>Summary</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var forecast in forecasts)
-            {
-                <tr>
-                    <td>@forecast.Date.ToShortDateString()</td>
-                    <td>@forecast.TemperatureC</td>
-                    <td>@forecast.TemperatureF</td>
-                    <td>@forecast.Summary</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-
-@code {
-    private WeatherForecast[] forecasts;
-
-    protected override async Task OnInitializedAsync()
-    {
-        forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("WeatherForecast");
-    }
-
-}
+<BlazorGrid TRow="WeatherForecast" SourceUrl="WeatherForecast">
+    <GridCol Caption="Date" TRow="WeatherForecast">
+        @context.Date.ToShortDateString()
+    </GridCol>
+    <GridCol Caption="Temp. (C)" TRow="WeatherForecast">
+        @context.TemperatureC
+    </GridCol>
+    <GridCol Caption="Temp. (F)" TRow="WeatherForecast">
+        @context.TemperatureF
+    </GridCol>
+    <GridCol AlignRight="true" Caption="Summary" TRow="WeatherForecast">
+        @context.Summary
+    </GridCol>
+</BlazorGrid>

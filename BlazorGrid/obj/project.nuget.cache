@@ -1,10 +1,9 @@
 {
   "version": 2,
-  "dgSpecHash": "al4coAtefiXs+9XZxKBK0jMSTdtLIKGnzguek6Pqwrov4hIaGUxCpXupbSc0nFvs5uxK+T409c0BhCzZUbJvWw==",
+  "dgSpecHash": "k6g/HDAsIJd3iS7sel30cju2tO02uarcPPU0BqQ8bPvrWq7p3PN41udtCfpo+8gNt3fvP/sPUHP9C5T5fmgtdg==",
   "success": true,
   "projectFilePath": "C:\\Users\\Majid\\Documents\\Repos\\BlazorGrid\\BlazorGrid\\BlazorGrid.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\Majid\\.nuget\\packages\\akinzekeel.blazorgrid.abstractions\\0.1.0\\akinzekeel.blazorgrid.abstractions.0.1.0.nupkg.sha512",
     "C:\\Users\\Majid\\.nuget\\packages\\microsoft.aspnetcore.authorization\\3.1.3\\microsoft.aspnetcore.authorization.3.1.3.nupkg.sha512",
     "C:\\Users\\Majid\\.nuget\\packages\\microsoft.aspnetcore.components\\3.1.3\\microsoft.aspnetcore.components.3.1.3.nupkg.sha512",
     "C:\\Users\\Majid\\.nuget\\packages\\microsoft.aspnetcore.components.analyzers\\3.1.3\\microsoft.aspnetcore.components.analyzers.3.1.3.nupkg.sha512",

@@ -2,7 +2,7 @@
 
 namespace BlazorGrid.Interfaces
 {
-    public interface IColumn<TRow>
+    public interface IGridCol<TRow>
     {
         string Caption { get; }
         RenderFragment<TRow> ChildContent { get; }

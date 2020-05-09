@@ -19,3 +19,8 @@ C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid\obj\Debug\netstandard2.1\st
 C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid\obj\Debug\netstandard2.1\staticwebassets\BlazorGrid.StaticWebAssets.xml
 C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid\obj\Debug\netstandard2.1\BlazorGrid.dll
 C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid\obj\Debug\netstandard2.1\BlazorGrid.pdb
+C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid\obj\Debug\netstandard2.1\RazorDeclaration\GridCol.razor.g.cs
+C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid\obj\Debug\netstandard2.1\Razor\GridCol.razor.g.cs
+C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid\bin\Debug\netstandard2.1\BlazorGrid.Abstractions.dll
+C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid\bin\Debug\netstandard2.1\BlazorGrid.Abstractions.pdb
+C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid\obj\Debug\netstandard2.1\BlazorGrid.csproj.CopyComplete

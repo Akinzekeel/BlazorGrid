@@ -1,10 +1,13 @@
-﻿using System;
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System;
 using System.Collections.Generic;
 using System.Text;
+using BlazorGrid.Abstractions.Interfaces;
 
 namespace Demo.Shared
 {
-    public class WeatherForecast
+    public class WeatherForecast : IRow
     {
         public DateTime Date { get; set; }
 
@@ -13,5 +16,7 @@ namespace Demo.Shared
         public string Summary { get; set; }
 
         public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+
+        public string RowId => Date.ToString();
     }
 }

@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "ntwVHgVvI0IobFtXoJ4ud0uW0S0JWGqOHmduw1p27uzIOHpwhfxmaQYeChUH/H4cW8bfQTvi2c1GM+nm0DkyOA==",
+  "dgSpecHash": "xVicKCMVnTgJvh0j+n0hSj4T3AXAUk1HN7qrxoli8dTkWELQ2ZUxDhJqzXSQ2gxnqeDNpPHHAGcbGEO0xHR/nw==",
   "success": true,
   "projectFilePath": "C:\\Users\\Majid\\Documents\\Repos\\BlazorGrid\\Demo\\Shared\\Demo.Shared.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\Majid\\.nuget\\packages\\akinzekeel.blazorgrid.abstractions\\0.1.0\\akinzekeel.blazorgrid.abstractions.0.1.0.nupkg.sha512"
+  ],
   "logs": []
 }

@@ -76,6 +76,13 @@ using Demo.Client.Shared;
 #line default
 #line hidden
 #nullable disable
+#nullable restore
+#line 10 "C:\Users\Majid\Documents\Repos\BlazorGrid\Demo\Client\_Imports.razor"
+using BlazorGrid;
+
+#line default
+#line hidden
+#nullable disable
     [Microsoft.AspNetCore.Components.RouteAttribute("/")]
     public partial class Index : Microsoft.AspNetCore.Components.ComponentBase
     {
