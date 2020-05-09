@@ -8,15 +8,17 @@ namespace BlazorGrid.Demo.Providers
 {
     public class CustomProvider : DefaultHttpProvider
     {
-        public CustomProvider(HttpClient http) : base(http) { }
+        private readonly HttpClient http;
+        public CustomProvider(HttpClient http) : base(http)
+        {
+            this.http = http;
+        }
 
         public override async Task<T> GetAsync<T>(string BaseUrl, string RowId)
         {
             var url = GetRequestUrl(BaseUrl, RowId);
             var response = await http.GetAsync(url);
-            var result = await DeserializeJsonAsync<T>(response);
-
-            return result.Data.FirstOrDefault(x => x.RowId == RowId);
+            return await DeserializeJsonAsync<T>(response);
         }
 
         public override async Task<DataPageResult<T>> GetAsync<T>(string BaseUrl, int Offset, int Length, string OrderBy, bool OrderByDescending, string SearchQuery)
@@ -28,7 +30,7 @@ namespace BlazorGrid.Demo.Providers
             var finalResult = new DataPageResult<T>
             {
                 TotalCount = result.TotalCount,
-                Data = result.Data.Skip(Offset).Take(Length)
+                Data = result.Data.Skip(Offset).Take(Length).ToList()
             };
 
             return finalResult;

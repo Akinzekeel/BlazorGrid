@@ -111,3 +111,17 @@ C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid.Tests\bin\Debug\netcoreapp3
 C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid.Tests\bin\Debug\netcoreapp3.1\BlazorGrid.Abstractions.pdb
 C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid.Tests\bin\Debug\netcoreapp3.1\package-lock.json
 C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid.Tests\bin\Debug\netcoreapp3.1\package.json
+C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid.Tests\bin\Debug\netcoreapp3.1\testhost.exe
+C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid.Tests\bin\Debug\netcoreapp3.1\AngleSharp.dll
+C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid.Tests\bin\Debug\netcoreapp3.1\AngleSharp.Css.dll
+C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid.Tests\bin\Debug\netcoreapp3.1\AngleSharp.Diffing.dll
+C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid.Tests\bin\Debug\netcoreapp3.1\AngleSharpWrappers.dll
+C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid.Tests\bin\Debug\netcoreapp3.1\Bunit.dll
+C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid.Tests\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Configuration.dll
+C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid.Tests\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Configuration.Abstractions.dll
+C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid.Tests\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Configuration.Binder.dll
+C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid.Tests\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Logging.dll
+C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid.Tests\bin\Debug\netcoreapp3.1\RichardSzalay.MockHttp.dll
+C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid.Tests\bin\Debug\netcoreapp3.1\xunit.abstractions.dll
+C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid.Tests\bin\Debug\netcoreapp3.1\xunit.assert.dll
+C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid.Tests\bin\Debug\netcoreapp3.1\xunit.core.dll

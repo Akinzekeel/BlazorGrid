@@ -2,7 +2,7 @@ using BlazorGrid.Abstractions;
 
 namespace BlazorGrid.Demo.Models
 {
-    public class ExchangeRate : IGridRow
+    public class Employee : IGridRow
     {
         public int Id { get; set; }
         public string FirstName { get; set; }
