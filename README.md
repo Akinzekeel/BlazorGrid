@@ -1,4 +1,4 @@
-![publish to nuget](https://github.com/Akinzekeel/BlazorGrid/workflows/publish%20to%20nuget/badge.svg)
+![NuGet package](https://github.com/Akinzekeel/BlazorGrid/workflows/Publish%20main%20project%20to%20NuGet/badge.svg)
 
 # BlazorGrid
 Coming from jQuery.DataTables to Blazor, I felt that wrapping the entire JavaScript library probably wasn't the best approach. The aforementioned library also included loads of features which I never used yet were always downloaded to the clients regardless.
