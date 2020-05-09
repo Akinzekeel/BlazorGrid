@@ -23,11 +23,11 @@ namespace BlazorGrid.Providers
             return await DeserializeJsonAsync<T>(response);
         }
 
-        public virtual async Task<DataPageResult<T>> GetAsync<T>(string BaseUrl, int Offset, int Length, string OrderBy, bool OrderByDescending, string SearchQuery)
+        public virtual async Task<BlazorGridResult<T>> GetAsync<T>(string BaseUrl, int Offset, int Length, string OrderBy, bool OrderByDescending, string SearchQuery)
         {
             var url = GetRequestUrl(BaseUrl, Offset, Length, OrderBy, OrderByDescending, SearchQuery);
             var response = await http.GetAsync(url);
-            var result = await DeserializeJsonAsync<DataPageResult<T>>(response);
+            var result = await DeserializeJsonAsync<BlazorGridResult<T>>(response);
             return result;
         }
 

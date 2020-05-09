@@ -2,7 +2,7 @@
 
 namespace BlazorGrid.Abstractions
 {
-    public class DataPageResult<T>
+    public class BlazorGridResult<T>
     {
         public int TotalCount { get; set; }
         public IReadOnlyList<T> Data { get; set; }
