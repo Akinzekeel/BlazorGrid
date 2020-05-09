@@ -13,5 +13,5 @@ jobs:
         id: publish_nuget
         uses: rohith/publish-nuget@v2
         with:
-          PROJECT_FILE_PATH: BlazorGrid/BlazorGrid.Abstractions.csproj
+          PROJECT_FILE_PATH: BlazorGrid.Abstractions/BlazorGrid.Abstractions.csproj
           NUGET_KEY: ${{secrets.NugetApiKey}}
