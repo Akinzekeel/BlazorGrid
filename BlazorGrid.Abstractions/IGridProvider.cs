@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using BlazorGrid.Abstractions.Models;
+using BlazorGrid.Abstractions;
 
 namespace BlazorGrid.Abstractions
 {

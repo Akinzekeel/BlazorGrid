@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using BlazorGrid.Interfaces;
+using BlazorGrid.Abstractions;
 using Demo.Client.Infrastructure;
 
 namespace Demo.Client

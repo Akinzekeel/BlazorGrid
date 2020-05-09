@@ -7,17 +7,15 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using BlazorGrid.Interfaces;
-using BlazorGrid.Abstractions.Interfaces;
+using BlazorGrid.Abstractions;
 using BlazorGrid.Helpers;
-using BlazorGrid.Abstractions.Models;
 
-namespace BlazorGrid
+namespace BlazorGrid.Components
 {
-    public partial class BlazorGrid<TRow> : IBlazorGrid<TRow> where TRow : IGridRow
+    public partial class BlazorGrid<TRow> where TRow : IGridRow
     {
         [Inject] public IGridProvider Provider { get; set; }
         [Inject] public NavigationManager Nav { get; set; }
-        private IBlazorGrid<TRow> Instance => this;
         private bool IsLoadingMore { get; set; }
         public const int DefaultPageSize = 25;
 
@@ -73,7 +71,7 @@ namespace BlazorGrid
             {
                 if (DefaultOrderBy != null)
                 {
-                    OrderByPropertyName = ExpressionHelper.GetPropertyName(DefaultOrderBy);
+                    OrderByPropertyName = Helpers.ExpressionHelper.GetPropertyName(DefaultOrderBy);
                     OrderByDescending = DefaultOrderByDescending;
                 }
 
@@ -123,7 +121,7 @@ namespace BlazorGrid
             }
         }
 
-        public void Add(IGridCol<TRow> Column)
+        internal void Add(IGridCol<TRow> Column)
         {
             Columns.Add(Column);
         }

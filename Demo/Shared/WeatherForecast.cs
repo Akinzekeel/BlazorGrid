@@ -3,11 +3,11 @@ using System.Runtime.CompilerServices;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using BlazorGrid.Abstractions.Interfaces;
+using BlazorGrid.Abstractions;
 
 namespace Demo.Shared
 {
-    public class WeatherForecast : IRow
+    public class WeatherForecast : IGridRow
     {
         public DateTime Date { get; set; }
 

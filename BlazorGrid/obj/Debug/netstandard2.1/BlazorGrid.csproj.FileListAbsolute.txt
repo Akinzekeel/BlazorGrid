@@ -4,13 +4,11 @@ C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid\bin\Debug\netstandard2.1\Bl
 C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid\obj\Debug\netstandard2.1\BlazorGrid.csprojAssemblyReference.cache
 C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid\obj\Debug\netstandard2.1\BlazorGrid.csproj.CoreCompileInputs.cache
 C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid\obj\Debug\netstandard2.1\BlazorGrid.RazorComponent.input.cache
-C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid\obj\Debug\netstandard2.1\RazorDeclaration\BlazorGrid.razor.g.cs
 C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid\obj\Debug\netstandard2.1\RazorDeclaration\_Imports.razor.g.cs
 C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid\obj\Debug\netstandard2.1\RazorDeclaration\BlazorGrid.dll
 C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid\obj\Debug\netstandard2.1\BlazorGrid.TagHelpers.input.cache
 C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid\obj\Debug\netstandard2.1\BlazorGrid.TagHelpers.output.cache
 C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid\obj\Debug\netstandard2.1\BlazorGrid.RazorCoreGenerate.cache
-C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid\obj\Debug\netstandard2.1\Razor\BlazorGrid.razor.g.cs
 C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid\obj\Debug\netstandard2.1\Razor\_Imports.razor.g.cs
 C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid\obj\Debug\netstandard2.1\BlazorGrid.AssemblyInfoInputs.cache
 C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid\obj\Debug\netstandard2.1\BlazorGrid.AssemblyInfo.cs
@@ -19,5 +17,10 @@ C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid\obj\Debug\netstandard2.1\st
 C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid\obj\Debug\netstandard2.1\staticwebassets\BlazorGrid.StaticWebAssets.xml
 C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid\obj\Debug\netstandard2.1\BlazorGrid.dll
 C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid\obj\Debug\netstandard2.1\BlazorGrid.pdb
-C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid\obj\Debug\netstandard2.1\RazorDeclaration\GridCol.razor.g.cs
-C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid\obj\Debug\netstandard2.1\Razor\GridCol.razor.g.cs
+C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid\obj\Debug\netstandard2.1\RazorDeclaration\Components\BlazorGrid.razor.g.cs
+C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid\obj\Debug\netstandard2.1\RazorDeclaration\Components\GridCol.razor.g.cs
+C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid\bin\Debug\netstandard2.1\BlazorGrid.Abstractions.dll
+C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid\bin\Debug\netstandard2.1\BlazorGrid.Abstractions.pdb
+C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid\obj\Debug\netstandard2.1\Razor\Components\BlazorGrid.razor.g.cs
+C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid\obj\Debug\netstandard2.1\Razor\Components\GridCol.razor.g.cs
+C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid\obj\Debug\netstandard2.1\BlazorGrid.csproj.CopyComplete

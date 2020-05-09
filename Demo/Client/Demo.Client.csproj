@@ -15,6 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Shared\Demo.Shared.csproj" />
     <ProjectReference Include="..\..\BlazorGrid\BlazorGrid.csproj" />
+    <ProjectReference Include="..\..\BlazorGrid.Abstractions\BlazorGrid.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

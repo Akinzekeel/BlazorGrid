@@ -1,4 +1,4 @@
-using BlazorGrid.Abstractions.Interfaces;
+using BlazorGrid.Abstractions;
 using BlazorGrid.Providers;
 using Microsoft.Extensions.DependencyInjection;
 

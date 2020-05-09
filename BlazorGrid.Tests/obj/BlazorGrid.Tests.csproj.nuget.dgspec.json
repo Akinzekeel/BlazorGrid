@@ -4,6 +4,58 @@
     "C:\\Users\\Majid\\Documents\\Repos\\BlazorGrid\\BlazorGrid.Tests\\BlazorGrid.Tests.csproj": {}
   },
   "projects": {
+    "C:\\Users\\Majid\\Documents\\Repos\\BlazorGrid\\BlazorGrid.Abstractions\\BlazorGrid.Abstractions.csproj": {
+      "version": "0.1.6-alpha",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Majid\\Documents\\Repos\\BlazorGrid\\BlazorGrid.Abstractions\\BlazorGrid.Abstractions.csproj",
+        "projectName": "Akinzekeel.BlazorGrid.Abstractions",
+        "projectPath": "C:\\Users\\Majid\\Documents\\Repos\\BlazorGrid\\BlazorGrid.Abstractions\\BlazorGrid.Abstractions.csproj",
+        "packagesPath": "C:\\Users\\Majid\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Majid\\Documents\\Repos\\BlazorGrid\\BlazorGrid.Abstractions\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Majid\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netstandard2.1"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netstandard2.1": {
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netstandard2.1": {
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "NETStandard.Library": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.201\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
     "C:\\Users\\Majid\\Documents\\Repos\\BlazorGrid\\BlazorGrid.Tests\\BlazorGrid.Tests.csproj": {
       "version": "1.0.0",
       "restore": {
@@ -104,7 +156,11 @@
         },
         "frameworks": {
           "netstandard2.1": {
-            "projectReferences": {}
+            "projectReferences": {
+              "C:\\Users\\Majid\\Documents\\Repos\\BlazorGrid\\BlazorGrid.Abstractions\\BlazorGrid.Abstractions.csproj": {
+                "projectPath": "C:\\Users\\Majid\\Documents\\Repos\\BlazorGrid\\BlazorGrid.Abstractions\\BlazorGrid.Abstractions.csproj"
+              }
+            }
           }
         },
         "warningProperties": {
@@ -116,10 +172,6 @@
       "frameworks": {
         "netstandard2.1": {
           "dependencies": {
-            "Akinzekeel.BlazorGrid.Abstractions": {
-              "target": "Package",
-              "version": "[0.1.4-alpha, )"
-            },
             "Microsoft.AspNetCore.Components": {
               "target": "Package",
               "version": "[3.1.3, )"

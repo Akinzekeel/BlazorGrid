@@ -1,10 +1,9 @@
 {
   "version": 2,
-  "dgSpecHash": "/7D3V7iOYv/Caf9n30/boJTTAuOPTSzIJ82Snf/+OfKQl8cgOAmbWVRVLD93gYPsB1Jwbuu2vL0AoM2DdSkYCg==",
+  "dgSpecHash": "Pd7QIxlV7PUoi4RPftZjKNJmDK2gNRxt86dKPp8reL6U0fOsFjamqi3VJDM8nOn3bWu3Au67cMso6TYofmJdzA==",
   "success": true,
   "projectFilePath": "C:\\Users\\Majid\\Documents\\Repos\\BlazorGrid\\BlazorGrid.Tests\\BlazorGrid.Tests.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\Majid\\.nuget\\packages\\akinzekeel.blazorgrid.abstractions\\0.1.4-alpha\\akinzekeel.blazorgrid.abstractions.0.1.4-alpha.nupkg.sha512",
     "C:\\Users\\Majid\\.nuget\\packages\\castle.core\\4.4.0\\castle.core.4.4.0.nupkg.sha512",
     "C:\\Users\\Majid\\.nuget\\packages\\coverlet.collector\\1.2.0\\coverlet.collector.1.2.0.nupkg.sha512",
     "C:\\Users\\Majid\\.nuget\\packages\\microsoft.aspnetcore.authorization\\3.1.3\\microsoft.aspnetcore.authorization.3.1.3.nupkg.sha512",
@@ -111,7 +110,8 @@
     "C:\\Users\\Majid\\.nuget\\packages\\system.threading.timer\\4.3.0\\system.threading.timer.4.3.0.nupkg.sha512",
     "C:\\Users\\Majid\\.nuget\\packages\\system.xml.readerwriter\\4.3.0\\system.xml.readerwriter.4.3.0.nupkg.sha512",
     "C:\\Users\\Majid\\.nuget\\packages\\system.xml.xdocument\\4.3.0\\system.xml.xdocument.4.3.0.nupkg.sha512",
-    "C:\\Users\\Majid\\.nuget\\packages\\system.xml.xmldocument\\4.3.0\\system.xml.xmldocument.4.3.0.nupkg.sha512"
+    "C:\\Users\\Majid\\.nuget\\packages\\system.xml.xmldocument\\4.3.0\\system.xml.xmldocument.4.3.0.nupkg.sha512",
+    "C:\\Users\\Majid\\.nuget\\packages\\akinzekeel.blazorgrid\\0.1.5-alpha\\akinzekeel.blazorgrid.0.1.5-alpha.nupkg.sha512"
   ],
   "logs": []
 }

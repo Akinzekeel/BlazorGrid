@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace BlazorGrid.Helpers
 {
-    public static class ExpressionHelper
+    internal static class ExpressionHelper
     {
         public static string GetPropertyName<T>(Expression<Func<T, object>> expression)
             => GetPropertyName(expression.Body);

@@ -1,10 +1,9 @@
 {
   "version": 2,
-  "dgSpecHash": "t6qodbqQqM+X4EHmGYDeYacqXc1sW8RcJPjWKzO9WgtPLY17wC+zpYBBIDjWy1FA4IFVqCFxWyUB6ZcRMNsnbg==",
+  "dgSpecHash": "qTB7JJ/ERDW2F1T4hcfvzvahKPQEUhmF5bcKw1c7+7njB7vHtFz/UDRcsw1Z41ceqZYC8B35PuS2PSqOtyfSmg==",
   "success": true,
   "projectFilePath": "C:\\Users\\Majid\\Documents\\Repos\\BlazorGrid\\Demo\\Server\\Demo.Server.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\Majid\\.nuget\\packages\\akinzekeel.blazorgrid.abstractions\\0.1.0\\akinzekeel.blazorgrid.abstractions.0.1.0.nupkg.sha512",
     "C:\\Users\\Majid\\.nuget\\packages\\microsoft.aspnetcore.authorization\\3.1.3\\microsoft.aspnetcore.authorization.3.1.3.nupkg.sha512",
     "C:\\Users\\Majid\\.nuget\\packages\\microsoft.aspnetcore.components\\3.1.3\\microsoft.aspnetcore.components.3.1.3.nupkg.sha512",
     "C:\\Users\\Majid\\.nuget\\packages\\microsoft.aspnetcore.components.analyzers\\3.1.3\\microsoft.aspnetcore.components.analyzers.3.1.3.nupkg.sha512",
@@ -32,7 +31,7 @@
     "C:\\Users\\Majid\\.nuget\\packages\\microsoft.jsinterop.webassembly\\3.2.0-rc1.20223.4\\microsoft.jsinterop.webassembly.3.2.0-rc1.20223.4.nupkg.sha512",
     "C:\\Users\\Majid\\.nuget\\packages\\system.net.http.json\\3.2.0-rc1.20217.1\\system.net.http.json.3.2.0-rc1.20217.1.nupkg.sha512",
     "C:\\Users\\Majid\\.nuget\\packages\\system.text.json\\4.7.1\\system.text.json.4.7.1.nupkg.sha512",
-    "C:\\Users\\Majid\\.nuget\\packages\\akinzekeel.blazorgrid\\0.1.1\\akinzekeel.blazorgrid.0.1.1.nupkg.sha512"
+    "C:\\Users\\Majid\\.nuget\\packages\\akinzekeel.blazorgrid\\0.1.5-alpha\\akinzekeel.blazorgrid.0.1.5-alpha.nupkg.sha512"
   ],
   "logs": []
 }

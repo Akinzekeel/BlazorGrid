@@ -78,7 +78,7 @@ using Demo.Client.Shared;
 #nullable disable
 #nullable restore
 #line 10 "C:\Users\Majid\Documents\Repos\BlazorGrid\Demo\Client\_Imports.razor"
-using BlazorGrid;
+using BlazorGrid.Components;
 
 #line default
 #line hidden

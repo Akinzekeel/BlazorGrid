@@ -4,14 +4,14 @@
     "C:\\Users\\Majid\\Documents\\Repos\\BlazorGrid\\Demo\\Server\\Demo.Server.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Majid\\Documents\\Repos\\BlazorGrid\\BlazorGrid\\BlazorGrid.csproj": {
-      "version": "0.1.1",
+    "C:\\Users\\Majid\\Documents\\Repos\\BlazorGrid\\BlazorGrid.Abstractions\\BlazorGrid.Abstractions.csproj": {
+      "version": "0.1.6-alpha",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Majid\\Documents\\Repos\\BlazorGrid\\BlazorGrid\\BlazorGrid.csproj",
-        "projectName": "Akinzekeel.BlazorGrid",
-        "projectPath": "C:\\Users\\Majid\\Documents\\Repos\\BlazorGrid\\BlazorGrid\\BlazorGrid.csproj",
+        "projectUniqueName": "C:\\Users\\Majid\\Documents\\Repos\\BlazorGrid\\BlazorGrid.Abstractions\\BlazorGrid.Abstractions.csproj",
+        "projectName": "Akinzekeel.BlazorGrid.Abstractions",
+        "projectPath": "C:\\Users\\Majid\\Documents\\Repos\\BlazorGrid\\BlazorGrid.Abstractions\\BlazorGrid.Abstractions.csproj",
         "packagesPath": "C:\\Users\\Majid\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Majid\\Documents\\Repos\\BlazorGrid\\BlazorGrid\\obj\\",
+        "outputPath": "C:\\Users\\Majid\\Documents\\Repos\\BlazorGrid\\BlazorGrid.Abstractions\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Majid\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -37,11 +37,63 @@
       },
       "frameworks": {
         "netstandard2.1": {
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "NETStandard.Library": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.201\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\Majid\\Documents\\Repos\\BlazorGrid\\BlazorGrid\\BlazorGrid.csproj": {
+      "version": "0.1.5-alpha",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Majid\\Documents\\Repos\\BlazorGrid\\BlazorGrid\\BlazorGrid.csproj",
+        "projectName": "Akinzekeel.BlazorGrid",
+        "projectPath": "C:\\Users\\Majid\\Documents\\Repos\\BlazorGrid\\BlazorGrid\\BlazorGrid.csproj",
+        "packagesPath": "C:\\Users\\Majid\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Majid\\Documents\\Repos\\BlazorGrid\\BlazorGrid\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Majid\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netstandard2.1"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netstandard2.1": {
+            "projectReferences": {
+              "C:\\Users\\Majid\\Documents\\Repos\\BlazorGrid\\BlazorGrid.Abstractions\\BlazorGrid.Abstractions.csproj": {
+                "projectPath": "C:\\Users\\Majid\\Documents\\Repos\\BlazorGrid\\BlazorGrid.Abstractions\\BlazorGrid.Abstractions.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netstandard2.1": {
           "dependencies": {
-            "Akinzekeel.BlazorGrid.Abstractions": {
-              "target": "Package",
-              "version": "[0.1.0, )"
-            },
             "Microsoft.AspNetCore.Components": {
               "target": "Package",
               "version": "[3.1.3, )"
@@ -93,6 +145,9 @@
         "frameworks": {
           "netstandard2.1": {
             "projectReferences": {
+              "C:\\Users\\Majid\\Documents\\Repos\\BlazorGrid\\BlazorGrid.Abstractions\\BlazorGrid.Abstractions.csproj": {
+                "projectPath": "C:\\Users\\Majid\\Documents\\Repos\\BlazorGrid\\BlazorGrid.Abstractions\\BlazorGrid.Abstractions.csproj"
+              },
               "C:\\Users\\Majid\\Documents\\Repos\\BlazorGrid\\BlazorGrid\\BlazorGrid.csproj": {
                 "projectPath": "C:\\Users\\Majid\\Documents\\Repos\\BlazorGrid\\BlazorGrid\\BlazorGrid.csproj"
               },
@@ -239,7 +294,11 @@
         },
         "frameworks": {
           "netstandard2.1": {
-            "projectReferences": {}
+            "projectReferences": {
+              "C:\\Users\\Majid\\Documents\\Repos\\BlazorGrid\\BlazorGrid.Abstractions\\BlazorGrid.Abstractions.csproj": {
+                "projectPath": "C:\\Users\\Majid\\Documents\\Repos\\BlazorGrid\\BlazorGrid.Abstractions\\BlazorGrid.Abstractions.csproj"
+              }
+            }
           }
         },
         "warningProperties": {
@@ -250,12 +309,6 @@
       },
       "frameworks": {
         "netstandard2.1": {
-          "dependencies": {
-            "Akinzekeel.BlazorGrid.Abstractions": {
-              "target": "Package",
-              "version": "[0.1.0, )"
-            }
-          },
           "imports": [
             "net461",
             "net462",

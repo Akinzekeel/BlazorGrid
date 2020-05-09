@@ -2,34 +2,28 @@
   "version": 3,
   "targets": {
     ".NETStandard,Version=v2.1": {
-      "Akinzekeel.BlazorGrid.Abstractions/0.1.0": {
-        "type": "package",
+      "Akinzekeel.BlazorGrid.Abstractions/0.1.6-alpha": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.1",
         "compile": {
-          "lib/netstandard2.1/BlazorGrid.Abstractions.dll": {}
+          "bin/placeholder/Akinzekeel.BlazorGrid.Abstractions.dll": {}
         },
         "runtime": {
-          "lib/netstandard2.1/BlazorGrid.Abstractions.dll": {}
+          "bin/placeholder/Akinzekeel.BlazorGrid.Abstractions.dll": {}
         }
       }
     }
   },
   "libraries": {
-    "Akinzekeel.BlazorGrid.Abstractions/0.1.0": {
-      "sha512": "YP9v9axRyJatuwwS2P/MFefn/2LId5eu8sQJZ42ShNl2cintTtwrguZTDFdniC5Owhi+F8oO3XlMgtFLUPC3dw==",
-      "type": "package",
-      "path": "akinzekeel.blazorgrid.abstractions/0.1.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "akinzekeel.blazorgrid.abstractions.0.1.0.nupkg.sha512",
-        "akinzekeel.blazorgrid.abstractions.nuspec",
-        "lib/netstandard2.1/BlazorGrid.Abstractions.dll"
-      ]
+    "Akinzekeel.BlazorGrid.Abstractions/0.1.6-alpha": {
+      "type": "project",
+      "path": "../../BlazorGrid.Abstractions/BlazorGrid.Abstractions.csproj",
+      "msbuildProject": "../../BlazorGrid.Abstractions/BlazorGrid.Abstractions.csproj"
     }
   },
   "projectFileDependencyGroups": {
     ".NETStandard,Version=v2.1": [
-      "Akinzekeel.BlazorGrid.Abstractions >= 0.1.0"
+      "Akinzekeel.BlazorGrid.Abstractions >= 0.1.6-alpha"
     ]
   },
   "packageFolders": {
@@ -57,7 +51,11 @@
       },
       "frameworks": {
         "netstandard2.1": {
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\Majid\\Documents\\Repos\\BlazorGrid\\BlazorGrid.Abstractions\\BlazorGrid.Abstractions.csproj": {
+              "projectPath": "C:\\Users\\Majid\\Documents\\Repos\\BlazorGrid\\BlazorGrid.Abstractions\\BlazorGrid.Abstractions.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
@@ -68,12 +66,6 @@
     },
     "frameworks": {
       "netstandard2.1": {
-        "dependencies": {
-          "Akinzekeel.BlazorGrid.Abstractions": {
-            "target": "Package",
-            "version": "[0.1.0, )"
-          }
-        },
         "imports": [
           "net461",
           "net462",
