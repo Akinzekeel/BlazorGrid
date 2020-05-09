@@ -8,7 +8,7 @@
     ".NETCoreApp,Version=v3.1": {
       "BlazorGrid.Tests/1.0.0": {
         "dependencies": {
-          "Akinzekeel.BlazorGrid": "0.1.1",
+          "Akinzekeel.BlazorGrid": "0.1.4-alpha",
           "MSTest.TestAdapter": "2.1.0",
           "MSTest.TestFramework": "2.1.0",
           "Microsoft.NET.Test.Sdk": "16.5.0",
@@ -17,6 +17,14 @@
         },
         "runtime": {
           "BlazorGrid.Tests.dll": {}
+        }
+      },
+      "Akinzekeel.BlazorGrid.Abstractions/0.1.4-alpha": {
+        "runtime": {
+          "lib/netstandard2.1/BlazorGrid.Abstractions.dll": {
+            "assemblyVersion": "0.1.4.0",
+            "fileVersion": "0.1.4.0"
+          }
         }
       },
       "Castle.Core/4.4.0": {
@@ -1278,19 +1286,14 @@
           "System.Xml.ReaderWriter": "4.3.0"
         }
       },
-      "Akinzekeel.BlazorGrid/0.1.1": {
+      "Akinzekeel.BlazorGrid/0.1.4-alpha": {
         "dependencies": {
-          "Akinzekeel.BlazorGrid.Abstractions": "0.1.3",
+          "Akinzekeel.BlazorGrid.Abstractions": "0.1.4-alpha",
           "Microsoft.AspNetCore.Components": "3.1.3",
           "Microsoft.AspNetCore.Components.Web": "3.1.3"
         },
         "runtime": {
           "BlazorGrid.dll": {}
-        }
-      },
-      "Akinzekeel.BlazorGrid.Abstractions/0.1.3": {
-        "runtime": {
-          "BlazorGrid.Abstractions.dll": {}
         }
       }
     }
@@ -1300,6 +1303,13 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
+    },
+    "Akinzekeel.BlazorGrid.Abstractions/0.1.4-alpha": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Awkm9WtbCqeSir06eW7k2nkM4vZxm9FiugQUNl/xIC+yOM43S5/032kFUhe5yx34vHRBiMO/TQ2Bdh53S84P8A==",
+      "path": "akinzekeel.blazorgrid.abstractions/0.1.4-alpha",
+      "hashPath": "akinzekeel.blazorgrid.abstractions.0.1.4-alpha.nupkg.sha512"
     },
     "Castle.Core/4.4.0": {
       "type": "package",
@@ -2050,12 +2060,7 @@
       "path": "system.xml.xmldocument/4.3.0",
       "hashPath": "system.xml.xmldocument.4.3.0.nupkg.sha512"
     },
-    "Akinzekeel.BlazorGrid/0.1.1": {
-      "type": "project",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "Akinzekeel.BlazorGrid.Abstractions/0.1.3": {
+    "Akinzekeel.BlazorGrid/0.1.4-alpha": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

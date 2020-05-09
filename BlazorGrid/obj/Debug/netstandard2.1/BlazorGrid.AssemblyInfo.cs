@@ -14,11 +14,11 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyDescriptionAttribute("A light weight data grid component for Blazor, focused on remote data. Supports f" +
     "iltering, sorting, paging & smart refresh")]
-[assembly: System.Reflection.AssemblyFileVersionAttribute("0.1.1.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("0.1.1")]
+[assembly: System.Reflection.AssemblyFileVersionAttribute("0.1.4.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("0.1.4-alpha")]
 [assembly: System.Reflection.AssemblyProductAttribute("BlazorGrid")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BlazorGrid")]
-[assembly: System.Reflection.AssemblyVersionAttribute("0.1.1.0")]
+[assembly: System.Reflection.AssemblyVersionAttribute("0.1.4.0")]
 
 // Von der MSBuild WriteCodeFragment-Klasse generiert.
 
