@@ -10,7 +10,7 @@
     <Description>Common models &amp; interfaces for BlazorGrid</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/Akinzekeel/BlazorGrid</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/Akinzekeel/BlazorGrid.Abstractions</RepositoryUrl>
+    <RepositoryUrl>https://github.com/Akinzekeel/BlazorGrid</RepositoryUrl>
     <PackageReleaseNotes>Preview</PackageReleaseNotes>
   </PropertyGroup>
 
