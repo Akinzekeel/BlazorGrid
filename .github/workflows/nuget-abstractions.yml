@@ -1,0 +1,17 @@
+name: Publish Abstractions to NuGet
+on:
+  push:
+    branches:
+      - master
+jobs:
+  publish:
+    name: build, pack & publish
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: publish on version change
+        id: publish_nuget
+        uses: rohith/publish-nuget@v2
+        with:
+          PROJECT_FILE_PATH: BlazorGrid/BlazorGrid.Abstractions.csproj
+          NUGET_KEY: ${{secrets.NugetApiKey}}
