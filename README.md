@@ -28,7 +28,7 @@ dotnet add package Akinzekeel.BlazorGrid.Abstractions
 ```
 
 ### Step 2: IGridProvider
-BlazorGrid will usually request data in batches by using **offset** and **length**. These can easily be translated to Linq on the server side with the `Take()` and `Skip()` methods.
+BlazorGrid will usually request data in batches by using **offset** and **length**. These can easily be translated to Linq on the server side with the `Take()` and `Skip()` methods (see step 4 on how to do that).
 
 However, there are scenarios where we do not have any control over the server-side. For these cases, you can implement your own IGridProvider. It is the responsibility of this provider to place requests in the correct format and then return the data as a GridPageResult<T>.
   
