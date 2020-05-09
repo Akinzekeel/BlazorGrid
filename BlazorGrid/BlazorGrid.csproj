@@ -5,7 +5,7 @@
     <RazorLangVersion>3.0</RazorLangVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>Akinzekeel.BlazorGrid</PackageId>
-    <Version>0.1.5-alpha</Version>
+    <Version>0.1.7-alpha</Version>
     <Preview></Preview>
     <Authors>Majid Iqbal</Authors>
     <Company />
