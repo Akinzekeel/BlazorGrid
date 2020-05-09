@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "PyZaOqlIyMq1xPTeaAbIDx6QJ8aASeILLOwyX/yCSslo4Q0Bzot9mwOusIqPG2rgc5YYu7v8mVKqafErqbqocA==",
+  "dgSpecHash": "/7D3V7iOYv/Caf9n30/boJTTAuOPTSzIJ82Snf/+OfKQl8cgOAmbWVRVLD93gYPsB1Jwbuu2vL0AoM2DdSkYCg==",
   "success": true,
   "projectFilePath": "C:\\Users\\Majid\\Documents\\Repos\\BlazorGrid\\BlazorGrid.Tests\\BlazorGrid.Tests.csproj",
   "expectedPackageFiles": [
@@ -111,8 +111,7 @@
     "C:\\Users\\Majid\\.nuget\\packages\\system.threading.timer\\4.3.0\\system.threading.timer.4.3.0.nupkg.sha512",
     "C:\\Users\\Majid\\.nuget\\packages\\system.xml.readerwriter\\4.3.0\\system.xml.readerwriter.4.3.0.nupkg.sha512",
     "C:\\Users\\Majid\\.nuget\\packages\\system.xml.xdocument\\4.3.0\\system.xml.xdocument.4.3.0.nupkg.sha512",
-    "C:\\Users\\Majid\\.nuget\\packages\\system.xml.xmldocument\\4.3.0\\system.xml.xmldocument.4.3.0.nupkg.sha512",
-    "C:\\Users\\Majid\\.nuget\\packages\\akinzekeel.blazorgrid\\0.1.4-alpha\\akinzekeel.blazorgrid.0.1.4-alpha.nupkg.sha512"
+    "C:\\Users\\Majid\\.nuget\\packages\\system.xml.xmldocument\\4.3.0\\system.xml.xmldocument.4.3.0.nupkg.sha512"
   ],
   "logs": []
 }

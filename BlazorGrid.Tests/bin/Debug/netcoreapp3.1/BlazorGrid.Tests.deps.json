@@ -8,7 +8,7 @@
     ".NETCoreApp,Version=v3.1": {
       "BlazorGrid.Tests/1.0.0": {
         "dependencies": {
-          "Akinzekeel.BlazorGrid": "0.1.4-alpha",
+          "Akinzekeel.BlazorGrid": "0.1.5-alpha",
           "MSTest.TestAdapter": "2.1.0",
           "MSTest.TestFramework": "2.1.0",
           "Microsoft.NET.Test.Sdk": "16.5.0",
@@ -1286,7 +1286,7 @@
           "System.Xml.ReaderWriter": "4.3.0"
         }
       },
-      "Akinzekeel.BlazorGrid/0.1.4-alpha": {
+      "Akinzekeel.BlazorGrid/0.1.5-alpha": {
         "dependencies": {
           "Akinzekeel.BlazorGrid.Abstractions": "0.1.4-alpha",
           "Microsoft.AspNetCore.Components": "3.1.3",
@@ -2060,7 +2060,7 @@
       "path": "system.xml.xmldocument/4.3.0",
       "hashPath": "system.xml.xmldocument.4.3.0.nupkg.sha512"
     },
-    "Akinzekeel.BlazorGrid/0.1.4-alpha": {
+    "Akinzekeel.BlazorGrid/0.1.5-alpha": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

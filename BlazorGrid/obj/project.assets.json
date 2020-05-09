@@ -793,7 +793,7 @@
     "C:\\Users\\Majid\\.nuget\\packages\\": {}
   },
   "project": {
-    "version": "0.1.4-alpha",
+    "version": "0.1.5-alpha",
     "restore": {
       "projectUniqueName": "C:\\Users\\Majid\\Documents\\Repos\\BlazorGrid\\BlazorGrid\\BlazorGrid.csproj",
       "projectName": "Akinzekeel.BlazorGrid",

@@ -1911,7 +1911,7 @@
           "lib/netstandard1.3/System.Xml.XmlDocument.dll": {}
         }
       },
-      "Akinzekeel.BlazorGrid/0.1.4-alpha": {
+      "Akinzekeel.BlazorGrid/0.1.5-alpha": {
         "type": "project",
         "framework": ".NETStandard,Version=v2.1",
         "dependencies": {
@@ -6534,7 +6534,7 @@
         "system.xml.xmldocument.nuspec"
       ]
     },
-    "Akinzekeel.BlazorGrid/0.1.4-alpha": {
+    "Akinzekeel.BlazorGrid/0.1.5-alpha": {
       "type": "project",
       "path": "../BlazorGrid/BlazorGrid.csproj",
       "msbuildProject": "../BlazorGrid/BlazorGrid.csproj"
@@ -6542,7 +6542,7 @@
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v3.1": [
-      "Akinzekeel.BlazorGrid >= 0.1.4-alpha",
+      "Akinzekeel.BlazorGrid >= 0.1.5-alpha",
       "MSTest.TestAdapter >= 2.1.0",
       "MSTest.TestFramework >= 2.1.0",
       "Microsoft.NET.Test.Sdk >= 16.5.0",
