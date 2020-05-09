@@ -9,6 +9,7 @@ namespace BlazorGrid.Demo.Providers
     public class CustomProvider : DefaultHttpProvider
     {
         private readonly HttpClient http;
+
         public CustomProvider(HttpClient http) : base(http)
         {
             this.http = http;
