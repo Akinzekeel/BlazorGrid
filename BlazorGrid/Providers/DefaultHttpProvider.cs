@@ -16,32 +16,45 @@ namespace BlazorGrid.Providers
             this.http = http;
         }
 
-        public async Task<DataPageResult<T>> GetAsync<T>(string requestUrl)
+        public async Task<T> GetAsync<T>(string BaseUrl, string RowId)
         {
-            var result = await http.GetAsync(requestUrl);
+            var url = GetRequestUrl(BaseUrl, RowId);
+            var response = await http.GetAsync(url);
+            return await DeserializeAsync<T>(response);
+        }
 
-            if (!result.IsSuccessStatusCode)
+        public async Task<DataPageResult<T>> GetAsync<T>(string BaseUrl, int Offset, int Length, string OrderBy, bool OrderByDescending, string SearchQuery)
+        {
+            var url = GetRequestUrl(BaseUrl, Offset, Length, OrderBy, OrderByDescending, SearchQuery);
+            var response = await http.GetAsync(url);
+            var result = await DeserializeAsync<DataPageResult<T>>(response);
+            return result;
+        }
+
+        private async Task<T> DeserializeAsync<T>(HttpResponseMessage response)
+        {
+            if (!response.IsSuccessStatusCode)
             {
-                if (result.StatusCode == HttpStatusCode.NotFound)
+                if (response.StatusCode == HttpStatusCode.NotFound)
                 {
                     return default;
                 }
                 else
                 {
-                    result.EnsureSuccessStatusCode();
+                    response.EnsureSuccessStatusCode();
                 }
             }
 
-            var content = await result.Content.ReadAsStringAsync();
-            return System.Text.Json.JsonSerializer.Deserialize<DataPageResult<T>>(content);
+            var content = await response.Content.ReadAsStringAsync();
+            return System.Text.Json.JsonSerializer.Deserialize<T>(content);
         }
 
-        public string GetRequestUrl(string BaseUrl, string RowId)
+        protected virtual string GetRequestUrl(string BaseUrl, string RowId)
         {
             return BaseUrl.TrimEnd('/') + '/' + RowId + "?More=false";
         }
 
-        public string GetRequestUrl(string BaseUrl, int Offset, int Length, string OrderBy, bool OrderByDescending, string SearchQuery)
+        protected virtual string GetRequestUrl(string BaseUrl, int Offset, int Length, string OrderBy, bool OrderByDescending, string SearchQuery)
         {
             var b = http.BaseAddress;
 

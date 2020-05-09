@@ -56,8 +56,6 @@ namespace BlazorGrid.Components
         [Parameter] public bool DefaultOrderByDescending { get; set; }
 
         private string QueryDebounced { get; set; }
-        private string PagedSourceUrl() => GetSourceFor(Rows?.Count ?? 0, SourceUrl);
-
         private string OrderByPropertyName { get; set; }
         private bool OrderByDescending { get; set; }
         private int TotalCount { get; set; }
@@ -97,7 +95,14 @@ namespace BlazorGrid.Components
 
             try
             {
-                var result = await Provider.GetAsync<TRow>(PagedSourceUrl());
+                var result = await Provider.GetAsync<TRow>(
+                    SourceUrl,
+                    Rows?.Count ?? 0,
+                    PageSize,
+                    OrderByPropertyName,
+                    OrderByDescending,
+                    QueryDebounced
+                );
 
                 TotalCount = result.TotalCount;
 
@@ -126,11 +131,6 @@ namespace BlazorGrid.Components
             Columns.Add(Column);
         }
 
-        private string GetSourceFor(int Offset, string Source)
-        {
-            return Provider.GetRequestUrl(Source, Offset, PageSize, OrderByPropertyName, OrderByDescending, QueryDebounced);
-        }
-
         protected Task TryApplySorting(string PropertyName)
         {
             if (string.IsNullOrEmpty(PropertyName))
@@ -149,7 +149,7 @@ namespace BlazorGrid.Components
             return LoadAsync(true);
         }
 
-private bool IsRefreshing;
+        private bool IsRefreshing;
         public async Task RefreshAsync()
         {
             if (IsRefreshing) return;
@@ -163,26 +163,31 @@ private bool IsRefreshing;
                 if (LastClickedRowIndex > -1)
                 {
                     var row = Rows[LastClickedRowIndex];
-                    var url = SourceUrl.TrimEnd('/') + '/' + row.RowId + "?More=false";
-                    var result = await Provider.GetAsync<TRow>(url);
-                    var updatedRow = result.Data.FirstOrDefault();
+                    var result = await Provider.GetAsync<TRow>(SourceUrl, row.RowId);
 
-                    if (updatedRow == null)
+                    if (result == null)
                     {
                         Rows.Remove(row);
+                        TotalCount--;
                     }
                     else
                     {
-                        Rows[LastClickedRowIndex] = updatedRow;
+                        Rows[LastClickedRowIndex] = result;
                     }
 
                     LastClickedRowIndex = -1;
-                    TotalCount = result.TotalCount;
                 }
                 else
                 {
-                    var url = GetSourceFor(0, SourceUrl);
-                    var result = await Provider.GetAsync<TRow>(url);
+                    var result = await Provider.GetAsync<TRow>(
+                        SourceUrl,
+                        0,
+                        PageSize,
+                        OrderByPropertyName,
+                        OrderByDescending,
+                        QueryDebounced
+                    );
+
                     var newRow = result.Data.FirstOrDefault();
 
                     if (newRow != null)
