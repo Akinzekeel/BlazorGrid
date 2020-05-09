@@ -21,7 +21,19 @@
                 </div>
             }
         </header>
-        @if(Rows == null)
+        @if(loadingError != null)
+        {
+            <div style="grid-column: span @Columns.Count()">
+                <div class="empty text-error">
+                    <div class="empty-title">
+                        <h2>Error</h2>
+                    </div>
+                    <div class="empty-subtitle">Failed to load data</div>
+                    <small class="d-block">@loadingError.Message</small>
+                </div>
+            </div>
+        }
+        else if(Rows == null)
         {
             <div style="grid-column: span @Columns.Count()">
                 <div class="empty">
