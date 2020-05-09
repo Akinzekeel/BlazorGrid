@@ -11,6 +11,7 @@ BlazorGrid does not match all of the features of jQuery.DataTables, however it i
 - Fetching remote data page-wise
 - Sorting, filtering & paging (server-side only)
 - Smart refresh
+- Based on CSS grids instead of table elements
 
 ### BlazorGrid is probably not the right choice if...
 - You need to handle client-side data
@@ -148,5 +149,6 @@ I would like to get the following things done before removing the preview status
 1. Find a better way to perform smart-refresh which doesn't require IGridRow
 1. Improve documentation
 1. Finish the demo project & host it
+1. Responsive support
 
 If you want to contribute to this project you're always welcome to do so. In case of questions or comments you can also contact me on Twitter at @Akinzekeel.
