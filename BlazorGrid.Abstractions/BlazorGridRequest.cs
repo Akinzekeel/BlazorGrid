@@ -13,7 +13,7 @@ namespace BlazorGrid.Abstractions
         public string Query { get; set; }
         public IEnumerable<object> ExcludedKeys { get; set; }
 
-        public IDictionary<string, object> ToDictionary()
+        public virtual IDictionary<string, object> ToDictionary()
             => new Dictionary<string, object> {
                 { nameof(Query), Query },
                 { nameof(Offset), Offset },
@@ -25,6 +25,9 @@ namespace BlazorGrid.Abstractions
 
         /// <summary>
         /// Returns the properties & values in the form of a=1&b=2&c=3
+        ///
+        /// If you added any custom properties, override the ToDictionary
+        /// method to have them included in the query string as well
         /// </summary>
         /// <returns></returns>
         public string ToQueryString()
