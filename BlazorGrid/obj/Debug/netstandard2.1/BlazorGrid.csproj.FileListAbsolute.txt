@@ -24,3 +24,5 @@ C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid\bin\Debug\netstandard2.1\Bl
 C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid\obj\Debug\netstandard2.1\Razor\Components\BlazorGrid.razor.g.cs
 C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid\obj\Debug\netstandard2.1\Razor\Components\GridCol.razor.g.cs
 C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid\obj\Debug\netstandard2.1\BlazorGrid.csproj.CopyComplete
+C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid\bin\Debug\netstandard2.1\package-lock.json
+C:\Users\Majid\Documents\Repos\BlazorGrid\BlazorGrid\bin\Debug\netstandard2.1\package.json

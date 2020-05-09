@@ -1,0 +1,87 @@
+@import "Variables";
+
+.blazor-grid {
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background-color: inherit;
+
+    .grid-scrollview {
+        display: grid;
+        background-color: inherit;
+        grid-template-columns: repeat(auto);
+    }
+
+    .grid-row {
+        display: contents;
+
+        > * {
+            padding: $bzg-layout-spacing;
+            border-bottom: 1px solid $bzg-component-hover-color;
+        }
+
+        &.grid-header {
+            background-color: inherit;
+
+            > * {
+                top: 0;
+                position: sticky;
+                white-space: nowrap;
+                border-left: 2px solid $bzg-bg-color;
+                background: $bzg-bg-color;
+                z-index: 10;
+                font-weight: bold;
+
+                &:first-child {
+                    border-left: none;
+                }
+
+                .sorted-indicator {
+                    font-size: $bzg-font-size-xs;
+                    visibility: hidden;
+                }
+
+                &.sorted {
+                    .sorted-indicator {
+                        visibility: visible;
+                        color: $bzg-primary-color-light;
+                    }
+                }
+
+                &.sortable {
+                    cursor: pointer;
+
+                    &:hover,
+                    &:focus {
+                        color: $bzg-primary-color !important;
+                        background: $bzg-component-hover-color;
+                    }
+
+                    &:active {
+                        background: $bzg-bg-color-darker;
+                    }
+                }
+            }
+            &:hover {
+                > * + * {
+                    border-left: 2px solid $bzg-component-hover-color;
+                }
+            }
+        }
+
+        &.clickable {
+            &:hover,
+            &:focus {
+                > * {
+                    background-color: $bzg-component-hover-color;
+                }
+            }
+
+            &:active {
+                > * {
+                    background-color: $bzg-component-active-color;
+                }
+            }
+        }
+    }
+}
