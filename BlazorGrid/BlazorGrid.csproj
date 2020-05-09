@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup Condition="$(Configuration) == 'Release'">
-    <PackageReference Include="Akinzekeel.BlazorGrid.Abstractions" Version="0.1.7-alpha" />
+    <PackageReference Include="Akinzekeel.BlazorGrid.Abstractions" Version="0.2.0-beta" />
   </ItemGroup>
 
   <ItemGroup Condition="$(Configuration) != 'Release'">

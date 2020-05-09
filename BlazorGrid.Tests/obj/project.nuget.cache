@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "SygHXcw2UsXmSX3Cs0etJoRuVRXFm5oXdi9+QYZkF6GNfTsNjicvxMPal96TBz7EltIaCD8ogpmJZwXIw5/JZg==",
+  "dgSpecHash": "ML6ZD5BiD62BdSoYAPAXK1MFsi/SPZRmZSYC2eQsQTMERZScm/6ygpSPmJ0wT1u0cblh/GTcy3Z5BRLTosaoCw==",
   "success": true,
   "projectFilePath": "C:\\Users\\Majid\\Documents\\Repos\\BlazorGrid\\BlazorGrid.Tests\\BlazorGrid.Tests.csproj",
   "expectedPackageFiles": [
@@ -126,7 +126,7 @@
     "C:\\Users\\Majid\\.nuget\\packages\\xunit.abstractions\\2.0.3\\xunit.abstractions.2.0.3.nupkg.sha512",
     "C:\\Users\\Majid\\.nuget\\packages\\xunit.assert\\2.4.1\\xunit.assert.2.4.1.nupkg.sha512",
     "C:\\Users\\Majid\\.nuget\\packages\\xunit.extensibility.core\\2.4.1\\xunit.extensibility.core.2.4.1.nupkg.sha512",
-    "C:\\Users\\Majid\\.nuget\\packages\\akinzekeel.blazorgrid.abstractions\\0.1.7-alpha\\akinzekeel.blazorgrid.abstractions.0.1.7-alpha.nupkg.sha512"
+    "C:\\Users\\Majid\\.nuget\\packages\\akinzekeel.blazorgrid\\0.1.9-alpha\\akinzekeel.blazorgrid.0.1.9-alpha.nupkg.sha512"
   ],
   "logs": []
 }

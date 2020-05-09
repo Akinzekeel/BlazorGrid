@@ -90,6 +90,7 @@ namespace BlazorGrid.Components
                 Rows = null;
             }
 
+            loadingError = null;
             IsLoadingMore = true;
             StateHasChanged();
 
