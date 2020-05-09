@@ -5,6 +5,8 @@ I've been a long time user of jQuery.DataTables and I think it's a really great 
 
 BlazorGrid does not match all of the features of jQuery.DataTables, however it is also a lot more light-weight and does not depend on JavaScript at all.
 
+**WARNING: This package is currently in preview (version 0.2.0-beta at the point of writing this warning). See the end of the file for information on what's missing.**
+
 ## Features
 - Fetching remote data page-wise
 - Sorting, filtering & paging (server-side only)
@@ -135,3 +137,16 @@ Now that the setup is complete, it's time to see the grid in action! Create a ra
 The component comes with a default css file which you can use out of the box for a default style. This default style is available at `_content/Akinzekeel.BlazorGrid/dist/blazor-grid.min.css`. However, for best customization I recommend you to use the SCSS files and integrate them into your own stylesheet. The SCSS files are located in this repository under `BlazorGrid/Styles`.
 
 Some of the styles & variables are based on the amazing [Spectre CSS framework](https://picturepan2.github.io/spectre/). If you already use that then customization will be even easier.
+
+# Roadmap
+This package is currently in preview lest because it is both my very first GitHub repository and my first NuGet package so I've got plenty to learn and discover. 
+
+I would like to get the following things done before removing the preview status:
+1. Localization
+1. Support different data providers per grid
+1. Provide helper methods and classes for quick server-side setup
+1. Find a better way to perform smart-refresh which doesn't require IGridRow
+1. Improve documentation
+1. Finish the demo project & host it
+
+If you want to contribute to this project you're always welcome to do so. In case of questions or comments you can also contact me on Twitter at @Akinzekeel.
