@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>Akinzekeel.BlazorGrid.Abstractions</PackageId>
-    <Version>0.1.5-alpha</Version>
+    <Version>0.1.6-alpha</Version>
     <Authors>Majid Iqbal</Authors>
     <Company />
     <Description>Common models &amp; interfaces for BlazorGrid</Description>
