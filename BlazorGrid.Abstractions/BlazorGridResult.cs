@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace BlazorGrid.Abstractions.Models
+namespace BlazorGrid.Abstractions
 {
     public class DataPageResult<T>
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace BlazorGrid.Abstractions.Models
+namespace BlazorGrid.Abstractions
 {
     public class BlazorGridRequest
     {

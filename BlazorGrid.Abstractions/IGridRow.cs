@@ -1,4 +1,4 @@
-namespace BlazorGrid.Abstractions.Interfaces
+namespace BlazorGrid.Abstractions
 {
     public interface IGridRow
     {

@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using BlazorGrid.Abstractions.Models;
 
-namespace BlazorGrid.Abstractions.Interfaces
+namespace BlazorGrid.Abstractions
 {
     public interface IGridProvider
     {
