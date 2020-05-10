@@ -17,18 +17,11 @@ steps:
 - task: NuGetToolInstaller@1
 
 - task: DotNetCoreCLI@2
-  displayName: 'Restore'
-  inputs:
-    command: 'restore'
-    restoreArguments: '-c $(buildConfiguration)'
-    projects: 'BlazorGrid/BlazorGrid.csproj'
-
-- task: DotNetCoreCLI@2
   displayName: 'Build'
   inputs:
     command: 'build'
     projects: 'BlazorGrid/BlazorGrid.csproj'
-    arguments: '--no-restore -c $(buildConfiguration) -o $(Build.ArtifactStagingDirectory)'
+    arguments: '-c $(buildConfiguration) -o $(Build.ArtifactStagingDirectory)'
 
 - task: DotNetCoreCLI@2
   displayName: 'Test'
