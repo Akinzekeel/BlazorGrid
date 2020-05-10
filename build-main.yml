@@ -20,7 +20,7 @@ steps:
   displayName: 'Restore'
   inputs:
     command: 'restore'
-    arguments: '-c $(buildConfiguration)'
+    restoreArguments: '-c $(buildConfiguration)'
     projects: 'BlazorGrid/BlazorGrid.csproj'
 
 - task: DotNetCoreCLI@2
