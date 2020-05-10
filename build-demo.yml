@@ -1,0 +1,31 @@
+# ASP.NET Core
+# Build and test ASP.NET Core projects targeting .NET Core.
+# Add steps that run tests, create a NuGet package, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+
+- task: UseDotNet@2
+  displayName: 'Use .Net Core 3.1.201 preview'
+  inputs:
+    packageType: 'sdk'
+    version: '3.1.201'
+    includePreviewVersions: true
+
+- task: DotNetCoreCLI@2
+  displayName: 'Build'
+  inputs:
+    zipAfterPublish: true
+    command: publish
+    publishWebProjects: false
+    projects: 'BlazorGrid.Demo/BlazorGrid.Demo.csproj'
+    arguments: '-c $(Build.Configuration) -o $(Build.ArtifactStagingDirectory)'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish'
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
