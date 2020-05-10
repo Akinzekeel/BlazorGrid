@@ -11,7 +11,6 @@ namespace BlazorGrid.Abstractions
         public string OrderBy { get; set; }
         public bool OrderByDescending { get; set; }
         public string Query { get; set; }
-        public IEnumerable<object> ExcludedKeys { get; set; }
 
         public virtual IDictionary<string, object> ToDictionary()
             => new Dictionary<string, object> {
@@ -20,7 +19,6 @@ namespace BlazorGrid.Abstractions
                 { nameof(Length), Length },
                 { nameof(OrderBy), OrderBy },
                 { nameof(OrderByDescending), OrderByDescending },
-                { nameof(ExcludedKeys), ExcludedKeys?.Any() == true ? string.Join(",", ExcludedKeys) : null }
             };
 
         /// <summary>
