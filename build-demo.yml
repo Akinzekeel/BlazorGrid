@@ -23,13 +23,21 @@ steps:
   displayName: 'Build'
   inputs:
     command: publish
-    publishWebProjects: false
+    zipAfterPublish: false
     projects: 'BlazorGrid.Demo/BlazorGrid.Demo.csproj'
     arguments: '-c $(Build.Configuration) -o $(Build.ArtifactStagingDirectory)'
+
+- task: ArchiveFiles@2
+  inputs:
+    rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/wwwroot'
+    includeRootFolder: false
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    replaceExistingArchive: false
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish'
   inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)/BlazorGrid.Demo'
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
     ArtifactName: 'drop'
     publishLocation: 'Container'
