@@ -30,6 +30,6 @@ steps:
 - task: PublishBuildArtifacts@1
   displayName: 'Publish'
   inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)/wwwroot'
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/BlazorGrid.Demo'
     ArtifactName: 'drop'
     publishLocation: 'Container'
