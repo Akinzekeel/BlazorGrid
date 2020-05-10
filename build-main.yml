@@ -41,7 +41,7 @@ steps:
   inputs:
     command: 'test'
     projects: 'BlazorGrid.Tests/BlazorGrid.Tests.csproj'
-    arguments: '-c $(buildConfiguration)'
+    arguments: ''
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish artifacts'
