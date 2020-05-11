@@ -51,7 +51,7 @@ namespace BlazorGrid.Components
         }
 
         [Parameter] public EventCallback<TRow> OnClick { get; set; }
-        [Parameter] public Func<TRow, string> href { get; set; }
+        [Parameter] public Func<TRow, string> Href { get; set; }
         [Parameter] public Expression<Func<TRow, object>> DefaultOrderBy { get; set; }
         [Parameter] public bool DefaultOrderByDescending { get; set; }
 
@@ -60,7 +60,7 @@ namespace BlazorGrid.Components
         private bool OrderByDescending { get; set; }
         private int TotalCount { get; set; }
         private IList<IGridCol<TRow>> Columns { get; set; } = new List<IGridCol<TRow>>();
-        private Exception loadingError { get; set; }
+        private Exception LoadingError { get; set; }
 
         private bool ParametersSetCalled;
         protected override async Task OnParametersSetAsync()
@@ -90,7 +90,7 @@ namespace BlazorGrid.Components
                 Rows = null;
             }
 
-            loadingError = null;
+            LoadingError = null;
             IsLoadingMore = true;
             StateHasChanged();
 
@@ -118,7 +118,7 @@ namespace BlazorGrid.Components
             }
             catch (Exception x)
             {
-                loadingError = x;
+                LoadingError = x;
             }
             finally
             {
@@ -251,7 +251,7 @@ namespace BlazorGrid.Components
             }
 
             LastClickedRowIndex = index;
-            var onClickUrl = href?.Invoke(r);
+            var onClickUrl = Href?.Invoke(r);
 
             if (onClickUrl != null)
             {

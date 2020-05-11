@@ -21,7 +21,7 @@
                 </div>
             }
         </header>
-        @if(loadingError != null)
+        @if(LoadingError != null)
         {
             <div style="grid-column: span @Columns.Count()">
                 <div class="empty text-error">
@@ -29,7 +29,7 @@
                         <h2>Error</h2>
                     </div>
                     <div class="empty-subtitle">Failed to load data</div>
-                    <small class="d-block">@loadingError.Message</small>
+                    <small class="d-block">@LoadingError.Message</small>
                 </div>
             </div>
         }
@@ -66,7 +66,7 @@
             {
                 var index = i;
                 var r = Rows.ElementAt(i);
-                var clickable = OnClick.HasDelegate || href != null;
+                var clickable = OnClick.HasDelegate || Href != null;
                 <div class="grid-row @(clickable ? "clickable" : "")" @onclick="_ => OnRowClicked(r, index)">
                     @foreach (var c in Columns) {
                         <div class="@c.CssClass">@c.ChildContent(r)</div>

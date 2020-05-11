@@ -64,7 +64,7 @@ namespace EOS.Client.Tests.ComponentTests
 
             var unit = RenderComponent<BlazorGrid<MyDto>>(
                 Parameter(nameof(BlazorGrid<MyDto>.SourceUrl), "unit-test"),
-                Parameter(nameof(BlazorGrid<MyDto>.href), href),
+                Parameter(nameof(BlazorGrid<MyDto>.Href), href),
                 ChildContent<GridCol<MyDto>>(
                     Parameter("Caption", "unit test"),
                     Template<MyDto>("ChildContent", (row) => (builder) =>
