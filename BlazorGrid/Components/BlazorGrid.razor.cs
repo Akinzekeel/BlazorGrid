@@ -12,7 +12,7 @@ using BlazorGrid.Helpers;
 
 namespace BlazorGrid.Components
 {
-    public partial class BlazorGrid<TRow> where TRow : IGridRow
+    public partial class BlazorGrid<TRow> : IBlazorGrid where TRow : class, IGridRow
     {
         [Inject] public IGridProvider Provider { get; set; }
         [Inject] public NavigationManager Nav { get; set; }
@@ -20,7 +20,7 @@ namespace BlazorGrid.Components
         public const int DefaultPageSize = 25;
 
         [Parameter] public string SourceUrl { get; set; }
-        [Parameter] public RenderFragment ChildContent { get; set; }
+        [Parameter] public RenderFragment<TRow> ChildContent { get; set; }
         [Parameter] public int PageSize { get; set; } = DefaultPageSize;
 
         private string _Query;
@@ -56,10 +56,10 @@ namespace BlazorGrid.Components
         [Parameter] public bool DefaultOrderByDescending { get; set; }
 
         private string QueryDebounced { get; set; }
-        private string OrderByPropertyName { get; set; }
-        private bool OrderByDescending { get; set; }
+        public string OrderByPropertyName { get; private set; }
+        public bool OrderByDescending { get; private set; }
         private int TotalCount { get; set; }
-        private IList<IGridCol<TRow>> Columns { get; set; } = new List<IGridCol<TRow>>();
+        private IList<IGridCol> Columns { get; set; } = new List<IGridCol>();
         private Exception LoadingError { get; set; }
 
         private bool ParametersSetCalled;
@@ -127,12 +127,7 @@ namespace BlazorGrid.Components
             }
         }
 
-        internal void Add(IGridCol<TRow> Column)
-        {
-            Columns.Add(Column);
-        }
-
-        protected Task TryApplySorting(string PropertyName)
+        public Task TryApplySorting(string PropertyName)
         {
             if (string.IsNullOrEmpty(PropertyName))
                 return Task.CompletedTask;
@@ -261,6 +256,11 @@ namespace BlazorGrid.Components
             {
                 OnClick.InvokeAsync(r);
             }
+        }
+
+        public void Add(IGridCol col)
+        {
+            Columns.Add(col);
         }
     }
 }

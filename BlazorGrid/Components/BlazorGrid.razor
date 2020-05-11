@@ -1,25 +1,10 @@
 @typeparam TRow
-<CascadingValue Value="this" IsFixed="true">
-    @ChildContent
-</CascadingValue>
 <div class="blazor-grid">
     <div class="grid-scrollview" style="grid-template-columns: @GridColumns">
         <header class="grid-row grid-header">
-            @foreach (var c in Columns) {
-                var prop = c.SortablePropertyName;
-                var sorted = OrderByPropertyName != null && prop == OrderByPropertyName;
-                <div @onclick="_ => TryApplySorting(prop)" class="@c.CssClass @(prop == null ? " " : " sortable") @(sorted ? "sorted" : "" )">
-                    @if (!c.AlignRight) {
-                        @c.Caption
-                    }
-                    @if(prop != null) {
-                        <i class="fa fa-sort-alpha-@(OrderByDescending ? "desc" : "asc") @(c.AlignRight ? "mr-2" : "ml-2") sorted-indicator @(sorted ? "" : "invisible")"></i>
-                    }
-                    @if (c.AlignRight) {
-                        @c.Caption
-                    }
-                </div>
-            }
+            <CascadingValue Value="this" IsFixed="true">
+                @ChildContent(null)
+            </CascadingValue>
         </header>
         @if(LoadingError != null)
         {
@@ -68,9 +53,7 @@
                 var r = Rows.ElementAt(i);
                 var clickable = OnClick.HasDelegate || Href != null;
                 <div class="grid-row @(clickable ? "clickable" : "")" @onclick="_ => OnRowClicked(r, index)">
-                    @foreach (var c in Columns) {
-                        <div class="@c.CssClass">@c.ChildContent(r)</div>
-                    }
+                    @ChildContent(r)
                 </div>
             }
             <div style="grid-column: span @Columns.Count()">
