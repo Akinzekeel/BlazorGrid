@@ -2,9 +2,10 @@
 # Build and test ASP.NET Core projects targeting the full .NET Framework.
 # Add steps that publish symbols, save build artifacts, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
-
 trigger:
-- master
+  paths:
+    exclude:
+      - '**/build-*.yml'
 
 pool:
   vmImage: 'windows-latest'
@@ -41,7 +42,7 @@ steps:
   inputs:
     command: 'test'
     projects: 'BlazorGrid.Tests/BlazorGrid.Tests.csproj'
-    arguments: '-c $(buildConfiguration)'
+    arguments: ''
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish artifacts'
