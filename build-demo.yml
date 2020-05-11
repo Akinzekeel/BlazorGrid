@@ -29,7 +29,7 @@ steps:
 
 - task: ArchiveFiles@2
   inputs:
-    rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/wwwroot'
+    rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/BlazorGrid'
     includeRootFolder: false
     archiveType: 'zip'
     archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
