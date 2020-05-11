@@ -1,28 +1,62 @@
 @page "/basic"
 @inject HttpClient Http
 
-<h1>Exchange rates</h1>
+<h1>Basic example</h1>
 
-<p>This is a basic example to show what the grid looks like with minimal configuration.</p>
-<p>This grid will pull live information from openexchangerates.org using a custom grid data provider.</p>
+<p>This example shows what the grid looks like with the minimum amount of configuration.</p>
+<p>For the purpose of this demo, all of the data is pulled from a static JSON file. Paging is handled by a custom provider which I wrote just for this demo.</p>
 
-<BlazorGrid TRow="Employee" SourceUrl="Data/employees.json">
-    <GridCol Caption="#" FitToContent="true" TRow="Employee">
-        @context.Id
-    </GridCol>
-    <GridCol Caption="#" FitToContent="true" TRow="Employee">
-        @if(!string.IsNullOrEmpty(context.Avatar))
+@if(ShowCode)
+{
+    <pre class="mb-2 pre-scrollable"><code>&lt;BlazorGrid TRow=&quot;Employee&quot; SourceUrl=&quot;Data/employees.json&quot;&gt;
+    &lt;GridCol Caption=&quot;#&quot; FitToContent=&quot;true&quot; TRow=&quot;Employee&quot;&gt;
+        @@context.Id
+    &lt;/GridCol&gt;
+    &lt;GridCol FitToContent=&quot;true&quot; TRow=&quot;Employee&quot;&gt;
+        @@if(!string.IsNullOrEmpty(context.Avatar))
         {
-            <img src="@context.Avatar" style="width: 32px; height: 32px;" />
+            &lt;img src=&quot;@@context.Avatar&quot; style=&quot;width: 32px; height: 32px;&quot; /&gt;
         }
-    </GridCol>
-    <GridCol Caption="First name" TRow="Employee">
-        @context.FirstName
-    </GridCol>
-    <GridCol Caption="Last name" TRow="Employee">
-        @context.LastName
-    </GridCol>
-    <GridCol Caption="Email address" TRow="Employee">
-        <a href="mailto:@context.Email">@context.Email</a>
-    </GridCol>
-</BlazorGrid>
+    &lt;/GridCol&gt;
+    &lt;GridCol Caption=&quot;First name&quot; TRow=&quot;Employee&quot;&gt;
+        @@context.FirstName
+    &lt;/GridCol&gt;
+    &lt;GridCol Caption=&quot;Last name&quot; TRow=&quot;Employee&quot;&gt;
+        @@context.LastName
+    &lt;/GridCol&gt;
+    &lt;GridCol Caption=&quot;Email address&quot; TRow=&quot;Employee&quot;&gt;
+        &lt;a href=&quot;mailto:@@context.Email&quot;&gt;@@context.Email&lt;/a&gt;
+    &lt;/GridCol&gt;
+&lt;/BlazorGrid&gt;</code></pre>
+
+    <button class="btn btn-sm btn-secondary" @onclick="() => { ShowCode = false; }">Back</button>
+}
+else
+{
+    <button class="btn btn-sm btn-secondary mb-2" @onclick="() => { ShowCode = true; }">Show code</button>
+
+    <BlazorGrid TRow="Employee" SourceUrl="Data/employees.json">
+        <GridCol Caption="#" FitToContent="true" TRow="Employee">
+            @context.Id
+        </GridCol>
+        <GridCol FitToContent="true" TRow="Employee">
+            @if(!string.IsNullOrEmpty(context.Avatar))
+            {
+                <img src="@context.Avatar" style="width: 32px; height: 32px;" />
+            }
+        </GridCol>
+        <GridCol Caption="First name" TRow="Employee">
+            @context.FirstName
+        </GridCol>
+        <GridCol Caption="Last name" TRow="Employee">
+            @context.LastName
+        </GridCol>
+        <GridCol Caption="Email address" TRow="Employee">
+            <a href="mailto:@context.Email">@context.Email</a>
+        </GridCol>
+    </BlazorGrid>
+}
+@code
+{
+    public bool ShowCode { get; set; }
+}
