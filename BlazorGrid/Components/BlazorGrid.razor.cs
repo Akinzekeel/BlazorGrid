@@ -271,6 +271,7 @@ namespace BlazorGrid.Components
         public void Add(IGridCol col)
         {
             Columns.Add(col);
+            StateHasChanged();
         }
     }
 }

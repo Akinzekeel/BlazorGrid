@@ -61,5 +61,31 @@ namespace BlazorGrid.Tests
             var scroller = grid.Find("*").FirstElementChild;
             Assert.AreEqual("grid-scrollview", scroller.ClassName);
         }
+
+        [TestMethod]
+        public void Has_Grid_Column_Style()
+        {
+            var noData = new List<MyDto>();
+
+            var grid = RenderComponent<BlazorGrid<MyDto>>(
+                Parameter(nameof(BlazorGrid<MyDto>.Rows), noData),
+                Template<MyDto>(nameof(ChildContent), (dto) => (b) =>
+                {
+                    b.OpenComponent(0, typeof(GridCol));
+                    b.AddMarkupContent(1, "<span></span>");
+                    b.CloseComponent();
+
+                    b.OpenComponent(2, typeof(GridCol));
+                    b.AddAttribute(3, nameof(GridCol.FitToContent), true);
+                    b.AddMarkupContent(4, "<span></span>");
+                    b.CloseComponent();
+                })
+            );
+
+            var scroller = grid.Find("*").FirstElementChild;
+            var style = scroller.GetAttribute("style");
+
+            Assert.AreEqual("grid-template-columns: auto max-content", style);
+        }
     }
 }
