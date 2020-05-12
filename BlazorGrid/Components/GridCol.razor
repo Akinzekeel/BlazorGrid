@@ -9,7 +9,7 @@ else
         @if (!AlignRight) {
             @Caption
         }
-        @if(IsSortable != null) {
+        @if(IsSortable) {
             <i class="fa fa-sort-alpha-@(Parent.OrderByDescending ? "desc" : "asc") @(AlignRight ? "mr-2" : "ml-2") sorted-indicator @(IsSorted ? "" : "invisible")"></i>
         }
         @if (AlignRight) {
