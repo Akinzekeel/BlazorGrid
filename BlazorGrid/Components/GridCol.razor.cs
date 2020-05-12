@@ -17,7 +17,19 @@ namespace BlazorGrid.Components
         [Parameter] public string OrderBy { get; set; }
 
         private bool IsRegistered;
-        public string CssClass => AlignRight ? "text-right" : "";
+        public string CssClass
+        {
+            get
+            {
+                var cls = new string[]{
+                    AlignRight ? "text-right" : "",
+                    IsSortable ? "sortable" : "",
+                    IsSorted ? "sorted" : ""
+                };
+
+                return string.Join(' ', cls).Trim();
+            }
+        }
 
         private bool IsSortable => !string.IsNullOrEmpty(OrderBy);
         private bool IsSorted => IsSortable && Parent?.OrderByPropertyName == OrderBy;

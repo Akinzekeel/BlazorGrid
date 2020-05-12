@@ -17,7 +17,7 @@ namespace BlazorGrid.Tests
     {
         class MyDto
         {
-
+            public string Name { get; set; }
         }
 
         [TestInitialize]
@@ -86,6 +86,43 @@ namespace BlazorGrid.Tests
             var style = scroller.GetAttribute("style");
 
             Assert.AreEqual("grid-template-columns: auto max-content", style);
+        }
+
+        [TestMethod]
+        public void Sortable_Column_Header_Has_Class()
+        {
+            var noData = new List<MyDto>();
+
+            var grid = RenderComponent<BlazorGrid<MyDto>>(
+                Parameter(nameof(BlazorGrid<MyDto>.Rows), noData),
+                Template<MyDto>(nameof(ChildContent), (dto) => (b) =>
+                {
+                    b.OpenComponent<GridCol>(0);
+                    b.AddAttribute(1, nameof(GridCol.OrderBy), nameof(dto.Name));
+                    b.CloseComponent();
+                })
+            );
+
+            var th = grid.Find(".grid-header > *");
+            Assert.AreEqual("sortable", th.ClassName);
+        }
+
+        [TestMethod]
+        public void Non_Sortable_Column_Header_Has_Class()
+        {
+            var noData = new List<MyDto>();
+
+            var grid = RenderComponent<BlazorGrid<MyDto>>(
+                Parameter(nameof(BlazorGrid<MyDto>.Rows), noData),
+                Template<MyDto>(nameof(ChildContent), (dto) => (b) =>
+                {
+                    b.OpenComponent<GridCol>(0);
+                    b.CloseComponent();
+                })
+            );
+
+            var th = grid.Find(".grid-header > *");
+            Assert.AreEqual("", th.ClassName);
         }
     }
 }

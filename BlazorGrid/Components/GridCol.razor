@@ -5,7 +5,7 @@
 }
 else
 {
-    <div @onclick="_ => Parent.TryApplySorting(OrderBy)" class="@CssClass @(IsSortable == null ? " " : " sortable") @(IsSorted ? "sorted" : "" )">
+    <div @onclick="_ => Parent.TryApplySorting(OrderBy)" class="@CssClass">
         @if (!AlignRight) {
             @Caption
         }
