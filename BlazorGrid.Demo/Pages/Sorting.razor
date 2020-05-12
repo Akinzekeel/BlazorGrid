@@ -1,14 +1,38 @@
 @page "/sorting"
 <h1>Sorting</h1>
-<p>In this example, some of the columns support sorting. This is achieved by providing the <code>GridCol</code> component with a value for the <code>Sortable</code> parameter. The string representation of this member expression is then passed onto the <code>IGridProvider</code> whenever the order of the grid is changed.</p>
+<p>In this example, some of the columns support sorting. This is achieved by providing the <code>GridCol</code> component with a value for the <code>OrderBy</code> parameter. When any of the header cells is clicked, the value of that parameter is then passed onto the <code>IGridProvider</code> which should return ordered data.</p>
 <p>Apart from this user-definable sorting, you can also provide a default value to the grid by using the parameters <code>DefaultOrderBy</code> and <code>DefaultOrderByDescending</code>.</p>
+<div class="alert alert-success">
+    <h4 class="alert-heading">Tip</h4>
+    <div><code>BlazorGrid.Abstractions.Extensions</code> contains extension methods for ordering IQueryables only by providing a string. Once you add the namespace, simply call <code>myQuery.OrderBy("someProperty")</code>.</div>
+</div>
 <hr />
 @if(ShowCode)
 {
+    <pre class="pre-scrollable"><code>&lt;BlazorGrid TRow=&quot;Employee&quot; SourceUrl=&quot;Data/employees.json&quot;&gt;
+    &lt;GridCol FitToContent=&quot;true&quot;&gt;
+        &lt;img src=&quot;@@context.Avatar&quot; style=&quot;width: 20px; height: 20px;&quot; /&gt;
+    &lt;/GridCol&gt;
+    &lt;GridCol Caption=&quot;#&quot; FitToContent=&quot;true&quot; OrderBy=&quot;@@nameof(context.Id)&quot;&gt;
+        @@context.Id
+    &lt;/GridCol&gt;
+    &lt;GridCol Caption=&quot;First name&quot; OrderBy=&quot;@@nameof(context.FirstName)&quot;&gt;
+        @@context.FirstName
+    &lt;/GridCol&gt;
+    &lt;GridCol Caption=&quot;Last name&quot; OrderBy=&quot;@@nameof(context.LastName)&quot;&gt;
+        @@context.LastName
+    &lt;/GridCol&gt;
+    &lt;GridCol Caption=&quot;Email address&quot; OrderBy=&quot;@@nameof(context.Email)&quot;&gt;
+        &lt;a href=&quot;mailto:@@context.Email&quot;&gt;@@context.Email&lt;/a&gt;
+    &lt;/GridCol&gt;
+&lt;/BlazorGrid&gt;</code></pre>
 
+    <button class="btn btn-sm btn-secondary" @onclick="() => ShowCode = false">Show code</button>
 }
 else
 {
+    <button class="btn btn-sm btn-secondary mb-2" @onclick="() => ShowCode = true">Show code</button>
+
     <BlazorGrid TRow="Employee" SourceUrl="Data/employees.json">
         <GridCol FitToContent="true">
             <img src="@context.Avatar" style="width: 20px; height: 20px;" />
