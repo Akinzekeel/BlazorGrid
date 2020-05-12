@@ -16,9 +16,10 @@ namespace BlazorGrid.Providers
             this.http = http;
         }
 
-        public virtual async Task<T> GetAsync<T>(string BaseUrl, string RowId)
+        public virtual async Task<T> ReloadAsync<T>(string BaseUrl, T Row)
         {
-            var url = GetRequestUrl(BaseUrl, RowId);
+            var r = Row as IGridRow;
+            var url = GetRequestUrl(BaseUrl, r?.RowId);
             var response = await http.GetAsync(url);
             return await DeserializeJsonAsync<T>(response);
         }

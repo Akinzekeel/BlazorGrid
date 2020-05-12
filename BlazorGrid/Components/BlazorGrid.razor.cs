@@ -80,9 +80,9 @@ namespace BlazorGrid.Components
 
                 if (Rows == null)
                 {
-                await LoadAsync(true);
+                    await LoadAsync(true);
+                }
             }
-        }
         }
 
         private async Task LoadAsync(bool Initialize)
@@ -153,6 +153,8 @@ namespace BlazorGrid.Components
         }
 
         private bool IsRefreshing;
+
+        [Obsolete]
         public async Task RefreshAsync()
         {
             if (IsRefreshing) return;
@@ -166,7 +168,7 @@ namespace BlazorGrid.Components
                 if (LastClickedRowIndex > -1)
                 {
                     var row = Rows[LastClickedRowIndex];
-                    var result = await Provider.GetAsync<TRow>(SourceUrl, row.RowId);
+                    var result = await Provider.ReloadAsync<TRow>(SourceUrl, row);
 
                     if (result == null)
                     {
@@ -182,37 +184,38 @@ namespace BlazorGrid.Components
                 }
                 else
                 {
-                    var result = await Provider.GetAsync<TRow>(
-                        SourceUrl,
-                        0,
-                        PageSize,
-                        OrderByPropertyName,
-                        OrderByDescending,
-                        QueryDebounced
-                    );
+                    await LoadAsync(true);
+                    // var result = await Provider.GetAsync<TRow>(
+                    //     SourceUrl,
+                    //     0,
+                    //     PageSize,
+                    //     OrderByPropertyName,
+                    //     OrderByDescending,
+                    //     QueryDebounced
+                    // );
 
-                    var newRow = result.Data.FirstOrDefault();
+                    // var newRow = result.Data.FirstOrDefault();
 
-                    if (newRow != null)
-                    {
-                        // A row has been added
-                        if (!Rows.Any(x => x.RowId == newRow.RowId))
-                        {
-                            Rows.Insert(0, newRow);
-                        }
-                        else
-                        {
-                            // The total count is unchanged but the row might have been
-                            // updated. Find & update it in our cache as well
-                            var i = Rows.FindIndex(0, Rows.Count, x => x.RowId == newRow.RowId);
-                            Rows[i] = newRow;
-                        }
-                    }
-                    else
-                    {
-                        // Looks like our row has been deleted
-                        Rows.RemoveAt(0);
-                    }
+                    // if (newRow != null)
+                    // {
+                    //     // A row has been added
+                    //     if (!Rows.Any(x => x.RowId == newRow.RowId))
+                    //     {
+                    //         Rows.Insert(0, newRow);
+                    //     }
+                    //     else
+                    //     {
+                    //         // The total count is unchanged but the row might have been
+                    //         // updated. Find & update it in our cache as well
+                    //         var i = Rows.FindIndex(0, Rows.Count, x => x.RowId == newRow.RowId);
+                    //         Rows[i] = newRow;
+                    //     }
+                    // }
+                    // else
+                    // {
+                    //     // Looks like our row has been deleted
+                    //     Rows.RemoveAt(0);
+                    // }
                 }
 
                 await InvokeAsync(StateHasChanged);
