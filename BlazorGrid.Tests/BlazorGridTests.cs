@@ -15,14 +15,13 @@ namespace EOS.Client.Tests.ComponentTests
     [TestClass]
     public class DataTableTests : ComponentTestFixture
     {
-        class MyDto : IGridRow
+        class MyDto
         {
             public MyDto() : this(Guid.NewGuid()) { }
             public MyDto(Guid id) { Id = id; }
 
             public Guid Id { get; private set; }
             public string Name { get; set; } = Guid.NewGuid().ToString();
-            public string RowId => Id.ToString();
         }
 
         // [DataTestMethod]
