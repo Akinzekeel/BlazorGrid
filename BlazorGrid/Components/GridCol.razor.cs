@@ -14,27 +14,13 @@ namespace BlazorGrid.Components
         [Parameter] public RenderFragment ChildContent { get; set; }
         [Parameter] public bool FitToContent { get; set; }
         [Parameter] public bool AlignRight { get; set; }
-
-        [Parameter]
-        public Expression<Func<object>> Sortable
-        {
-            get => _Sortable; set
-            {
-                _Sortable = value;
-                _SortablePropertyName = _Sortable == null
-                    ? null
-                    : ExpressionHelper.GetPropertyName(_Sortable);
-            }
-        }
-
-        private string _SortablePropertyName;
-        private Expression<Func<object>> _Sortable;
-
-        public string SortablePropertyName => _SortablePropertyName;
+        [Parameter] public string OrderBy { get; set; }
 
         private bool IsRegistered;
-
         public string CssClass => AlignRight ? "text-right" : "";
+
+        private bool IsSortable => !string.IsNullOrEmpty(OrderBy);
+        private bool IsSorted => IsSortable && Parent?.OrderByPropertyName == OrderBy;
 
         protected override void OnParametersSet()
         {

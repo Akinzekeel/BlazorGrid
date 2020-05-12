@@ -71,17 +71,5 @@ namespace BlazorGrid.Abstractions.Helpers
 
             return selector;
         }
-
-        /// Creates a predicate in the form of x => x.Id == id
-        /// in which id is a constant value. This expression can then
-        /// be used in a Where Linq filter. This function is EF compatible.
-        public static Expression<Func<TItem, bool>> WhereIdExpression<TItem, TKey>(TKey Id, string KeyPropertyName = "Id")
-        {
-            ParameterExpression argParam = Expression.Parameter(typeof(TItem), "x");
-            Expression keyProperty = Expression.Property(argParam, KeyPropertyName);
-            var input = Expression.Constant(Id);
-            Expression eq = Expression.Equal(keyProperty, input);
-            return Expression.Lambda<Func<TItem, bool>>(eq, argParam);
-        }
     }
 }

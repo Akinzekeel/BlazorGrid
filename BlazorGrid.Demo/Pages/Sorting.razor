@@ -13,16 +13,16 @@ else
         <GridCol FitToContent="true">
             <img src="@context.Avatar" style="width: 20px; height: 20px;" />
         </GridCol>
-        <GridCol Caption="#" FitToContent="true" Sortable="() => context.Id">
+        <GridCol Caption="#" FitToContent="true" OrderBy="@nameof(context.Id)">
             @context.Id
         </GridCol>
-        <GridCol Caption="First name" Sortable="() => context.FirstName">
+        <GridCol Caption="First name" OrderBy="@nameof(context.FirstName)">
             @context.FirstName
         </GridCol>
-        <GridCol Caption="Last name" Sortable="() => context.LastName">
+        <GridCol Caption="Last name" OrderBy="@nameof(context.LastName)">
             @context.LastName
         </GridCol>
-        <GridCol Caption="Email address" Sortable="() => context.Email">
+        <GridCol Caption="Email address" OrderBy="@nameof(context.Email)">
             <a href="mailto:@context.Email">@context.Email</a>
         </GridCol>
     </BlazorGrid>
