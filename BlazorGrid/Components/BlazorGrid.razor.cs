@@ -12,7 +12,7 @@ using BlazorGrid.Helpers;
 
 namespace BlazorGrid.Components
 {
-    public partial class BlazorGrid<TRow> : IBlazorGrid where TRow : class, IGridRow
+    public partial class BlazorGrid<TRow> : IBlazorGrid where TRow : class
     {
         [Inject] public IGridProvider Provider { get; set; }
         [Inject] public NavigationManager Nav { get; set; }
