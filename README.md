@@ -10,7 +10,6 @@ BlazorGrid does not match all of the features of jQuery.DataTables, however it i
 ## Features
 - Fetching remote data page-wise
 - Sorting, filtering & paging (server-side only)
-- Smart refresh
 - Based on CSS grids instead of table elements
 
 ### BlazorGrid is probably not the right choice if...
@@ -20,7 +19,7 @@ BlazorGrid does not match all of the features of jQuery.DataTables, however it i
 
 ## Setup
 ### Step 1: Install
-In your client-side Blazor project, install the NuGet package with the following command: 
+In your client-side Blazor project, install the NuGet package with the following command:
 ```powershell
 dotnet add package Akinzekeel.BlazorGrid
 ```
@@ -34,7 +33,7 @@ dotnet add package Akinzekeel.BlazorGrid.Abstractions
 BlazorGrid will usually request data in batches by using **offset** and **length**. These can easily be translated to Linq on the server side with the `Take()` and `Skip()` methods (see step 4 on how to do that).
 
 However, there are scenarios where we do not have any control over the server-side. For these cases, you can implement your own IGridProvider. It is the responsibility of this provider to place requests in the correct format and then return the data as a GridPageResult<T>.
-  
+
 If you have control over the data-source/api/server, then I recommend you to use the DefaultHttpProvider.
 
 To set up a provider in dependency injection, go to **Program.cs** in your client-side project and register the service like so:
@@ -44,12 +43,9 @@ using BlazorGrid.Providers;
 using BlazorGrid.Abstractions;
 // ...
 builder.Services.AddTransient<IGridProvider, DefaultHttpProvider>();
-``` 
+```
 
-### Step 3: Set up your models
-Models or dto's which you want to display in the grid need to have a unique row id. Therefore your models must implement `IGridRow` which has a string getter called `RowId`. The `RowId` is required for smart refresh to work.
-
-### Step 4 (optional): Set up your Web Api
+### Step 3: Set up your Web Api
 If you are pulling data from your own Web Api project, then your action method should look something like this (assuming you use the DefaultHttpProvider):
 ```c#
 using System.Threading;
@@ -129,8 +125,8 @@ namespace Sample
 Now that the setup is complete, it's time to see the grid in action! Create a razor page in your client project and add the following code:
 ```razor
 <BlazorGrid TRow="MyDto" SourceUrl="Api/MySample">
-  <GridCol TRow="MyDto">@context.Name</Column>
-  <GridCol TRow="MyDto">@context.Timestamp</Column>
+  <GridCol>@context.Name</Column>
+  <GridCol>@context.Timestamp</Column>
 </BlazorGrid>
 ```
 
@@ -140,7 +136,7 @@ The component comes with a default css file which you can use out of the box for
 Some of the styles & variables are based on the amazing [Spectre CSS framework](https://picturepan2.github.io/spectre/). If you already use that then customization will be even easier.
 
 # Roadmap
-This package is currently in preview lest because it is both my very first GitHub repository and my first NuGet package so I've got plenty to learn and discover. 
+This package is currently in preview lest because it is both my very first GitHub repository and my first NuGet package so I've got plenty to learn and discover.
 
 I would like to get the following things done before removing the preview status:
 1. Localization
