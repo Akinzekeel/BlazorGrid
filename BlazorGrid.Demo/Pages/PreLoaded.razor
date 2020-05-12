@@ -1,0 +1,21 @@
+@page "/pre-loaded"
+@using System.Globalization
+<h1>Pre loaded data</h1>
+<p>BlazorGrid has limited support for client-side data. The following grids uses a list of .Net's CultureInfo objects without any provider. Sorting, paging and filtering is not supported because those require a provider.</p>
+@if(ShowCode)
+{
+
+}
+else
+{
+    <BlazorGrid Rows="Data" TRow="CultureInfo">
+        <GridCol Caption="LCID">@context.LCID</GridCol>
+        <GridCol Caption="ISO code">@context.ThreeLetterISOLanguageName</GridCol>
+        <GridCol Caption="Display name">@context.DisplayName</GridCol>
+    </BlazorGrid>
+}
+@code
+{
+    public bool ShowCode { get; set; }
+    private List<CultureInfo> Data { get; set; } = CultureInfo.GetCultures(CultureTypes.AllCultures).ToList();
+}
