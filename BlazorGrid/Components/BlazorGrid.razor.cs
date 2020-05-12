@@ -77,8 +77,12 @@ namespace BlazorGrid.Components
                 }
 
                 ParametersSetCalled = true;
+
+                if (Rows == null)
+                {
                 await LoadAsync(true);
             }
+        }
         }
 
         private async Task LoadAsync(bool Initialize)
