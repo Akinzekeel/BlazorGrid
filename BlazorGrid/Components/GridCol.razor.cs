@@ -1,8 +1,8 @@
-using BlazorGrid.Abstractions;
 using System.Linq.Expressions;
 using Microsoft.AspNetCore.Components;
 using System;
 using BlazorGrid.Interfaces;
+using BlazorGrid.Abstractions.Helpers;
 
 namespace BlazorGrid.Components
 {
@@ -23,7 +23,7 @@ namespace BlazorGrid.Components
                 _Sortable = value;
                 _SortablePropertyName = _Sortable == null
                     ? null
-                    : Helpers.ExpressionHelper.GetPropertyName(_Sortable);
+                    : ExpressionHelper.GetPropertyName(_Sortable);
             }
         }
 

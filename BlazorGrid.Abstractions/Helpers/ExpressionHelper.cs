@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
-namespace BlazorGrid.Helpers
+namespace BlazorGrid.Abstractions.Helpers
 {
-    internal static class ExpressionHelper
+    public static class ExpressionHelper
     {
         public static string GetPropertyName<T>(Expression<Func<T, object>> expression)
             => GetPropertyName(expression.Body);

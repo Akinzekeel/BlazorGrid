@@ -1,5 +1,4 @@
 using System.Data;
-using System.ComponentModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using BlazorGrid.Interfaces;
 using BlazorGrid.Abstractions;
-using BlazorGrid.Helpers;
+using BlazorGrid.Abstractions.Helpers;
 
 namespace BlazorGrid.Components
 {

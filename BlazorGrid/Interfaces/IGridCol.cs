@@ -8,7 +8,7 @@ namespace BlazorGrid.Interfaces
         RenderFragment ChildContent { get; }
         string CssClass { get; }
         bool AlignRight { get; }
-        string SortablePropertyName { get; }
+        // string SortablePropertyName { get; }
         bool FitToContent { get; }
     }
 }
