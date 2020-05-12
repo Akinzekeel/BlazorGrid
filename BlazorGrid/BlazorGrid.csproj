@@ -9,7 +9,7 @@
     <Preview></Preview>
     <Authors>Majid Iqbal</Authors>
     <Company />
-    <Description>A light weight data grid component for Blazor, focused on remote data. Supports filtering, sorting, paging &amp; smart refresh</Description>
+    <Description>A light weight data grid component for Blazor, focused on remote data. Supports filtering, sorting &amp; paging</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/Akinzekeel/BlazorGrid</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Akinzekeel/BlazorGrid</RepositoryUrl>
