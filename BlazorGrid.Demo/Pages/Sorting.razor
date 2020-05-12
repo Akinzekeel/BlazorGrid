@@ -1,0 +1,33 @@
+@page "/sorting"
+<h1>Sorting</h1>
+<p>In this example, some of the columns support sorting. This is achieved by providing the <code>GridCol</code> component with a value for the <code>Sortable</code> parameter. The string representation of this member expression is then passed onto the <code>IGridProvider</code> whenever the order of the grid is changed.</p>
+<p>Apart from this user-definable sorting, you can also provide a default value to the grid by using the parameters <code>DefaultOrderBy</code> and <code>DefaultOrderByDescending</code>.</p>
+<hr />
+@if(ShowCode)
+{
+
+}
+else
+{
+    <BlazorGrid TRow="Employee" SourceUrl="Data/employees.json">
+        <GridCol FitToContent="true">
+            <img src="@context.Avatar" style="width: 20px; height: 20px;" />
+        </GridCol>
+        <GridCol Caption="#" FitToContent="true" Sortable="() => context.Id">
+            @context.Id
+        </GridCol>
+        <GridCol Caption="First name" Sortable="() => context.FirstName">
+            @context.FirstName
+        </GridCol>
+        <GridCol Caption="Last name" Sortable="() => context.LastName">
+            @context.LastName
+        </GridCol>
+        <GridCol Caption="Email address" Sortable="() => context.Email">
+            <a href="mailto:@context.Email">@context.Email</a>
+        </GridCol>
+    </BlazorGrid>
+}
+@code
+{
+    public bool ShowCode { get; set; }
+}
