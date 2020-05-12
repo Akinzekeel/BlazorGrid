@@ -69,7 +69,7 @@ namespace BlazorGrid.Components
             {
                 if (DefaultOrderBy != null)
                 {
-                    OrderByPropertyName = Helpers.ExpressionHelper.GetPropertyName(DefaultOrderBy);
+                    OrderByPropertyName = ExpressionHelper.GetPropertyName(DefaultOrderBy);
                     OrderByDescending = DefaultOrderByDescending;
                 }
 
