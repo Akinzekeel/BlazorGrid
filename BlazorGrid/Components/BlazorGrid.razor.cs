@@ -63,6 +63,8 @@ namespace BlazorGrid.Components
         private IList<IGridCol> Columns { get; set; } = new List<IGridCol>();
         private Exception LoadingError { get; set; }
 
+        public event EventHandler<int> OnAfterRowClicked;
+
         private bool ParametersSetCalled;
         protected override async Task OnParametersSetAsync()
         {
@@ -255,6 +257,8 @@ namespace BlazorGrid.Components
             {
                 OnClick.InvokeAsync(r);
             }
+
+            OnAfterRowClicked?.Invoke(this, index);
         }
 
         public void Add(IGridCol col)
