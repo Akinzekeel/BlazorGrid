@@ -5,10 +5,11 @@
 
 <p>This example shows what the grid looks like with the minimum amount of configuration.</p>
 <p>For the purpose of this demo, all of the data is pulled from a static JSON file. Paging is handled by a custom provider which I wrote just for this demo.</p>
-
+<button class="btn btn-sm btn-outline-primary" @onclick="() => { ShowCode =! ShowCode; }">Toggle code view</button>
+<hr />
 @if(ShowCode)
 {
-    <pre class="mb-2 pre-scrollable"><code>&lt;BlazorGrid TRow=&quot;Employee&quot; SourceUrl=&quot;Data/employees.json&quot;&gt;
+    <pre class="pre-scrollable"><code>&lt;BlazorGrid TRow=&quot;Employee&quot; SourceUrl=&quot;Data/employees.json&quot;&gt;
     &lt;GridCol FitToContent=&quot;true&quot;&gt;
         &lt;img src=&quot;@@context.Avatar&quot; style=&quot;width: 20px; height: 20px;&quot; /&gt;
     &lt;/GridCol&gt;
@@ -25,12 +26,9 @@
         &lt;a href=&quot;mailto:@@context.Email&quot;&gt;@@context.Email&lt;/a&gt;
     &lt;/GridCol&gt;
 &lt;/BlazorGrid&gt;</code></pre>
-
-    <button class="btn btn-sm btn-secondary" @onclick="() => { ShowCode = false; }">Back</button>
 }
 else
 {
-    <button class="btn btn-sm btn-secondary mb-2" @onclick="() => { ShowCode = true; }">Show code</button>
 
     <BlazorGrid TRow="Employee" SourceUrl="Data/employees.json">
         <GridCol FitToContent="true">

@@ -6,6 +6,7 @@
     <h4 class="alert-heading">Tip</h4>
     <div><code>BlazorGrid.Abstractions.Extensions</code> contains extension methods for ordering IQueryables only by providing a string. Once you add the namespace, simply call <code>myQuery.OrderBy("someProperty")</code>.</div>
 </div>
+<button class="btn btn-sm btn-outline-primary" @onclick="() => { ShowCode =! ShowCode; }">Toggle code view</button>
 <hr />
 @if(ShowCode)
 {
@@ -26,13 +27,9 @@
         &lt;a href=&quot;mailto:@@context.Email&quot;&gt;@@context.Email&lt;/a&gt;
     &lt;/GridCol&gt;
 &lt;/BlazorGrid&gt;</code></pre>
-
-    <button class="btn btn-sm btn-secondary" @onclick="() => ShowCode = false">Show code</button>
 }
 else
 {
-    <button class="btn btn-sm btn-secondary mb-2" @onclick="() => ShowCode = true">Show code</button>
-
     <BlazorGrid TRow="Employee" SourceUrl="Data/employees.json">
         <GridCol FitToContent="true">
             <img src="@context.Avatar" style="width: 20px; height: 20px;" />
