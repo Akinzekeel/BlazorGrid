@@ -54,6 +54,7 @@ namespace BlazorGrid.Components
         [Parameter] public Func<TRow, string> Href { get; set; }
         [Parameter] public Expression<Func<TRow, object>> DefaultOrderBy { get; set; }
         [Parameter] public bool DefaultOrderByDescending { get; set; }
+        [Parameter] public List<TRow> Rows { get; set; }
 
         private string QueryDebounced { get; set; }
         public string OrderByPropertyName { get; private set; }
@@ -224,8 +225,6 @@ namespace BlazorGrid.Components
                 return string.Join(' ', sizes);
             }
         }
-
-        private List<TRow> Rows { get; set; }
 
         public Task LoadMoreAsync()
         {
