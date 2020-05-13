@@ -37,32 +37,49 @@ else
         </BlazorGrid>
     </div>
 
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
+    @if(ShowModal && _clickedRow != null)
+    {
+        <div class="modal modal-sm active">
+            <a @onclick="() => ShowModal = false" class="modal-overlay" aria-label="Close"></a>
+            <div class="modal-container">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <a @onclick="() => ShowModal = false" class="btn btn-clear float-right" aria-label="Close"></a>
+                    <div class="modal-title h5">You clicked on the following row</div>
                 </div>
                 <div class="modal-body">
-                    ...
+                <div class="content">
+                    <dl>
+                        <dt>Id</dt>
+                        <dd>@_clickedRow.Id</dd>
+                        <dt>First name</dt>
+                        <dd>@_clickedRow.FirstName</dd>
+                        <dt>Last name</dt>
+                        <dd>@_clickedRow.LastName</dd>
+                        <dt>Email address</dt>
+                        <dd>@_clickedRow.Email</dd>
+                    </dl>
+                </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button class="btn btn-sm btn-primary" @onclick="() => ShowModal = false">Close</button>
                 </div>
             </div>
         </div>
-    </div>
+    }
 }
 @code
 {
     public bool ShowCode { get; set; }
+    public bool ShowModal { get; set; }
+
+    private Employee _clickedRow;
 
     private void ShowDetails(Employee row)
     {
-        nav.NavigateTo("#exampleModal");
+        if(row != null)
+        {
+            _clickedRow = row;
+            ShowModal = true;
+        }
     }
 }
