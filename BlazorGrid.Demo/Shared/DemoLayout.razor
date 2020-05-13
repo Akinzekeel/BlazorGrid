@@ -1,0 +1,50 @@
+@inherits LayoutComponentBase
+<TopNav />
+<div class="container grid-lg py-2">
+    <div class="columns col-oneline">
+        <div class="column col-auto">
+            <ul class="menu">
+                <li class="menu-item">
+                    <NavLink class="" href="/demos/basic">
+                        Basic example
+                    </NavLink>
+                </li>
+                <li class="menu-item">
+                    <NavLink class="" href="/demos/sorting">
+                        Sorting
+                    </NavLink>
+                </li>
+                <li class="menu-item">
+                    <NavLink class="" href="/demos/on-click">
+                        OnClick action
+                    </NavLink>
+                </li>
+                <li class="menu-item">
+                    <NavLink class="" href="/demos/events">
+                        Events
+                    </NavLink>
+                </li>
+                <li class="menu-item">
+                    <NavLink class="" href="/demos/custom-provider">
+                        Custom provider
+                    </NavLink>
+                </li>
+                <li class="menu-item">
+                    <NavLink class="" href="/demos/pre-loaded">
+                        Pre-loaded data
+                    </NavLink>
+                </li>
+                <li class="menu-item">
+                    <NavLink class="" href="/demos/custom-styling">
+                        Custom styling
+                    </NavLink>
+                </li>
+            </ul>
+        </div>
+        <div class="column col-auto divider-vert hidden"></div>
+        <div class="column col-auto" style="flex-shrink: 1;" id="content">
+            @Body
+        </div>
+    </div>
+</div>
+<PageFooter />

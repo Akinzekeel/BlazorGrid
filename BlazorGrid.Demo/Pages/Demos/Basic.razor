@@ -1,15 +1,12 @@
-@page "/basic"
-@inject HttpClient Http
-
+@page "/demos/basic"
+@layout DemoLayout
 <h1>Basic example</h1>
-
 <p>This example shows what the grid looks like with the minimum amount of configuration.</p>
 <p>For the purpose of this demo, all of the data is pulled from a static JSON file. Paging is handled by a custom provider which I wrote just for this demo.</p>
-<button class="btn btn-sm btn-outline-primary" @onclick="() => { ShowCode =! ShowCode; }">Toggle code view</button>
-<hr />
+<button class="btn btn-sm btn-primary mb-2" @onclick="() => { ShowCode =! ShowCode; }">Toggle code view</button>
 @if(ShowCode)
 {
-    <pre class="pre-scrollable"><code>&lt;BlazorGrid TRow=&quot;Employee&quot; SourceUrl=&quot;Data/employees.json&quot;&gt;
+    <pre class="code" data-lang="Razor"><code class="bg-dark text-light">&lt;BlazorGrid TRow=&quot;Employee&quot; SourceUrl=&quot;Data/employees.json&quot;&gt;
     &lt;GridCol FitToContent=&quot;true&quot;&gt;
         &lt;img src=&quot;@@context.Avatar&quot; style=&quot;width: 20px; height: 20px;&quot; /&gt;
     &lt;/GridCol&gt;
@@ -29,24 +26,25 @@
 }
 else
 {
-
-    <BlazorGrid TRow="Employee" SourceUrl="Data/employees.json">
-        <GridCol FitToContent="true">
-            <img src="@context.Avatar" style="width: 20px; height: 20px;" />
-        </GridCol>
-        <GridCol Caption="#" FitToContent="true">
-            @context.Id
-        </GridCol>
-        <GridCol Caption="First name">
-            @context.FirstName
-        </GridCol>
-        <GridCol Caption="Last name">
-            @context.LastName
-        </GridCol>
-        <GridCol Caption="Email address">
-            <a href="mailto:@context.Email">@context.Email</a>
-        </GridCol>
-    </BlazorGrid>
+    <div>
+        <BlazorGrid TRow="Employee" SourceUrl="Data/employees.json">
+            <GridCol FitToContent="true">
+                <img src="@context.Avatar" style="width: 20px; height: 20px;" />
+            </GridCol>
+            <GridCol Caption="#" FitToContent="true">
+                @context.Id
+            </GridCol>
+            <GridCol Caption="First name">
+                @context.FirstName
+            </GridCol>
+            <GridCol Caption="Last name">
+                @context.LastName
+            </GridCol>
+            <GridCol Caption="Email address">
+                <a href="mailto:@context.Email">@context.Email</a>
+            </GridCol>
+        </BlazorGrid>
+    </div>
 }
 @code
 {

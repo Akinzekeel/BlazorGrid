@@ -1,0 +1,68 @@
+@layout DemoLayout
+@page "/demos/on-click"
+@inject NavigationManager nav
+<h1>OnClick actions</h1>
+<p>Grid rows can invoke an action when clicked. Simply provide a delegate to the grid's <code>OnClick</code> event handler which takes a parameter of type <code>TRow</code>.</p>
+<p>Alternatively, you may also set a function of type <code>Func&lt;TRow, string&gt;</code> to the <code>Href</code> parameter of the grid. This is a shorthand for calling the <code>NavigationManager.NavigateTo(string)</code>.</p>
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title">Tip</h4>
+        <span>All rows in the grid will have a CSS class <code>clickable</code> if you provide either a delegate or a function to the aforementioned parameters. You can use this class for additional styling if necessary.</span>
+    </div>
+</div>
+<button class="btn btn-sm btn-primary my-2" @onclick="() => { ShowCode =! ShowCode; }">Toggle code view</button>
+@if(ShowCode)
+{
+    <pre class="code" data-lang="Razor"><code></code></pre>
+}
+else
+{
+    <div>
+        <BlazorGrid TRow="Employee" SourceUrl="Data/employees.json" OnClick="row => ShowDetails(row)">
+            <GridCol FitToContent="true">
+                <img src="@context.Avatar" style="width: 20px; height: 20px;" />
+            </GridCol>
+            <GridCol Caption="#" FitToContent="true">
+                @context.Id
+            </GridCol>
+            <GridCol Caption="First name">
+                @context.FirstName
+            </GridCol>
+            <GridCol Caption="Last name">
+                @context.LastName
+            </GridCol>
+            <GridCol Caption="Email address">
+                <a href="mailto:@context.Email">@context.Email</a>
+            </GridCol>
+        </BlazorGrid>
+    </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@code
+{
+    public bool ShowCode { get; set; }
+
+    private void ShowDetails(Employee row)
+    {
+        nav.NavigateTo("#exampleModal");
+    }
+}

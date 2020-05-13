@@ -1,0 +1,35 @@
+@layout DemoLayout
+@page "/demos/pre-loaded"
+@using System.Globalization
+<h1>Pre loaded data</h1>
+<p>BlazorGrid has basic support for displaying client-side data. The following grid uses a list of .Net's <code>CultureInfo</code> objects without any provider. Sorting, paging and filtering is not supported because those features depend on a provider.</p>
+<p>Pre loading data in this fashion is not ideal due to limited features and potentially worse performance, however it can be suitable for small amounts of data.</p>
+<button class="btn btn-sm btn-primary my-2" @onclick="() => { ShowCode =! ShowCode; }">Toggle code view</button>
+@if(ShowCode)
+{
+    <pre class="code" data-lang="Razor"><code class="bg-dark text-light">&lt;BlazorGrid Rows=&quot;Data&quot; TRow=&quot;CultureInfo&quot;&gt;
+    &lt;GridCol Caption=&quot;LCID&quot;&gt;@@context.LCID&lt;/GridCol&gt;
+    &lt;GridCol Caption=&quot;ISO code&quot;&gt;@@context.ThreeLetterISOLanguageName&lt;/GridCol&gt;
+    &lt;GridCol Caption=&quot;Display name&quot;&gt;@@context.DisplayName&lt;/GridCol&gt;
+&lt;/BlazorGrid&gt;
+
+@@code
+{
+    private List&lt;CultureInfo&gt; Data { get; set; } = CultureInfo.GetCultures(CultureTypes.NeutralCultures).ToList();
+}</code></pre>
+}
+else
+{
+    <div>
+        <BlazorGrid Rows="Data" TRow="CultureInfo">
+            <GridCol Caption="LCID">@context.LCID</GridCol>
+            <GridCol Caption="ISO code">@context.ThreeLetterISOLanguageName</GridCol>
+            <GridCol Caption="Display name">@context.DisplayName</GridCol>
+        </BlazorGrid>
+    </div>
+}
+@code
+{
+    public bool ShowCode { get; set; }
+    private List<CultureInfo> Data { get; set; } = CultureInfo.GetCultures(CultureTypes.NeutralCultures).ToList();
+}

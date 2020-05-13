@@ -1,0 +1,95 @@
+/**
+    Part of Akinzekeel.BlazorGrid
+    Last updated for version 0.2.2-beta
+**/
+@import "variables";
+
+.blazor-grid {
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background-color: inherit;
+
+    .grid-scrollview {
+        display: grid;
+        background-color: inherit;
+        grid-template-columns: repeat(auto);
+    }
+
+    .grid-row {
+        display: contents;
+
+        > * {
+            padding: $layout-spacing;
+            border-bottom: 1px solid $component-hover-color;
+            border-left: 2px solid transparent;
+        }
+
+        &.clickable {
+            cursor: pointer;
+        }
+
+        &.grid-header {
+            background-color: inherit;
+
+            > * {
+                top: 0;
+                position: sticky;
+                white-space: nowrap;
+                background: $bg-color;
+                z-index: 10;
+                font-weight: bold;
+
+                &:first-child {
+                    border-left: none;
+                }
+
+                .sorted-indicator {
+                    font-size: $font-size-sm;
+                    visibility: hidden;
+                }
+
+                &.sorted {
+                    .sorted-indicator {
+                        visibility: visible;
+                        color: $primary-color-light;
+                    }
+                }
+
+                &.sortable {
+                    cursor: pointer;
+
+                    &:hover,
+                    &:focus {
+                        color: $primary-color !important;
+                        background: $component-hover-color;
+                    }
+
+                    &:active {
+                        background: $bg-color-dark;
+                    }
+                }
+            }
+            &:hover {
+                > * + * {
+                    border-left: 2px solid $component-hover-color;
+                }
+            }
+        }
+
+        &.clickable {
+            &:hover,
+            &:focus {
+                > * {
+                    background-color: $component-hover-color;
+                }
+            }
+
+            &:active {
+                > * {
+                    background-color: $component-active-color;
+                }
+            }
+        }
+    }
+}
