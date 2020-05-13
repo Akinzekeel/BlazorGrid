@@ -1,19 +1,21 @@
-![NuGet package](https://github.com/Akinzekeel/BlazorGrid/workflows/Publish%20main%20project%20to%20NuGet/badge.svg)
+![NuGet package](https://img.shields.io/nuget/vpre/Akinzekeel.BlazorGrid)
 
 # BlazorGrid
 I've been a long time user of jQuery.DataTables and I think it's a really great plugin. However, even with no extra features and without jQuery, we're talking about some 15,000 lines of JavaScript. I needed a data grid in my Blazor project lately and I felt that wrapping a JavaScript library of this size wasn't something I really wanted to do, so instead I started writing my own component called BlazorGrid.
 
-BlazorGrid does not match all of the features of jQuery.DataTables, however it is also a lot more light-weight and does not depend on JavaScript at all.
+BlazorGrid does not match all of the features of jQuery.DataTables, however it is a lot more light-weight and does not depend on JavaScript at all.
 
-**WARNING: This package is currently in preview (version 0.2.0-beta at the point of writing this warning). See the end of the file for information on what's missing.**
+## [Click here to see a live demo](https://blazorgrid-demo.azurewebsites.net)
+
+**WARNING: This package is currently in preview (currently version 0.4.4-beta). See the end of the file for information on what's missing.**
 
 ## Features
 - Fetching remote data page-wise
 - Sorting, filtering & paging (server-side only)
-- Based on CSS grids instead of table elements
+- Tableless / based on pure CSS grids
+- Limited support for client-side data
 
 ### BlazorGrid is probably not the right choice if...
-- You need to handle client-side data
 - You need client-side sorting, filtering or paging
 - You need advanced features such as virtual scrolling, grouping or complex filtering with operators
 
@@ -23,18 +25,20 @@ In your client-side Blazor project, install the NuGet package with the following
 ```powershell
 dotnet add package Akinzekeel.BlazorGrid
 ```
-
-On your server-side Blazor or Web Api project and also in your shared project (or wherever your models or dto's are located), install the following NuGet package:
+In the project which will provide your remote data (Web Api or other) you may optionally install the following NuGet package:
 ```powershell
 dotnet add package Akinzekeel.BlazorGrid.Abstractions
 ```
+This optional package contains extension methods and interfaces without depending on Mvc or other packages.
 
-### Step 2: IGridProvider
-BlazorGrid will usually request data in batches by using **offset** and **length**. These can easily be translated to Linq on the server side with the `Take()` and `Skip()` methods (see step 4 on how to do that).
+### Step 2: Set up a provider
+BlazorGrid will usually request data in batches by using **offset** and **length**. These can easily be translated to Linq on the server side with the `Take()` and `Skip()` methods.
 
-However, there are scenarios where we do not have any control over the server-side. For these cases, you can implement your own IGridProvider. It is the responsibility of this provider to place requests in the correct format and then return the data as a GridPageResult<T>.
+However, there are scenarios where we do not have any control over the server-side. For these cases, you can implement your own `IGridProvider`. It is the responsibility of this provider to place requests in the correct format and then return the data as a `BlazorGridResult<T>`.
 
-If you have control over the data-source/api/server, then I recommend you to use the DefaultHttpProvider.
+If you have control over the data-source, api or server, then I recommend you to use the DefaultHttpProvider and adjust your action methods to take a parameter of type `BlazorGridRequest` (see step 3).
+
+Whether you write a custom provider or use the builtin one, you will need to set it up in your dependency injection configuration.
 
 To set up a provider in dependency injection, go to **Program.cs** in your client-side project and register the service like so:
 
@@ -46,7 +50,7 @@ builder.Services.AddTransient<IGridProvider, DefaultHttpProvider>();
 ```
 
 ### Step 3: Set up your Web Api
-If you are pulling data from your own Web Api project, then your action method should look something like this (assuming you use the DefaultHttpProvider):
+If you are pulling data from your own Web Api project, then your action method should look something like this (assuming you use the `DefaultHttpProvider`):
 ```c#
 using System.Threading;
 using BlazorGrid.Abstractions;
@@ -136,15 +140,15 @@ The component comes with a default css file which you can use out of the box for
 Some of the styles & variables are based on the amazing [Spectre CSS framework](https://picturepan2.github.io/spectre/). If you already use that then customization will be even easier.
 
 # Roadmap
-This package is currently in preview lest because it is both my very first GitHub repository and my first NuGet package so I've got plenty to learn and discover.
+This package is currently in preview.
 
 I would like to get the following things done before removing the preview status:
 1. Localization
-1. Support different data providers per grid
-1. Provide helper methods and classes for quick server-side setup
-1. Find a better way to perform smart-refresh which doesn't require IGridRow
-1. Improve documentation
-1. Finish the demo project & host it
-1. Responsive support
+2. Support different data providers per grid
+3. ~~Provide helper methods and classes for quick server-side setup~~
+4. Find a better way to perform smart-refresh which doesn't require IGridRow
+5. Improve documentation
+6. Finish the demo project & host it
+7. Responsive support
 
 If you want to contribute to this project you're always welcome to do so. In case of questions or comments you can also contact me on Twitter at @Akinzekeel.
