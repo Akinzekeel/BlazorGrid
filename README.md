@@ -5,9 +5,9 @@ I've been a long time user of jQuery.DataTables and I think it's a really great 
 
 BlazorGrid does not match all of the features of jQuery.DataTables, however it is a lot more light-weight and does not depend on JavaScript at all.
 
-## [Click here to see a live demo](https://blazorgrid-demo.azurewebsites.net)
+## [Click here to see a live demo](https://blazorgrid.z6.web.core.windows.net/)
 
-**WARNING: This package is currently in preview (currently version 0.4.4-beta). See the end of the file for information on what's missing.**
+**WARNING: This package is currently in preview. See the end of the file for information on what's missing.**
 
 ## Features
 - Fetching remote data page-wise
