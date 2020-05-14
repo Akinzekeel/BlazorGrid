@@ -1,23 +1,95 @@
 @layout DemoLayout
 @page "/demos/on-click"
 @inject NavigationManager nav
-<h1>OnClick actions</h1>
-<p>Grid rows can invoke an action when clicked. Simply provide a delegate to the grid's <code>OnClick</code> event handler which takes a parameter of type <code>TRow</code>.</p>
-<p>Alternatively, you may also set a function of type <code>Func&lt;TRow, string&gt;</code> to the <code>Href</code> parameter of the grid. This is a shorthand for calling the <code>NavigationManager.NavigateTo(string)</code>.</p>
-<div class="card">
-    <div class="card-body">
-        <h4 class="card-title">Tip</h4>
-        <span>All rows in the grid will have a CSS class <code>clickable</code> if you provide either a delegate or a function to the aforementioned parameters. You can use this class for additional styling if necessary.</span>
+<div class="float-right my-2">
+    <div class="form-group">
+        <label class="form-switch">
+            <input type="checkbox" @bind-value="ShowCode">
+            <i class="form-icon"></i> View source
+        </label>
     </div>
 </div>
-<button class="btn btn-sm btn-primary my-2" @onclick="() => { ShowCode =! ShowCode; }">Toggle code view</button>
+<h1>OnClick actions</h1>
 @if(ShowCode)
 {
-    <pre class="code" data-lang="Razor"><code></code></pre>
+    <div class="overflow-auto">
+    <pre class="code overflow-auto" data-lang="Razor"><code class="bg-dark text-light">&lt;BlazorGrid TRow=&quot;Employee&quot; SourceUrl=&quot;Data/employees.json&quot; OnClick=&quot;row =&gt; ShowDetails(row)&quot;&gt;
+    &lt;GridCol FitToContent=&quot;true&quot;&gt;
+        &lt;img src=&quot;@@context.Avatar&quot; style=&quot;width: 20px; height: 20px;&quot; /&gt;
+    &lt;/GridCol&gt;
+    &lt;GridCol Caption=&quot;#&quot; FitToContent=&quot;true&quot;&gt;
+        @@context.Id
+    &lt;/GridCol&gt;
+    &lt;GridCol Caption=&quot;First name&quot;&gt;
+        @@context.FirstName
+    &lt;/GridCol&gt;
+    &lt;GridCol Caption=&quot;Last name&quot;&gt;
+        @@context.LastName
+    &lt;/GridCol&gt;
+    &lt;GridCol Caption=&quot;Email address&quot;&gt;
+        &lt;a href=&quot;mailto:@@context.Email&quot;&gt;@@context.Email&lt;/a&gt;
+    &lt;/GridCol&gt;
+&lt;/BlazorGrid&gt;
+
+@@if(ShowModal &amp;&amp; _clickedRow != null)
+{
+    &lt;div class=&quot;modal modal-sm active&quot;&gt;
+        &lt;a @@onclick=&quot;() =&gt; ShowModal = false&quot; class=&quot;modal-overlay&quot; aria-label=&quot;Close&quot;&gt;&lt;/a&gt;
+        &lt;div class=&quot;modal-container&quot;&gt;
+            &lt;div class=&quot;modal-header&quot;&gt;
+                &lt;a @@onclick=&quot;() =&gt; ShowModal = false&quot; class=&quot;btn btn-clear float-right&quot; aria-label=&quot;Close&quot;&gt;&lt;/a&gt;
+                &lt;div class=&quot;modal-title h5&quot;&gt;You clicked on the following row&lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;modal-body&quot;&gt;
+            &lt;div class=&quot;content&quot;&gt;
+                &lt;dl&gt;
+                    &lt;dt&gt;Id&lt;/dt&gt;
+                    &lt;dd&gt;@@_clickedRow.Id&lt;/dd&gt;
+                    &lt;dt&gt;First name&lt;/dt&gt;
+                    &lt;dd&gt;@@_clickedRow.FirstName&lt;/dd&gt;
+                    &lt;dt&gt;Last name&lt;/dt&gt;
+                    &lt;dd&gt;@@_clickedRow.LastName&lt;/dd&gt;
+                    &lt;dt&gt;Email address&lt;/dt&gt;
+                    &lt;dd&gt;@@_clickedRow.Email&lt;/dd&gt;
+                &lt;/dl&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;modal-footer&quot;&gt;
+                &lt;button class=&quot;btn btn-sm btn-primary&quot; @@onclick=&quot;() =&gt; ShowModal = false&quot;&gt;Close&lt;/button&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+}
+
+@@code
+{
+    public bool ShowModal { get; set; }
+
+    private Employee _clickedRow;
+
+    private void ShowDetails(Employee row)
+    {
+        if(row != null)
+        {
+            _clickedRow = row;
+            ShowModal = true;
+        }
+    }
+}</code></pre>
+</div>
 }
 else
 {
-    <div>
+    <p>Grid rows can invoke an action when clicked. Simply provide a delegate to the grid's <code>OnClick</code> event handler which takes a parameter of type <code>TRow</code>.</p>
+    <p>Alternatively, you may also set a function of type <code>Func&lt;TRow, string&gt;</code> to the <code>Href</code> parameter of the grid. This is a shorthand for calling the <code>NavigationManager.NavigateTo(string)</code>.</p>
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Tip</h4>
+            <span>All rows in the grid will have a CSS class <code>clickable</code> if you provide either a delegate or a function to the aforementioned parameters. You can use this class for additional styling if necessary.</span>
+        </div>
+    </div>
+
+    <div class="mt-2">
         <BlazorGrid TRow="Employee" SourceUrl="Data/employees.json" OnClick="row => ShowDetails(row)">
             <GridCol FitToContent="true">
                 <img src="@context.Avatar" style="width: 20px; height: 20px;" />

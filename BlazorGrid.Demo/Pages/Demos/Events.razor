@@ -1,22 +1,73 @@
 @layout DemoLayout
 @page "/demos/events"
 @implements IDisposable
-<h1>Events</h1>
-<p>Currently, BlazorGrid only has one event called <code>OnAfterRowClicked</code> which you can bind to. As the name implies, this event is fired after a row has been clicked and after the <code>Href</code> function or the <code>OnClick</code> delegate have been executed.</p>
-<p>The event is useful if you need to write some type of plugin or need to be notified of row interactions programmatically.</p>
-<p>The event fires with an <code>int</code> as the argument. This is the index of the row which was clicked. If you need the entire row object, you can access it via the grid instance's <code>Rows</code> property. Note that this event always fires when a row is clicked - even when neither <code>Href</code> nor <code>OnClick</code> are provided.</p>
-<div class="card">
-    <div class="card-body">
-        You have clicked row index: <code>@clickedIndex</code>
+<div class="float-right my-2">
+    <div class="form-group">
+        <label class="form-switch">
+            <input type="checkbox" @bind-value="ShowCode">
+            <i class="form-icon"></i> View source
+        </label>
     </div>
 </div>
+<h1>Events</h1>
 @if(ShowCode)
 {
-    <pre class="code" data-lang="Razor"><code class="bg-dark text-light"></code></pre>
+    <pre class="code" data-lang="Razor"><code class="bg-dark text-light">&lt;BlazorGrid @@ref=&quot;grid&quot; TRow=&quot;Employee&quot; SourceUrl=&quot;Data/employees.json&quot;&gt;
+    &lt;GridCol FitToContent=&quot;true&quot;&gt;
+        &lt;img src=&quot;@@context.Avatar&quot; style=&quot;width: 20px; height: 20px;&quot; /&gt;
+    &lt;/GridCol&gt;
+    &lt;GridCol Caption=&quot;#&quot; FitToContent=&quot;true&quot;&gt;
+        @@context.Id
+    &lt;/GridCol&gt;
+    &lt;GridCol Caption=&quot;First name&quot;&gt;
+        @@context.FirstName
+    &lt;/GridCol&gt;
+    &lt;GridCol Caption=&quot;Last name&quot;&gt;
+        @@context.LastName
+    &lt;/GridCol&gt;
+    &lt;GridCol Caption=&quot;Email address&quot;&gt;
+        &lt;a href=&quot;mailto:@@context.Email&quot;&gt;@@context.Email&lt;/a&gt;
+    &lt;/GridCol&gt;
+&lt;/BlazorGrid&gt;
+
+@@code
+{
+    public BlazorGrid.Components.BlazorGrid&lt;Employee&gt; grid { get; set; }
+    private int? clickedIndex { get; set; }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if(firstRender)
+        {
+            grid.OnAfterRowClicked += rowClicked;
+        }
+    }
+
+    private void rowClicked(object sender, int index)
+    {
+        clickedIndex = index;
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        grid.OnAfterRowClicked -= rowClicked;
+    }
+}</code></pre>
 }
 else
 {
-    <div>
+    <p>Currently, BlazorGrid only has one event called <code>OnAfterRowClicked</code> which you can bind to. As the name implies, this event is fired after a row has been clicked and after the <code>Href</code> function or the <code>OnClick</code> delegate have been executed.</p>
+    <p>The event is useful if you need to write some type of plugin or need to be notified of row interactions programmatically.</p>
+    <p>The event fires with an <code>int</code> as the argument. This is the index of the row which was clicked. If you need the entire row object, you can access it via the grid instance's <code>Rows</code> property. Note that this event always fires when a row is clicked - even when neither <code>Href</code> nor <code>OnClick</code> are provided.</p>
+    <p><b>Remember to implement <code>IDisposable</code> and un-register your delegate on <code>Dispose()</code></b></p>
+    <div class="card">
+        <div class="card-body">
+            You have clicked row index: <code>@clickedIndex</code>
+        </div>
+    </div>
+
+    <div class="mt-2">
         <BlazorGrid @ref="grid" TRow="Employee" SourceUrl="Data/employees.json">
             <GridCol FitToContent="true">
                 <img src="@context.Avatar" style="width: 20px; height: 20px;" />

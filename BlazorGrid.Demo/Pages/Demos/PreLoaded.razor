@@ -1,10 +1,15 @@
 @layout DemoLayout
 @page "/demos/pre-loaded"
 @using System.Globalization
+<div class="float-right my-2">
+    <div class="form-group">
+        <label class="form-switch">
+            <input type="checkbox" @bind-value="ShowCode">
+            <i class="form-icon"></i> View source
+        </label>
+    </div>
+</div>
 <h1>Pre loaded data</h1>
-<p>BlazorGrid has basic support for displaying client-side data. The following grid uses a list of .Net's <code>CultureInfo</code> objects without any provider. Sorting, paging and filtering is not supported because those features depend on a provider.</p>
-<p>Pre loading data in this fashion is not ideal due to limited features and potentially worse performance, however it can be suitable for small amounts of data.</p>
-<button class="btn btn-sm btn-primary my-2" @onclick="() => { ShowCode =! ShowCode; }">Toggle code view</button>
 @if(ShowCode)
 {
     <pre class="code" data-lang="Razor"><code class="bg-dark text-light">&lt;BlazorGrid Rows=&quot;Data&quot; TRow=&quot;CultureInfo&quot;&gt;
@@ -15,12 +20,17 @@
 
 @@code
 {
-    private List&lt;CultureInfo&gt; Data { get; set; } = CultureInfo.GetCultures(CultureTypes.NeutralCultures).ToList();
+    private List&lt;CultureInfo&gt; Data { get; set; } = CultureInfo
+        .GetCultures(CultureTypes.NeutralCultures)
+        .ToList();
 }</code></pre>
 }
 else
 {
-    <div>
+    <p>BlazorGrid has basic support for displaying client-side data. The following grid uses a list of .Net's <code>CultureInfo</code> objects without any provider. Sorting, paging and filtering is not supported because those features depend on a provider.</p>
+    <p>Pre loading data in this fashion is not ideal due to limited features and potentially worse performance, however it can be suitable for small amounts of data.</p>
+
+    <div class="mt-2">
         <BlazorGrid Rows="Data" TRow="CultureInfo">
             <GridCol Caption="LCID">@context.LCID</GridCol>
             <GridCol Caption="ISO code">@context.ThreeLetterISOLanguageName</GridCol>

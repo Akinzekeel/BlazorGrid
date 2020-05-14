@@ -1,9 +1,14 @@
 @page "/demos/basic"
 @layout DemoLayout
+<div class="float-right my-2">
+    <div class="form-group">
+        <label class="form-switch">
+            <input type="checkbox" @bind-value="ShowCode">
+            <i class="form-icon"></i> View source
+        </label>
+    </div>
+</div>
 <h1>Basic example</h1>
-<p>This example shows what the grid looks like with the minimum amount of configuration.</p>
-<p>For the purpose of this demo, all of the data is pulled from a static JSON file. Paging is handled by a custom provider which I wrote just for this demo.</p>
-<button class="btn btn-sm btn-primary mb-2" @onclick="() => { ShowCode =! ShowCode; }">Toggle code view</button>
 @if(ShowCode)
 {
     <pre class="code" data-lang="Razor"><code class="bg-dark text-light">&lt;BlazorGrid TRow=&quot;Employee&quot; SourceUrl=&quot;Data/employees.json&quot;&gt;
@@ -26,7 +31,10 @@
 }
 else
 {
-    <div>
+    <p>This example shows what the grid looks like with the minimum amount of configuration.</p>
+    <p>For the purpose of this demo, all of the data is pulled from a static JSON file. Paging is handled by a custom provider which I wrote just for this demo.</p>
+
+    <div class="mt-2">
         <BlazorGrid TRow="Employee" SourceUrl="Data/employees.json">
             <GridCol FitToContent="true">
                 <img src="@context.Avatar" style="width: 20px; height: 20px;" />

@@ -1,15 +1,14 @@
 @layout DemoLayout
 @page "/demos/sorting"
-<h1>Sorting</h1>
-<p>In this example, some of the columns support sorting. This is achieved by providing the <code>GridCol</code> component with a value for the <code>OrderBy</code> parameter. When any of the header cells is clicked, the value of that parameter is then passed onto the <code>IGridProvider</code> which should return ordered data.</p>
-<p>Apart from this user-definable sorting, you can also provide a default value to the grid by using the parameters <code>DefaultOrderBy</code> and <code>DefaultOrderByDescending</code>.</p>
-<div class="card">
-    <div class="card-body">
-        <h5 class="card-title">Tip</h5>
-        <code>BlazorGrid.Abstractions.Extensions</code> contains extension methods for ordering IQueryables only by providing a string. Once you add the namespace, simply call <code>myQuery.OrderBy("someProperty")</code>.
+<div class="float-right my-2">
+    <div class="form-group">
+        <label class="form-switch">
+            <input type="checkbox" @bind-value="ShowCode">
+            <i class="form-icon"></i> View source
+        </label>
     </div>
 </div>
-<button class="btn btn-sm btn-primary my-2" @onclick="() => { ShowCode =! ShowCode; }">Toggle code view</button>
+<h1>Sorting</h1>
 @if(ShowCode)
 {
     <pre class="code" data-lang="Razor"><code class="bg-dark text-light">&lt;BlazorGrid TRow=&quot;Employee&quot; SourceUrl=&quot;Data/employees.json&quot;&gt;
@@ -32,7 +31,16 @@
 }
 else
 {
-    <div>
+    <p>In this example, some of the columns support sorting. This is achieved by providing the <code>GridCol</code> component with a value for the <code>OrderBy</code> parameter. When any of the header cells is clicked, the value of that parameter is then passed onto the <code>IGridProvider</code> which should return ordered data.</p>
+    <p>Apart from this user-definable sorting, you can also provide a default value to the grid by using the parameters <code>DefaultOrderBy</code> and <code>DefaultOrderByDescending</code>.</p>
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Tip</h5>
+            <code>BlazorGrid.Abstractions.Extensions</code> contains extension methods for ordering IQueryables only by providing a string. Once you add the namespace, simply call <code>myQuery.OrderBy("someProperty")</code>.
+        </div>
+    </div>
+
+    <div class="mt-2">
         <BlazorGrid TRow="Employee" SourceUrl="Data/employees.json">
             <GridCol FitToContent="true">
                 <img src="@context.Avatar" style="width: 20px; height: 20px;" />

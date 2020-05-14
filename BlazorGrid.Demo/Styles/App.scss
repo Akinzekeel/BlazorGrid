@@ -18,3 +18,15 @@ app,
 .hidden {
     visibility: hidden;
 }
+
+.overflow-auto {
+    overflow: auto !important;
+}
+
+.overflow-none {
+    overflow: none !important;
+}
+
+.form-group {
+    font-weight: bold;
+}
