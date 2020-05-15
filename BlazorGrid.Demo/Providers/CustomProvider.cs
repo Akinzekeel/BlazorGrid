@@ -16,11 +16,6 @@ namespace BlazorGrid.Demo.Providers
             this.http = http;
         }
 
-        public override Task<T> ReloadAsync<T>(string BaseUrl, T Row)
-        {
-            return Task.FromResult<T>(default);
-        }
-
         public override async Task<BlazorGridResult<T>> GetAsync<T>(string BaseUrl, int Offset, int Length, string OrderBy, bool OrderByDescending, string SearchQuery)
         {
             var url = GetRequestUrl(BaseUrl, Offset, Length, OrderBy, OrderByDescending, SearchQuery);
