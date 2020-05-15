@@ -2,7 +2,7 @@ $bg-color: #f9f9f9;
 $mono-font-family: monospace;
 
 @import "Spectre/Spectre";
-@import "BlazorGrid";
+@import "../../BlazorGrid/Styles/BlazorGrid.scss";
 
 body,
 app,
