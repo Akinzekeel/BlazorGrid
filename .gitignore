@@ -320,3 +320,5 @@ __pycache__/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+
+.vscode
