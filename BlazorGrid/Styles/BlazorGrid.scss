@@ -1,6 +1,6 @@
 /**
     Part of Akinzekeel.BlazorGrid
-    Last updated for version 0.2.2-beta
+    Last updated for version 0.4.5-beta
 **/
 @import "Variables";
 @import "Empty";
@@ -24,7 +24,8 @@
         > * {
             padding: $layout-spacing;
             border-bottom: 1px solid $component-hover-color;
-            border-left: 2px solid $bg-color;
+            border-left: 2px solid transparent;
+            border-top: 1px solid transparent;
         }
 
         &.grid-header {

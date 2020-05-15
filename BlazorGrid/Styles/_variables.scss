@@ -118,5 +118,5 @@ $zindex-2: 200 !default;
 $zindex-3: 300 !default;
 $zindex-4: 400 !default;
 
-$component-active-color: $bg-color;
-$component-hover-color: $bg-color-light;
+$component-active-color: darken($bg-color, 5%);
+$component-hover-color: darken($bg-color, 3%);
