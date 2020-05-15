@@ -64,10 +64,9 @@ namespace BlazorGrid.Components
 
         public event EventHandler<int> OnAfterRowClicked;
 
-        private bool ParametersSetCalled;
-        protected override async Task OnParametersSetAsync()
+        protected override void OnAfterRender(bool firstRender)
         {
-            if (!ParametersSetCalled)
+            if (firstRender)
             {
                 if (DefaultOrderBy != null)
                 {
@@ -75,11 +74,9 @@ namespace BlazorGrid.Components
                     OrderByDescending = DefaultOrderByDescending;
                 }
 
-                ParametersSetCalled = true;
-
                 if (Rows == null)
                 {
-                    await LoadAsync(true);
+                    InvokeAsync(() => LoadAsync(true));
                 }
             }
         }
