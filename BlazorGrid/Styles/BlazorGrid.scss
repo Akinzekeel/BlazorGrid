@@ -40,7 +40,7 @@
                 font-weight: bold;
 
                 &:first-child {
-                    border-left: none;
+                    border-left-color: transparent !important;
                 }
 
                 .sorted-indicator {
