@@ -23,6 +23,7 @@ namespace BlazorGrid.Components
         [Parameter] public int PageSize { get; set; } = DefaultPageSize;
 
         private string _Query;
+
         [Parameter]
         public string Query
         {

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using BlazorGrid.Abstractions;
 using BlazorGrid.Abstractions.Extensions;
+using BlazorGrid.Demo.Models;
+using System;
 
 namespace BlazorGrid.Demo.Providers
 {
@@ -21,6 +23,7 @@ namespace BlazorGrid.Demo.Providers
             var url = GetRequestUrl(BaseUrl, Offset, Length, OrderBy, OrderByDescending, SearchQuery);
             var response = await http.GetAsync(url);
             var result = await DeserializeJsonAsync<BlazorGridResult<T>>(response);
+            var totalCount = result.TotalCount;
 
             var data = result.Data.AsQueryable();
 
@@ -36,9 +39,21 @@ namespace BlazorGrid.Demo.Providers
                 }
             }
 
+            if (!string.IsNullOrEmpty(SearchQuery) && data is IQueryable<Employee> employees)
+            {
+                data = employees.Where(x =>
+                    x.Email.IndexOf(SearchQuery, StringComparison.CurrentCultureIgnoreCase) > -1
+                    || x.FirstName.IndexOf(SearchQuery, StringComparison.CurrentCultureIgnoreCase) == 0
+                    || x.LastName.IndexOf(SearchQuery, StringComparison.CurrentCultureIgnoreCase) == 0
+                    || x.Id.ToString() == SearchQuery
+                ).Cast<T>();
+
+                totalCount = data.Count();
+            }
+
             var finalResult = new BlazorGridResult<T>
             {
-                TotalCount = result.TotalCount,
+                TotalCount = totalCount,
                 Data = data.Skip(Offset).Take(Length).ToList()
             };
 
