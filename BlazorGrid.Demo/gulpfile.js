@@ -17,6 +17,7 @@ var files = {
 
 gulp.task("watch", () => {
     gulp.watch("./Styles/**/*", compileCss);
+    gulp.watch("./../BlazorGrid/Styles/**/*", compileCss);
 });
 
 gulp.task("clean", (done) => {

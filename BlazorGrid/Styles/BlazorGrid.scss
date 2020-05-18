@@ -1,6 +1,6 @@
 /**
     Part of Akinzekeel.BlazorGrid
-    Last updated for version 0.4.8-beta
+    Last updated for version 0.5.0-beta
 **/
 @import "Variables";
 @import "Empty";
@@ -43,14 +43,17 @@
                     border-left-color: transparent !important;
                 }
 
-                .sorted-indicator {
-                    font-size: $font-size-sm;
-                    visibility: hidden;
+                .blazor-grid-sort-icon {
+                    font-size: $font-size-lg;
+                    opacity: 0.2;
+                    padding: 0 $unit-1 $unit-1 $unit-1;
+                    transform: rotate(90deg);
+                    display: inline-block;
                 }
 
                 &.sorted {
-                    .sorted-indicator {
-                        visibility: visible;
+                    .blazor-grid-sort-icon {
+                        opacity: 1 !important;
                         color: $primary-color-light;
                     }
                 }
@@ -62,6 +65,10 @@
                     &:focus {
                         color: $primary-color !important;
                         background: $component-hover-color;
+
+                        .blazor-grid-sort-icon {
+                            opacity: 0.5;
+                        }
                     }
 
                     &:active {
@@ -69,9 +76,12 @@
                     }
                 }
             }
+
             &:hover {
-                > * + * {
-                    border-left: 2px solid $component-hover-color;
+                > * {
+                    + * {
+                        border-left: 2px solid $component-hover-color;
+                    }
                 }
             }
         }
