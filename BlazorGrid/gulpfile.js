@@ -10,13 +10,13 @@ sass.compiler = require('node-sass');
 var files = {
     css: {
         themes: {
-            main: "./Styles/BlazorGrid.scss"
+            main: "./Content/BlazorGrid.scss"
         }
     }
 };
 
 gulp.task("watch", () => {
-    gulp.watch("./Styles/**/*", compileCss);
+    gulp.watch("./Content/**/*", compileCss);
 });
 
 gulp.task("clean", (done) => {
@@ -33,14 +33,8 @@ function compileCss(done) {
     done();
 }
 
-function copyContent() {
-    return gulp.src("./Content/**/*")
-        .pipe(gulp.dest("./wwwroot/dist"));
-}
-
 gulp.task("default", (done) => {
     return gulp.series(
-        compileCss,
-        copyContent
+        compileCss
     )(done);
 });
