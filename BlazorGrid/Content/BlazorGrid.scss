@@ -49,6 +49,8 @@
                     padding: 0 $unit-1 $unit-1 $unit-1;
                     transform: rotate(90deg);
                     display: inline-block;
+                    margin-top: -$unit-1;
+                    margin-bottom: -$unit-1;
                 }
 
                 &.sorted {
