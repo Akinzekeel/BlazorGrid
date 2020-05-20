@@ -1,45 +1,46 @@
 @inherits LayoutComponentBase
-<TopNav />
-<div class="container grid-lg py-2">
-    <div class="columns col-oneline">
-        <div class="column col-auto">
-            <ul class="menu">
-                <li class="menu-item">
-                    <NavLink class="" href="/demos/basic">
-                        Basic example
-                    </NavLink>
-                </li>
-                <li class="menu-item">
-                    <NavLink class="" href="/demos/sorting">
-                        Sorting
-                    </NavLink>
-                </li>
-                <li class="menu-item">
-                    <NavLink class="" href="/demos/on-click">
-                        OnClick action
-                    </NavLink>
-                </li>
-                <li class="menu-item">
-                    <NavLink class="" href="/demos/events">
-                        Events
-                    </NavLink>
-                </li>
-                <li class="menu-item">
-                    <NavLink class="" href="/demos/pre-loaded">
-                        Pre-loaded data
-                    </NavLink>
-                </li>
-                <li class="menu-item">
-                    <NavLink class="" href="/demos/search-and-filter">
-                        Search &amp; filtering
-                    </NavLink>
-                </li>
-            </ul>
-        </div>
-        <div class="column col-auto divider-vert hidden px-2"></div>
-        <div class="column col-auto" style="flex-grow: 1; flex-shrink: 1;" id="content">
-            @Body
-        </div>
+<StackPanel Orientation="Orientation.Vertical" style="height:100vh;width:100vw;">
+    <TopNav />
+    <div class="container grid-lg py-2">
+        <StackPanel Orientation="Orientation.Horizontal">
+            <StackItem class="pr-2">
+                <ul class="menu mr-2" style="position: sticky; top: 0;">
+                    <li class="menu-item">
+                        <NavLink class="" href="/demos/basic">
+                            Basic example
+                        </NavLink>
+                    </li>
+                    <li class="menu-item">
+                        <NavLink class="" href="/demos/sorting">
+                            Sorting
+                        </NavLink>
+                    </li>
+                    <li class="menu-item">
+                        <NavLink class="" href="/demos/on-click">
+                            OnClick action
+                        </NavLink>
+                    </li>
+                    <li class="menu-item">
+                        <NavLink class="" href="/demos/events">
+                            Events
+                        </NavLink>
+                    </li>
+                    <li class="menu-item">
+                        <NavLink class="" href="/demos/pre-loaded">
+                            Pre-loaded data
+                        </NavLink>
+                    </li>
+                    <li class="menu-item">
+                        <NavLink class="" href="/demos/search-and-filter">
+                            Search &amp; filtering
+                        </NavLink>
+                    </li>
+                </ul>
+            </StackItem>
+            <ScrollView style="min-height: 100vh">
+                @Body
+            </ScrollView>
+        </StackPanel>
     </div>
-</div>
-<PageFooter />
+    <PageFooter />
+</StackPanel>

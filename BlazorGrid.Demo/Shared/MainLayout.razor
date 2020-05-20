@@ -1,6 +1,12 @@
 ﻿@inherits LayoutComponentBase
-<TopNav />
-<div class="container grid-lg py-2" id="content">
-    @Body
-</div>
-<PageFooter />
+<StackPanel Orientation="Orientation.Vertical" style="height: 100vh; width: 100vw;">
+    <StackItem>
+        <TopNav />
+    </StackItem>
+    <ScrollView>
+        <div class="container grid-lg py-2">
+            @Body
+        </div>
+    </ScrollView>
+    <PageFooter />
+</StackPanel>
