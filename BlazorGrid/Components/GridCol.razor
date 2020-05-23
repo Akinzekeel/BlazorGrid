@@ -1,7 +1,7 @@
 ﻿@implements IGridCol
 @if(Parent == null)
 {
-    <div class="@CssClass">@ChildContent</div>
+    <div @attributes="FinalAttributes">@ChildContent</div>
 }
 else
 {
