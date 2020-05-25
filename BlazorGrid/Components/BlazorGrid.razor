@@ -1,5 +1,5 @@
 @typeparam TRow
-<div class="blazor-grid">
+<div @attributes="FinalAttributes">
     <div class="grid-scrollview" style="grid-template-columns: @GridColumns">
         <header class="grid-row grid-header">
             <CascadingValue Value="this" IsFixed="true">

@@ -55,6 +55,7 @@ namespace BlazorGrid.Components
         [Parameter] public Expression<Func<TRow, object>> DefaultOrderBy { get; set; }
         [Parameter] public bool DefaultOrderByDescending { get; set; }
         [Parameter] public List<TRow> Rows { get; set; }
+        [Parameter(CaptureUnmatchedValues = true)] public IDictionary<string, object> Attributes { get; set; }
 
         private string QueryDebounced { get; set; }
         public string OrderByPropertyName { get; private set; }
@@ -64,6 +65,54 @@ namespace BlazorGrid.Components
         private Exception LoadingError { get; set; }
 
         public event EventHandler<int> OnAfterRowClicked;
+
+        private IDictionary<string, object> FinalAttributes
+        {
+            get
+            {
+                var attr = new Dictionary<string, object>
+                {
+                    { "class", CssClass }
+                };
+
+                if (Attributes != null)
+                {
+                    foreach (var a in Attributes)
+                    {
+                        if (a.Key != "class")
+                        {
+                            attr.Add(a.Key, a.Value);
+                        }
+                    }
+                }
+
+                return attr;
+            }
+        }
+
+        public string CssClass
+        {
+            get
+            {
+                var cls = new List<string> { "blazor-grid" };
+
+                if (Attributes != null)
+                {
+                    string customClasses = Attributes
+                        .Where(x => x.Key == "class")
+                        .Select(x => x.Value?.ToString())
+                        .FirstOrDefault();
+
+                    if (!string.IsNullOrEmpty(customClasses))
+                    {
+                        // Merge custom classes
+                        cls.AddRange(customClasses.Split(' '));
+                    }
+                }
+
+                return string.Join(' ', cls).Trim();
+            }
+        }
 
         protected override void OnAfterRender(bool firstRender)
         {

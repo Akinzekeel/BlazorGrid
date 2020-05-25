@@ -46,6 +46,43 @@ namespace BlazorGrid.Tests
         }
 
         [TestMethod]
+        public void Can_Merge_ClassNames()
+        {
+            var noData = new List<MyDto>();
+
+            var grid = RenderComponent<BlazorGrid<MyDto>>(
+                Parameter("class", "my-custom-class"),
+                Parameter(nameof(BlazorGrid<MyDto>.Rows), noData),
+                Template<MyDto>(nameof(ChildContent), (dto) => (b) =>
+                {
+
+                })
+            );
+
+            var outer = grid.Find("*");
+            Assert.AreEqual("blazor-grid my-custom-class", outer.ClassName);
+        }
+
+        [TestMethod]
+        public void Can_Have_Custom_Attributes()
+        {
+            var noData = new List<MyDto>();
+
+            var grid = RenderComponent<BlazorGrid<MyDto>>(
+                Parameter("data-custom", "my-custom-value"),
+                Parameter(nameof(BlazorGrid<MyDto>.Rows), noData),
+                Template<MyDto>(nameof(ChildContent), (dto) => (b) =>
+                {
+
+                })
+            );
+
+            var outer = grid.Find("*");
+            Assert.IsTrue(outer.HasAttribute("data-custom"));
+            Assert.AreEqual("my-custom-value", outer.GetAttribute("data-custom"));
+        }
+
+        [TestMethod]
         public void Has_Inner_Classes()
         {
             var noData = new List<MyDto>();

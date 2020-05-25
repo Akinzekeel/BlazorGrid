@@ -31,3 +31,9 @@ app,
 .form-group {
     font-weight: bold;
 }
+
+#attributes-demo-grid {
+    .grid-row:first-child {
+        display: none;
+    }
+}

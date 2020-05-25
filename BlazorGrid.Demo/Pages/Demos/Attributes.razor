@@ -1,0 +1,80 @@
+@page "/demos/attributes"
+@layout DemoLayout
+<div class="float-right my-2">
+    <div class="form-group">
+        <label class="form-switch">
+            <input type="checkbox" @bind-value="ShowCode">
+            <i class="form-icon"></i> View source
+        </label>
+    </div>
+</div>
+<h1>Attributes</h1>
+@if(ShowCode)
+{
+    <pre class="code" data-lang="Razor"><code class="bg-dark text-light">&lt;BlazorGrid TRow=&quot;Employee&quot; SourceUrl=&quot;Data/employees.json&quot; id=&quot;attributes-demo-grid&quot;&gt;
+    &lt;GridCol FitToContent=&quot;true&quot;&gt;
+        &lt;img src=&quot;@@context.Avatar&quot; style=&quot;width: 20px; height: 20px;&quot; /&gt;
+    &lt;/GridCol&gt;
+    &lt;GridCol Caption=&quot;#&quot; FitToContent=&quot;true&quot; class=&quot;bg-primary tooltip tooltip-right&quot; data-tooltip=&quot;@@(context == null ? null : string.Join(&quot; &quot;, context.FirstName, context.LastName))&quot;&gt;
+        @@context.Id
+    &lt;/GridCol&gt;
+    &lt;GridCol Caption=&quot;First name&quot;&gt;
+        @@context.FirstName
+    &lt;/GridCol&gt;
+    &lt;GridCol Caption=&quot;Last name&quot;&gt;
+        @@context.LastName
+    &lt;/GridCol&gt;
+    &lt;GridCol Caption=&quot;Email address&quot;&gt;
+        &lt;a href=&quot;mailto:@@context.Email&quot;&gt;@@context.Email&lt;/a&gt;
+    &lt;/GridCol&gt;
+&lt;/BlazorGrid&gt;</code></pre>
+
+    <pre class="code" data-lang="SCSS"><code class="bg-dark text-light">#attributes-demo-grid &#123;
+    .grid-row:first-child &#123;
+        display: none;
+    &#125;
+&#125;</code></pre>
+}
+else
+{
+    <p>Both the <code>BlazorGrid</code> and the <code>GridCol</code> components support custom attributes as well as custom CSS classes.</p>
+    <p>In the following example, we decorate the <code>BlazorGrid</code> with a custom <code>id</code> to hide the header, and we also add a <code>bg-primary</code> class and a <code>data-tooltip</code> attribute to one of the columns.</p>
+
+    <div class="card my-2">
+        <div class="card-body">
+            <h4 class="card-title">Tip</h4>
+            <span>CSS class names that you provide via the <code>class</code> attribute will be merged with the default BlazorGrid CSS classes automatically - so you don't need to repeat those.</span>
+        </div>
+    </div>
+
+    <div class="card my-2">
+        <div class="card-body">
+            <h4 class="card-title">Caution</h4>
+            <span>When you decorate a <code>GridCol</code> with a custom attribute as shown here, be sure to do a <code>null</code> check on the <code>context</code> variable which will be <code>null</code> while building the header. This check is not necessary inside the <code>GridCol</code>'s <code>ChildContent</code> however.</span>
+        </div>
+    </div>
+
+    <div class="mt-2">
+        <BlazorGrid TRow="Employee" SourceUrl="Data/employees.json" id="attributes-demo-grid">
+            <GridCol FitToContent="true">
+                <img src="@context.Avatar" style="width: 20px; height: 20px;" />
+            </GridCol>
+            <GridCol Caption="#" FitToContent="true" class="bg-primary tooltip tooltip-right" data-tooltip="@(context == null ? null : string.Join(" ", context.FirstName, context.LastName))">
+                @context.Id
+            </GridCol>
+            <GridCol Caption="First name">
+                @context.FirstName
+            </GridCol>
+            <GridCol Caption="Last name">
+                @context.LastName
+            </GridCol>
+            <GridCol Caption="Email address">
+                <a href="mailto:@context.Email">@context.Email</a>
+            </GridCol>
+        </BlazorGrid>
+    </div>
+}
+@code
+{
+    public bool ShowCode { get; set; }
+}

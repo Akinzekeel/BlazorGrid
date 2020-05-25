@@ -5,7 +5,7 @@
     <RazorLangVersion>3.0</RazorLangVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>Akinzekeel.BlazorGrid</PackageId>
-    <Version>0.5.5-beta</Version>
+    <Version>0.5.6-beta</Version>
     <Preview></Preview>
     <Authors>Majid Iqbal</Authors>
     <Company />
@@ -13,7 +13,7 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/Akinzekeel/BlazorGrid</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Akinzekeel/BlazorGrid</RepositoryUrl>
-    <PackageReleaseNotes>Preview</PackageReleaseNotes>
+    <PackageReleaseNotes>Add support for custom classes and attributes</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
