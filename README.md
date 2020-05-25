@@ -146,7 +146,7 @@ I would like to get the following things done before removing the preview status
 1. Localization
 2. Support different data providers per grid
 3. ~~Provide helper methods and classes for quick server-side setup~~
-4. Find a better way to perform smart-refresh which doesn't require IGridRow
+4. ~~Find a better way to perform smart-refresh which doesn't require IGridRow~~
 5. Improve documentation
 6. ~~Finish the demo project & host it~~
 7. Responsive support
