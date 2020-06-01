@@ -5,7 +5,7 @@
     <RazorLangVersion>3.0</RazorLangVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>Akinzekeel.BlazorGrid</PackageId>
-    <Version>0.5.6-beta</Version>
+    <Version>0.5.7-beta</Version>
     <Preview></Preview>
     <Authors>Majid Iqbal</Authors>
     <Company />
@@ -13,7 +13,7 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/Akinzekeel/BlazorGrid</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Akinzekeel/BlazorGrid</RepositoryUrl>
-    <PackageReleaseNotes>Add support for custom classes and attributes</PackageReleaseNotes>
+    <PackageReleaseNotes>Add localization for English &amp; German</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
@@ -33,6 +33,22 @@
     <Content Include="Content\**\*" BuildAction="Content">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Resources\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>BlazorGrid</CustomToolNamespace>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

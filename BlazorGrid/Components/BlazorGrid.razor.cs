@@ -15,6 +15,7 @@ namespace BlazorGrid.Components
     {
         [Inject] public IGridProvider Provider { get; set; }
         [Inject] public NavigationManager Nav { get; set; }
+
         private bool IsLoadingMore { get; set; }
         public const int DefaultPageSize = 25;
 
