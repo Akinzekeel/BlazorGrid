@@ -5,6 +5,6 @@ namespace BlazorGrid.Abstractions
     public class BlazorGridResult<T>
     {
         public int TotalCount { get; set; }
-        public IReadOnlyList<T> Data { get; set; }
+        public IReadOnlyList<T> Data { get; set; } = new T[0];
     }
 }
