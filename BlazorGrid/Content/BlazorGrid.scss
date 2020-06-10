@@ -89,6 +89,8 @@
         }
 
         &.clickable {
+            cursor: pointer;
+
             &:hover,
             &:focus {
                 > * {
