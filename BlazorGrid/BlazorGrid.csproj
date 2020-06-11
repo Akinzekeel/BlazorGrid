@@ -5,7 +5,7 @@
     <RazorLangVersion>3.0</RazorLangVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>Akinzekeel.BlazorGrid</PackageId>
-    <Version>0.5.7-beta</Version>
+    <Version>0.5.8-beta</Version>
     <Preview></Preview>
     <Authors>Majid Iqbal</Authors>
     <Company />
@@ -13,7 +13,7 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/Akinzekeel/BlazorGrid</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Akinzekeel/BlazorGrid</RepositoryUrl>
-    <PackageReleaseNotes>Add localization for English &amp; German</PackageReleaseNotes>
+    <PackageReleaseNotes>Update CSS (cursor for .clickable)</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup Condition="$(Configuration) == 'Release'">
-    <PackageReference Include="Akinzekeel.BlazorGrid.Abstractions" Version="0.4.8-beta" />
+    <PackageReference Include="Akinzekeel.BlazorGrid.Abstractions" Version="0.5.8-beta" />
   </ItemGroup>
 
   <ItemGroup Condition="$(Configuration) != 'Release'">
