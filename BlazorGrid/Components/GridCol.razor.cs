@@ -1,5 +1,5 @@
-using Microsoft.AspNetCore.Components;
 using BlazorGrid.Interfaces;
+using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -14,6 +14,7 @@ namespace BlazorGrid.Components
         [Parameter] public bool FitToContent { get; set; }
         [Parameter] public bool AlignRight { get; set; }
         [Parameter] public string OrderBy { get; set; }
+        [Parameter] public string FilterBy { get; set; }
         [Parameter(CaptureUnmatchedValues = true)] public IDictionary<string, object> Attributes { get; set; }
 
         private bool IsRegistered;
@@ -72,6 +73,9 @@ namespace BlazorGrid.Components
 
         private bool IsSortable => !string.IsNullOrEmpty(OrderBy);
         private bool IsSorted => IsSortable && Parent?.OrderByPropertyName == OrderBy;
+
+        private bool IsFilterable => !string.IsNullOrEmpty(FilterBy);
+        private bool IsFiltered => IsFilterable && Parent?.IsFilteredBy(FilterBy) == true;
 
         protected override void OnParametersSet()
         {

@@ -77,6 +77,12 @@
                         background: $component-active-color;
                     }
                 }
+
+                .blazor-grid-filter-icon {
+                    padding: 0 $unit-1 $unit-1 $unit-1;
+                    display: inline-block;
+                    color: $secondary-color;
+                }
             }
 
             &:hover {

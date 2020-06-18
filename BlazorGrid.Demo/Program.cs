@@ -1,14 +1,10 @@
+using BlazorGrid.Abstractions;
+using BlazorGrid.Demo.Providers;
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Net.Http;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Text;
-using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Microsoft.Extensions.Configuration;
-using BlazorGrid.Abstractions;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using BlazorGrid.Demo.Providers;
 
 namespace BlazorGrid.Demo
 {

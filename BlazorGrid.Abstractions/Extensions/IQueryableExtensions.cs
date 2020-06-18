@@ -1,7 +1,7 @@
+using BlazorGrid.Abstractions.Helpers;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
-using BlazorGrid.Abstractions.Helpers;
 
 namespace BlazorGrid.Abstractions.Extensions
 {

@@ -1,5 +1,3 @@
-using BlazorGrid.Abstractions;
-
 namespace BlazorGrid.Demo.Models
 {
     public class Employee

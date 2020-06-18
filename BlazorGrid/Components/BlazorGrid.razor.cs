@@ -1,17 +1,20 @@
-using System.Data;
+using BlazorGrid.Abstractions;
+using BlazorGrid.Abstractions.Filters;
+using BlazorGrid.Abstractions.Helpers;
+using BlazorGrid.Interfaces;
+using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Components;
-using BlazorGrid.Interfaces;
-using BlazorGrid.Abstractions;
-using BlazorGrid.Abstractions.Helpers;
 
 namespace BlazorGrid.Components
 {
-    public partial class BlazorGrid<TRow> : IBlazorGrid where TRow : class
+    public partial class BlazorGrid<TRow> : IDisposable, IBlazorGrid where TRow : class
     {
         [Inject] public IGridProvider Provider { get; set; }
         [Inject] public NavigationManager Nav { get; set; }
@@ -58,11 +61,14 @@ namespace BlazorGrid.Components
         [Parameter] public List<TRow> Rows { get; set; }
         [Parameter(CaptureUnmatchedValues = true)] public IDictionary<string, object> Attributes { get; set; }
 
+        public FilterDescriptor Filter { get; private set; } = new FilterDescriptor();
+
         private string QueryDebounced { get; set; }
         public string OrderByPropertyName { get; private set; }
         public bool OrderByDescending { get; private set; }
         private int TotalCount { get; set; }
-        private IList<IGridCol> Columns { get; set; } = new List<IGridCol>();
+        private IList<IGridCol> ColumnsList { get; set; } = new List<IGridCol>();
+        public IEnumerable<IGridCol> Columns => ColumnsList;
         private Exception LoadingError { get; set; }
 
         public event EventHandler<int> OnAfterRowClicked;
@@ -129,7 +135,19 @@ namespace BlazorGrid.Components
                 {
                     InvokeAsync(() => LoadAsync(true));
                 }
+
+                // Subscribe to Filter object changes
+                Filter.PropertyChanged += OnFilterChanged;
+                Filter.Filters.CollectionChanged += OnFilterCollectionChanged;
             }
+        }
+
+        private void OnFilterCollectionChanged(object sender, NotifyCollectionChangedEventArgs e) => Reload();
+        private void OnFilterChanged(object sender, PropertyChangedEventArgs e) => Reload();
+
+        public Task Reload()
+        {
+            return LoadAsync(true);
         }
 
         private async Task LoadAsync(bool Initialize)
@@ -156,18 +174,22 @@ namespace BlazorGrid.Components
                     PageSize,
                     OrderByPropertyName,
                     OrderByDescending,
-                    QueryDebounced
+                    QueryDebounced,
+                    Filter
                 );
 
-                TotalCount = result.TotalCount;
+                if (result != null)
+                {
+                    TotalCount = result.TotalCount;
 
-                if (Initialize)
-                {
-                    Rows = result.Data.ToList();
-                }
-                else
-                {
-                    Rows.AddRange(result.Data);
+                    if (Initialize)
+                    {
+                        Rows = result.Data.ToList();
+                    }
+                    else
+                    {
+                        Rows.AddRange(result.Data);
+                    }
                 }
             }
             catch (Exception x)
@@ -203,7 +225,7 @@ namespace BlazorGrid.Components
         {
             get
             {
-                var sizes = Columns.Select(col => col.FitToContent ? "max-content" : "auto");
+                var sizes = ColumnsList.Select(col => col.FitToContent ? "max-content" : "auto");
                 return string.Join(' ', sizes);
             }
         }
@@ -243,8 +265,60 @@ namespace BlazorGrid.Components
 
         public void Add(IGridCol col)
         {
-            Columns.Add(col);
+            ColumnsList.Add(col);
             StateHasChanged();
+        }
+
+        PropertyType IBlazorGrid.GetTypeFor(string PropertyName)
+        {
+            return GetTypeFor(PropertyName);
+        }
+
+        public static PropertyType GetTypeFor(string PropertyName)
+        {
+            var t = typeof(TRow);
+            var p = t.GetProperty(PropertyName);
+
+            if (p == null)
+            {
+                throw new ArgumentException(string.Format("Property {0} was not found on type {1}", PropertyName, t.Name));
+            }
+
+            t = p.PropertyType;
+
+            var intType = typeof(int);
+
+            if (intType.IsAssignableFrom(t) || intType.IsAssignableFrom(Nullable.GetUnderlyingType(t)))
+            {
+                return PropertyType.Integer;
+            }
+
+            var decType = typeof(decimal);
+
+            if (decType.IsAssignableFrom(t) || decType.IsAssignableFrom(Nullable.GetUnderlyingType(t)))
+            {
+                return PropertyType.Decimal;
+            }
+
+            return PropertyType.String;
+        }
+
+        public bool IsFilteredBy(string PropertyName)
+        {
+            return Filter?.Filters.Any(x => x.Property == PropertyName) == true;
+        }
+
+        public void Dispose()
+        {
+            if (Filter != null)
+            {
+                Filter.PropertyChanged -= OnFilterChanged;
+
+                if (Filter.Filters != null)
+                {
+                    Filter.Filters.CollectionChanged -= OnFilterCollectionChanged;
+                }
+            }
         }
     }
 }

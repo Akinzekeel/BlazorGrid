@@ -1,4 +1,5 @@
 using BlazorGrid.Abstractions;
+using BlazorGrid.Abstractions.Filters;
 using BlazorGrid.Components;
 using BlazorGrid.Tests.Mock;
 using Bunit;
@@ -45,8 +46,9 @@ namespace BlazorGrid.Tests
                 It.IsAny<int>(),
                 null,
                 false,
-                It.IsAny<string>())
-            , Times.Once());
+                It.IsAny<string>(),
+                It.IsAny<FilterDescriptor>()
+            ), Times.Once());
 
             var th = grid.Find(".grid-header > *");
             th.Click();
@@ -57,8 +59,9 @@ namespace BlazorGrid.Tests
                 It.IsAny<int>(),
                 nameof(MyDto.Name),
                 false,
-                It.IsAny<string>())
-            , Times.Once());
+                It.IsAny<string>(),
+                It.IsAny<FilterDescriptor>()
+            ), Times.Once());
 
             mockProvider.VerifyNoOtherCalls();
         }
@@ -80,8 +83,9 @@ namespace BlazorGrid.Tests
                 It.IsAny<int>(),
                 null,
                 false,
-                It.IsAny<string>())
-            , Times.Once());
+                It.IsAny<string>(),
+                It.IsAny<FilterDescriptor>()
+            ), Times.Once());
 
             var th = grid.Find(".grid-header > *");
             th.Click();

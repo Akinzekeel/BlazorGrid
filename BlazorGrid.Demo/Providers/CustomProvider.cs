@@ -1,11 +1,14 @@
-using BlazorGrid.Providers;
-using System.Net.Http;
-using System.Linq;
-using System.Threading.Tasks;
 using BlazorGrid.Abstractions;
 using BlazorGrid.Abstractions.Extensions;
+using BlazorGrid.Abstractions.Filters;
 using BlazorGrid.Demo.Models;
+using BlazorGrid.Providers;
 using System;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Net.Http;
+using System.Threading.Tasks;
+using ExpressionBuilder.Generics;
 
 namespace BlazorGrid.Demo.Providers
 {
@@ -18,9 +21,9 @@ namespace BlazorGrid.Demo.Providers
             this.http = http;
         }
 
-        public override async Task<BlazorGridResult<T>> GetAsync<T>(string BaseUrl, int Offset, int Length, string OrderBy, bool OrderByDescending, string SearchQuery)
+        public override async Task<BlazorGridResult<T>> GetAsync<T>(string BaseUrl, int Offset, int Length, string OrderBy, bool OrderByDescending, string SearchQuery, FilterDescriptor Filter)
         {
-            var url = GetRequestUrl(BaseUrl, Offset, Length, OrderBy, OrderByDescending, SearchQuery);
+            var url = GetRequestUrl(BaseUrl, Offset, Length, OrderBy, OrderByDescending, SearchQuery, Filter);
             var response = await http.GetAsync(url);
             var result = await DeserializeJsonAsync<BlazorGridResult<T>>(response);
             var totalCount = result.TotalCount;
@@ -47,6 +50,14 @@ namespace BlazorGrid.Demo.Providers
                     || x.LastName.IndexOf(SearchQuery, StringComparison.CurrentCultureIgnoreCase) == 0
                     || x.Id.ToString() == SearchQuery
                 ).Cast<T>();
+
+                totalCount = data.Count();
+            }
+
+            if (Filter?.Filters.Any() == true)
+            {
+                var f = Filters.Helpers.FilterHelper.Build<Employee>(Filter);
+                data = (data as IQueryable<Employee>).Where(f).Cast<T>();
 
                 totalCount = data.Count();
             }

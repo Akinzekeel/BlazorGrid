@@ -1,4 +1,3 @@
-using System.Linq;
 using BlazorGrid.Components;
 using BlazorGrid.Interfaces;
 using Bunit;

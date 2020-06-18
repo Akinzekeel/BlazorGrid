@@ -1,4 +1,4 @@
-@page "/demos/search-and-filter"
+@page "/demos/search"
 @layout DemoLayout
 <div class="float-right my-2">
     <div class="form-group">
@@ -8,8 +8,8 @@
         </label>
     </div>
 </div>
-<h1>Search &amp; filter</h1>
-@if(ShowCode)
+<h1>Search</h1>
+@if (ShowCode)
 {
     <pre class="code" data-lang="Razor"><code class="bg-dark text-light">&lt;input type=&quot;text&quot; class=&quot;form-input input-lg&quot; placeholder=&quot;Filter&quot;
         @@bind-value=&quot;FilterInput&quot; @@bind-value:event=&quot;oninput&quot; /&gt;

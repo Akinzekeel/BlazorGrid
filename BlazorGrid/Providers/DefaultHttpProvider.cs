@@ -1,9 +1,10 @@
+using BlazorGrid.Abstractions;
+using BlazorGrid.Abstractions.Filters;
 using System;
 using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using BlazorGrid.Abstractions;
 
 namespace BlazorGrid.Providers
 {
@@ -16,9 +17,9 @@ namespace BlazorGrid.Providers
             this.http = http;
         }
 
-        public virtual async Task<BlazorGridResult<T>> GetAsync<T>(string BaseUrl, int Offset, int Length, string OrderBy, bool OrderByDescending, string SearchQuery)
+        public virtual async Task<BlazorGridResult<T>> GetAsync<T>(string BaseUrl, int Offset, int Length, string OrderBy, bool OrderByDescending, string SearchQuery, FilterDescriptor Filter)
         {
-            var url = GetRequestUrl(BaseUrl, Offset, Length, OrderBy, OrderByDescending, SearchQuery);
+            var url = GetRequestUrl(BaseUrl, Offset, Length, OrderBy, OrderByDescending, SearchQuery, Filter);
             var response = await http.GetAsync(url);
             var result = await DeserializeJsonAsync<BlazorGridResult<T>>(response);
             return result;
@@ -42,12 +43,13 @@ namespace BlazorGrid.Providers
             return System.Text.Json.JsonSerializer.Deserialize<T>(content);
         }
 
+        [Obsolete]
         protected virtual string GetRequestUrl(string BaseUrl, string RowId)
         {
             return BaseUrl.TrimEnd('/') + '/' + RowId + "?More=false";
         }
 
-        protected virtual string GetRequestUrl(string BaseUrl, int Offset, int Length, string OrderBy, bool OrderByDescending, string SearchQuery)
+        protected virtual string GetRequestUrl(string BaseUrl, int Offset, int Length, string OrderBy, bool OrderByDescending, string SearchQuery, FilterDescriptor Filter)
         {
             var b = http.BaseAddress;
 
@@ -64,7 +66,8 @@ namespace BlazorGrid.Providers
                 Length = Length,
                 OrderBy = OrderBy,
                 OrderByDescending = OrderByDescending,
-                Query = SearchQuery
+                Query = SearchQuery,
+                Filter = Filter
             };
 
             uri.Query = parameters.ToQueryString();

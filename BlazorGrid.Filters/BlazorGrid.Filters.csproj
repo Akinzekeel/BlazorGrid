@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="LambdaExpressionBuilder" Version="2.1.0-rc" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\ExpressionBuilder\ExpressionBuilder\ExpressionBuilder.csproj" />
+    <ProjectReference Include="..\BlazorGrid.Abstractions\BlazorGrid.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>

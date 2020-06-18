@@ -1,0 +1,168 @@
+﻿@page "/demos/filters"
+@layout DemoLayout
+@using BlazorGrid.Abstractions.Filters
+<div class="float-right my-2">
+    <div class="form-group">
+        <label class="form-switch">
+            <input type="checkbox" @bind-value="ShowCode">
+            <i class="form-icon"></i> View source
+        </label>
+    </div>
+</div>
+<h1>Filters</h1>
+@if (ShowCode)
+{
+    <pre class="code" data-lang="Razor"><code class="bg-dark text-light"></code></pre>
+}
+else
+{
+    <p>If your users need more fine-grained control over the results in the grid, you can use the Filter object rather than the search query.</p>
+    <p>Filters allow you to pass a number of custom constraints in the form of a FilterDescriptor object to the provider. By using the BlazorGrid.Filters FilterHelper you can then easily use the FilterDescriptor in a Linq.Where call (big thanks to LambdaExpressionBuilder for this functionality).</p>
+    <p>Note: the inner structure of the filter object is not tracked for changes, so remember to call Reload() when you changed the Filter parameter.</p>
+
+    @if (Grid != null)
+    {
+        <h6>Filters</h6>
+        <div class="card">
+            @if (Grid.Filter?.Filters.Any() == true)
+            {
+                foreach (var f in Grid.Filter.Filters)
+                {
+                    <div class="chip">
+                        @f.Property
+                        <a @onclick="() => RemoveFilter(f)" class="btn btn-clear" aria-label="Close" role="button"></a>
+                    </div>
+                }
+                <a class="btn btn-sm" @onclick="ClearAll">Clear all</a>
+            }
+            @if (IsAddFilterMode)
+            {
+                <div class="form-group">
+                    <div class="form-inline">
+                        <select class="form-select select-sm" @bind="AddProperty">
+                            @foreach (var col in Grid.Columns.Where(x => !string.IsNullOrEmpty(x.FilterBy)))
+                            {
+                                <option value="@col.FilterBy">@col.Caption</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-inline">
+                        <select class="form-select select-sm" @bind="AddOperator">
+                            <option value="@FilterOperator.Contains">Contains</option>
+                            <option value="@FilterOperator.DoesNotContain">Does not contain</option>
+                            <option value="@FilterOperator.EndsWith">ends with</option>
+                            <option value="@FilterOperator.EqualTo">equals</option>
+                            <option value="@FilterOperator.GreaterThan">Greater than</option>
+                            <option value="@FilterOperator.GreaterThanOrEqualTo">Greater than or equal</option>
+                            <option value="@FilterOperator.IsEmpty">Is empty</option>
+                            <option value="@FilterOperator.IsNotEmpty">Is not empty</option>
+                            <option value="@FilterOperator.IsNotNull">Is not null</option>
+                            <option value="@FilterOperator.IsNotNullNorWhiteSpace">Is not null or white space</option>
+                            <option value="@FilterOperator.IsNull">Is null</option>
+                            <option value="@FilterOperator.IsNullOrWhiteSpace">Is null or white space</option>
+                            <option value="@FilterOperator.LessThan">Less than</option>
+                            <option value="@FilterOperator.LessThanOrEqualTo">Less then or equal</option>
+                            <option value="@FilterOperator.NotEqualTo">Not equal to</option>
+                            <option value="@FilterOperator.NotIn">Not in</option>
+                            <option value="@FilterOperator.StartsWith">Starts with</option>
+                        </select>
+                    </div>
+                    <div class="form-inline">
+                        <input type="text" class="form-input input-sm" @bind="AddValue" />
+                    </div>
+                    <div class="form-inline">
+                        <button class="btn btn-sm btn-primary" @onclick="AddFilter">OK</button>
+                        <button class="btn btn-sm" @onclick="CancelAddFilter">Cancel</button>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <a class="btn btn-sm" @onclick="() => IsAddFilterMode = true">
+                    Add filter
+                </a>
+            }
+            <button class="btn btn-primary btn-sm" @onclick="ChangeOp">change op</button>
+        </div>
+    }
+
+    <div class="mt-2">
+        <BlazorGrid @ref="Grid" Filter="MyFilter" Query="@FilterInput" TRow="Employee" SourceUrl="Data/employees.json">
+            <GridCol FitToContent="true">
+                <img src="@context.Avatar" style="width: 20px; height: 20px;" />
+            </GridCol>
+            <GridCol Caption="#" FitToContent="true" FilterBy="@nameof(context.Id)">
+                @context.Id
+            </GridCol>
+            <GridCol Caption="First name" FilterBy="@nameof(context.FirstName)">
+                @context.FirstName
+            </GridCol>
+            <GridCol Caption="Last name" FilterBy="@nameof(context.LastName)">
+                @context.LastName
+            </GridCol>
+            <GridCol Caption="Email address" FilterBy="@nameof(context.Email)">
+                <a href="mailto:@context.Email">@context.Email</a>
+            </GridCol>
+        </BlazorGrid>
+    </div>
+}
+@code
+{
+    public bool ShowCode { get; set; }
+    public string FilterInput { get; set; }
+
+    public BlazorGrid.Components.BlazorGrid<Employee> Grid { get; set; }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender && Grid != null)
+        {
+            StateHasChanged();
+        }
+    }
+
+    private bool IsAddFilterMode { get; set; }
+    private FilterOperator AddOperator { get; set; }
+    private string AddProperty { get; set; }
+    private string AddValue { get; set; }
+
+    private void AddFilter()
+    {
+        IsAddFilterMode = false;
+
+        var t = BlazorGrid.Components.BlazorGrid<Employee>.GetTypeFor(AddProperty);
+
+        Grid.Filter.Filters.Add(new PropertyFilter
+        {
+            Operator = AddOperator,
+            Property = AddProperty,
+            Type = t,
+            Value = AddValue
+        });
+
+    }
+
+    private void CancelAddFilter()
+    {
+        IsAddFilterMode = false;
+        AddOperator = default;
+        AddProperty = default;
+        AddValue = default;
+
+    }
+
+    private void RemoveFilter(PropertyFilter filter)
+    {
+        Grid.Filter.Filters.Remove(filter);
+    }
+
+    private void ClearAll()
+    {
+        Grid.Filter.Filters.Clear();
+    }
+
+    private void ChangeOp()
+    {
+        Grid.Filter.Connector = ConnectorType.Any;
+    }
+}
