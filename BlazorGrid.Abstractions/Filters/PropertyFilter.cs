@@ -11,9 +11,6 @@ namespace BlazorGrid.Abstractions.Filters
         [JsonPropertyName("v")]
         public string Value { get; set; }
 
-        [JsonPropertyName("t")]
-        public PropertyType Type { get; set; }
-
         [JsonPropertyName("o")]
         public FilterOperator Operator { get; set; }
     }

@@ -29,7 +29,6 @@ namespace BlazorGrid.Filters.Tests
                     {
                         Operator = FilterOperator.DoesNotContain,
                         Property = "UnitTest",
-                        Type = PropertyType.String,
                         Value = "foo"
                     }
                 }

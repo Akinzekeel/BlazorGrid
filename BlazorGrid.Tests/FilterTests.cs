@@ -21,46 +21,7 @@ namespace BlazorGrid.Tests
     {
         class Model
         {
-            public int Int { get; set; }
-            public int? NInt { get; set; }
-            public decimal Dec { get; set; }
-            public decimal? NDec { get; set; }
             public string String { get; set; }
-        }
-
-        [TestMethod]
-        public void Can_Detect_PropertyType_Integer()
-        {
-            var result = Components.BlazorGrid<Model>.GetTypeFor(nameof(Model.Int));
-            Assert.AreEqual(PropertyType.Integer, result);
-        }
-
-        [TestMethod]
-        public void Can_Detect_PropertyType_Integer_Nullable()
-        {
-            var result = Components.BlazorGrid<Model>.GetTypeFor(nameof(Model.NInt));
-            Assert.AreEqual(PropertyType.Integer, result);
-        }
-
-        [TestMethod]
-        public void Can_Detect_PropertyType_Decimal()
-        {
-            var result = Components.BlazorGrid<Model>.GetTypeFor(nameof(Model.Dec));
-            Assert.AreEqual(PropertyType.Decimal, result);
-        }
-
-        [TestMethod]
-        public void Can_Detect_PropertyType_Decimal_Nullable()
-        {
-            var result = Components.BlazorGrid<Model>.GetTypeFor(nameof(Model.NDec));
-            Assert.AreEqual(PropertyType.Decimal, result);
-        }
-
-        [TestMethod]
-        public void Can_Detect_PropertyType_String()
-        {
-            var result = Components.BlazorGrid<Model>.GetTypeFor(nameof(Model.String));
-            Assert.AreEqual(PropertyType.String, result);
         }
 
         private Mock<IGridProvider> mockProvider;
@@ -146,8 +107,7 @@ namespace BlazorGrid.Tests
             {
                 Property = "Foo",
                 Operator = FilterOperator.Contains,
-                Value = "Bar",
-                Type = PropertyType.String
+                Value = "Bar"
             });
 
             mockProvider.Verify(x => x.GetAsync<Model>(

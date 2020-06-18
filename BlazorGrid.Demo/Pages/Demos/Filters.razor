@@ -130,13 +130,10 @@ else
     {
         IsAddFilterMode = false;
 
-        var t = BlazorGrid.Components.BlazorGrid<Employee>.GetTypeFor(AddProperty);
-
         Grid.Filter.Filters.Add(new PropertyFilter
         {
             Operator = AddOperator,
             Property = AddProperty,
-            Type = t,
             Value = AddValue
         });
 

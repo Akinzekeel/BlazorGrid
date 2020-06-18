@@ -269,40 +269,6 @@ namespace BlazorGrid.Components
             StateHasChanged();
         }
 
-        PropertyType IBlazorGrid.GetTypeFor(string PropertyName)
-        {
-            return GetTypeFor(PropertyName);
-        }
-
-        public static PropertyType GetTypeFor(string PropertyName)
-        {
-            var t = typeof(TRow);
-            var p = t.GetProperty(PropertyName);
-
-            if (p == null)
-            {
-                throw new ArgumentException(string.Format("Property {0} was not found on type {1}", PropertyName, t.Name));
-            }
-
-            t = p.PropertyType;
-
-            var intType = typeof(int);
-
-            if (intType.IsAssignableFrom(t) || intType.IsAssignableFrom(Nullable.GetUnderlyingType(t)))
-            {
-                return PropertyType.Integer;
-            }
-
-            var decType = typeof(decimal);
-
-            if (decType.IsAssignableFrom(t) || decType.IsAssignableFrom(Nullable.GetUnderlyingType(t)))
-            {
-                return PropertyType.Decimal;
-            }
-
-            return PropertyType.String;
-        }
-
         public bool IsFilteredBy(string PropertyName)
         {
             return Filter?.Filters.Any(x => x.Property == PropertyName) == true;

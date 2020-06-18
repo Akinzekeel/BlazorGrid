@@ -23,7 +23,10 @@ namespace BlazorGrid.Filters.Helpers
                 var op = GetOperation(filter.Operator);
 
                 // Detect the type
-                if (filter.Type == PropertyType.Decimal)
+                var type = typeof(T).GetProperty(filter.Property).PropertyType;
+                type = Nullable.GetUnderlyingType(type) ?? type;
+
+                if (type == typeof(decimal))
                 {
                     // Cast to decimal
                     if (decimal.TryParse(filter.Value, out var val))
@@ -32,7 +35,7 @@ namespace BlazorGrid.Filters.Helpers
                         result.By(filter.Property, op, val, (Connector)descriptor.Connector);
                     }
                 }
-                else if (filter.Type == PropertyType.Integer)
+                else if (type == typeof(int))
                 {
                     // Cast to int
                     if (int.TryParse(filter.Value, out var val))
@@ -41,7 +44,7 @@ namespace BlazorGrid.Filters.Helpers
                         result.By(filter.Property, op, val, (Connector)descriptor.Connector);
                     }
                 }
-                else if (filter.Type == PropertyType.String)
+                else if (type == typeof(string))
                 {
                     // Apply filter
                     result.By(filter.Property, op, filter.Value);
