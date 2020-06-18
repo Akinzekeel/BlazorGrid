@@ -61,7 +61,7 @@ namespace BlazorGrid.Filters.Helpers
                 FilterOperator.IsEmpty => new IsEmpty(),
                 FilterOperator.NotEqualTo => new NotEqualTo(),
                 FilterOperator.LessThanOrEqualTo => new LessThanOrEqualTo(),
-                FilterOperator.LessThan => new IsNullOrWhiteSpace(),
+                FilterOperator.LessThan => new LessThan(),
                 FilterOperator.IsNullOrWhiteSpace => new IsNullOrWhiteSpace(),
                 FilterOperator.IsNull => new IsNull(),
                 FilterOperator.IsNotNullNorWhiteSpace => new IsNotNullNorWhiteSpace(),

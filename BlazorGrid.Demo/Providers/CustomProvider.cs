@@ -5,10 +5,8 @@ using BlazorGrid.Demo.Models;
 using BlazorGrid.Providers;
 using System;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Net.Http;
 using System.Threading.Tasks;
-using ExpressionBuilder.Generics;
 
 namespace BlazorGrid.Demo.Providers
 {

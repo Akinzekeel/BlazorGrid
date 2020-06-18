@@ -1,11 +1,8 @@
 ﻿using BlazorGrid.Abstractions.Filters;
 using BlazorGrid.Filters.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 
 namespace BlazorGrid.Filters.Tests
 {
@@ -14,11 +11,12 @@ namespace BlazorGrid.Filters.Tests
     {
         class Model
         {
-            public string UnitTest { get; set; }
+            public int IntVal { get; set; }
+            public string StringVal { get; set; }
         }
 
         [TestMethod]
-        public void Can_Build_Filter_From_Descriptor()
+        public void Can_Build_Filter_From_Descriptor_String_DoesNotContain()
         {
             var descriptor = new FilterDescriptor()
             {
@@ -28,7 +26,7 @@ namespace BlazorGrid.Filters.Tests
                     new PropertyFilter
                     {
                         Operator = FilterOperator.DoesNotContain,
-                        Property = "UnitTest",
+                        Property = nameof(Model.StringVal),
                         Value = "foo"
                     }
                 }
@@ -38,15 +36,47 @@ namespace BlazorGrid.Filters.Tests
 
             var data = new Model[]
             {
-                new Model { UnitTest = "barfoobar" },
-                new Model { UnitTest = "foobar" },
-                new Model { UnitTest = "unit test" }
+                new Model { StringVal = "barfoobar" },
+                new Model { StringVal = "foobar" },
+                new Model { StringVal = "unit test" }
             };
 
             var filtered = data.AsQueryable().Where(f);
 
             Assert.AreEqual(1, filtered.Count());
-            Assert.AreEqual("unit test", filtered.Single().UnitTest);
+            Assert.AreEqual("unit test", filtered.Single().StringVal);
+        }
+
+        [TestMethod]
+        public void Can_Build_Filter_From_Descriptor_Int_LessThan()
+        {
+            var descriptor = new FilterDescriptor()
+            {
+                Connector = default,
+                Filters = new ObservableCollection<PropertyFilter>
+                {
+                    new PropertyFilter
+                    {
+                        Operator = FilterOperator.LessThan,
+                        Property = nameof(Model.IntVal),
+                        Value = "20"
+                    }
+                }
+            };
+
+            var f = FilterHelper.Build<Model>(descriptor);
+
+            var data = new Model[]
+            {
+                new Model { IntVal = 40 },
+                new Model { IntVal = 20 },
+                new Model { IntVal = 19 }
+            };
+
+            var filtered = data.AsQueryable().Where(f);
+
+            Assert.AreEqual(1, filtered.Count());
+            Assert.AreEqual(19, filtered.Single().IntVal);
         }
     }
 }

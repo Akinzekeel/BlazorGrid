@@ -1,4 +1,3 @@
-using BlazorGrid.Abstractions.Filters;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
