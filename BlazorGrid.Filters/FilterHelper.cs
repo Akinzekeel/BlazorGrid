@@ -5,10 +5,16 @@ using ExpressionBuilder.Interfaces;
 using ExpressionBuilder.Operations;
 using System;
 
-namespace BlazorGrid.Filters.Helpers
+namespace BlazorGrid.Filters
 {
     public static class FilterHelper
     {
+        /// <summary>
+        /// Converts a FilterDescriptor object into a Filter&lt;<typeparamref name="T"/>&gt;
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="descriptor"></param>
+        /// <returns></returns>
         public static Filter<T> Build<T>(this FilterDescriptor descriptor) where T : class
         {
             if (descriptor is null)

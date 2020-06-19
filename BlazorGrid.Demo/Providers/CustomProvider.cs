@@ -54,7 +54,7 @@ namespace BlazorGrid.Demo.Providers
 
             if (Filter?.Filters.Any() == true)
             {
-                var f = Filters.Helpers.FilterHelper.Build<Employee>(Filter);
+                var f = Filters.FilterHelper.Build<Employee>(Filter);
                 data = (data as IQueryable<Employee>).Where(f).Cast<T>();
 
                 totalCount = data.Count();

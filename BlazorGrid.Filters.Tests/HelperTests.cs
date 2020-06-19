@@ -1,5 +1,4 @@
 ﻿using BlazorGrid.Abstractions.Filters;
-using BlazorGrid.Filters.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.ObjectModel;
 using System.Linq;
