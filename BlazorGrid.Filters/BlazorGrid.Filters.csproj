@@ -2,11 +2,17 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>Akinzekeel.BlazorGrid.Filters</PackageId>
+    <Version>0.6.2-beta</Version>
+    <Authors>Majid Iqbal</Authors>
+    <Company />
+    <Description>Helper to convert the FilterDescriptor object into a Filter / Expression</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/Akinzekeel/BlazorGrid</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Akinzekeel/BlazorGrid</RepositoryUrl>
+    <PackageReleaseNotes>Preview</PackageReleaseNotes>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="LambdaExpressionBuilder" Version="2.1.0-rc" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\ExpressionBuilder\ExpressionBuilder\ExpressionBuilder.csproj" />
