@@ -15,7 +15,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\ExpressionBuilder\ExpressionBuilder\ExpressionBuilder.csproj" />
+    <PackageReference Include="Akinzekeel.ExpressionBuilder" Version="20200621.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\BlazorGrid.Abstractions\BlazorGrid.Abstractions.csproj" />
   </ItemGroup>
 
