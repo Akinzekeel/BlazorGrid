@@ -3,7 +3,7 @@
     <div class="grid-scrollview" style="grid-template-columns: @GridColumns">
         <header class="grid-row grid-header">
             <CascadingValue Value="this" IsFixed="true">
-                @ChildContent(null)
+                @ChildContent(GetEmptyRow())
             </CascadingValue>
         </header>
         @if (LoadingError != null)
@@ -15,7 +15,10 @@
                     </div>
                     <div class="empty-subtitle">@Resources.LoadingError_Text</div>
                     <small class="d-block">@LoadingError.Message</small>
-                    <code>@LoadingError.StackTrace</code>
+                    @if (System.Diagnostics.Debugger.IsAttached)
+                    {
+                        <code style="line-break: auto">@LoadingError.StackTrace</code>
+                    }
                 </div>
             </div>
         }

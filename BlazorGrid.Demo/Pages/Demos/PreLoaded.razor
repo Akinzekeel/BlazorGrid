@@ -10,7 +10,7 @@
     </div>
 </div>
 <h1>Pre loaded data</h1>
-@if(ShowCode)
+@if (ShowCode)
 {
     <pre class="code" data-lang="Razor"><code class="bg-dark text-light">&lt;BlazorGrid Rows=&quot;Data&quot; TRow=&quot;CultureInfo&quot;&gt;
     &lt;GridCol Caption=&quot;LCID&quot;&gt;@@context.LCID&lt;/GridCol&gt;
@@ -31,10 +31,10 @@ else
     <p>Pre loading data in this fashion is not ideal due to limited features and potentially worse performance, however it can be suitable for small amounts of data.</p>
 
     <div class="mt-2">
-        <BlazorGrid Rows="Data" TRow="CultureInfo">
-            <GridCol Caption="LCID">@context.LCID</GridCol>
-            <GridCol Caption="ISO code">@context.ThreeLetterISOLanguageName</GridCol>
-            <GridCol Caption="Display name">@context.DisplayName</GridCol>
+        <BlazorGrid Rows="Data" TRow="CultureInfo" EmptyRow="CultureInfo.CurrentCulture">
+            <GridCol For="context.LCID" Caption="LCID">@context.LCID</GridCol>
+            <GridCol For="context.ThreeLetterISOLanguageName" Caption="ISO code">@context.ThreeLetterISOLanguageName</GridCol>
+            <GridCol For="context.DisplayName" Caption="Display name">@context.DisplayName</GridCol>
         </BlazorGrid>
     </div>
 }

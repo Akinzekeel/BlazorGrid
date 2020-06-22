@@ -19,6 +19,8 @@
 
 
   <ItemGroup>
+    <ProjectReference Include="..\BlazorGrid.Demo\BlazorGrid.Demo.csproj" />
+    <ProjectReference Include="..\BlazorGrid.Filters\BlazorGrid.Filters.csproj" />
     <ProjectReference Include="..\BlazorGrid\BlazorGrid.csproj" />
   </ItemGroup>
 

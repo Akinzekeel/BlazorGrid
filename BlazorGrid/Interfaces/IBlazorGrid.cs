@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace BlazorGrid.Interfaces
@@ -7,10 +9,9 @@ namespace BlazorGrid.Interfaces
     {
         string OrderByPropertyName { get; }
         bool OrderByDescending { get; }
-
         void Add(IGridCol col);
-        Task TryApplySorting(string PropertyName);
-        bool IsFilteredBy(string PropertyName);
+        Task TryApplySorting<T>(Expression<Func<T>> Property);
+        bool IsFilteredBy<T>(Expression<Func<T>> Property);
         IEnumerable<IGridCol> Columns { get; }
     }
 }

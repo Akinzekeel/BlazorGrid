@@ -40,9 +40,9 @@ else
                 <div class="form-group">
                     <div class="form-inline">
                         <select class="form-select select-sm" @bind="AddProperty">
-                            @foreach (var col in Grid.Columns.Where(x => !string.IsNullOrEmpty(x.FilterBy)))
+                            @foreach (var col in Grid.Columns.Where(x => x.IsFilterable))
                             {
-                                <option value="@col.FilterBy">@col.Caption</option>
+                                <option value="@col.ForExpression">@col.Caption</option>
                             }
                         </select>
                     </div>
@@ -88,19 +88,19 @@ else
 
     <div class="mt-2">
         <BlazorGrid @ref="Grid" Filter="MyFilter" Query="@FilterInput" TRow="Employee" SourceUrl="Data/employees.json">
-            <GridCol FitToContent="true">
+            <StaticGridCol FitToContent="true">
                 <img src="@context.Avatar" style="width: 20px; height: 20px;" />
-            </GridCol>
-            <GridCol Caption="#" FitToContent="true" FilterBy="@nameof(context.Id)">
+            </StaticGridCol>
+            <GridCol For="context.Id" Caption="#" FitToContent="true">
                 @context.Id
             </GridCol>
-            <GridCol Caption="First name" FilterBy="@nameof(context.FirstName)">
+            <GridCol For="context.FirstName" Caption="First name">
                 @context.FirstName
             </GridCol>
-            <GridCol Caption="Last name" FilterBy="@nameof(context.LastName)">
+            <GridCol For="context.LastName" Caption="Last name">
                 @context.LastName
             </GridCol>
-            <GridCol Caption="Email address" FilterBy="@nameof(context.Email)">
+            <GridCol For="context.Email" Caption="Email address">
                 <a href="mailto:@context.Email">@context.Email</a>
             </GridCol>
         </BlazorGrid>

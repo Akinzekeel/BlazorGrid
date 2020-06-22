@@ -1,0 +1,11 @@
+﻿@implements IGridCol
+@if (Parent == null)
+{
+    <div @attributes="FinalAttributes">@ChildContent</div>
+}
+else
+{
+    <div class="@CssClass">
+        @Caption
+    </div>
+}

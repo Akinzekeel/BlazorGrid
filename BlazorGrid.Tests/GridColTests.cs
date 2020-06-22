@@ -19,7 +19,7 @@ namespace BlazorGrid.Tests
         {
             var fakeGrid = new Mock<IBlazorGrid>();
 
-            var unit = RenderComponent<GridCol>(
+            var unit = RenderComponent<GridCol<string>>(
                 CascadingValue(fakeGrid.Object),
                 Parameter("Caption", "Name")
             );
@@ -32,24 +32,24 @@ namespace BlazorGrid.Tests
         {
             var fakeGrid = new Mock<IBlazorGrid>();
 
-            var unit = RenderComponent<GridCol>(
+            var unit = RenderComponent<GridCol<string>>(
                 CascadingValue(fakeGrid.Object),
                 Parameter("class", "my-custom-class"),
-                Parameter(nameof(GridCol.AlignRight), true)
+                Parameter(nameof(GridCol<string>.AlignRight), true)
             );
 
-            unit.MarkupMatches("<div class=\"text-right my-custom-class\"></div>");
+            unit.MarkupMatches("<div class=\"text-right sortable my-custom-class\"><span class=\"blazor-grid-sort-icon\">‹›</span></div>");
         }
 
         [TestMethod]
         public void Can_Set_Custom_Attributes()
         {
-            var unit = RenderComponent<GridCol>(
+            var unit = RenderComponent<GridCol<string>>(
                 Parameter("title", "Unit test"),
                 ChildContent("Hello world")
             );
 
-            unit.MarkupMatches("<div class=\"\" title=\"Unit test\">Hello world</div>");
+            unit.MarkupMatches("<div class=\"sortable\" title=\"Unit test\">Hello world</div>");
         }
 
         [TestMethod]
@@ -57,12 +57,12 @@ namespace BlazorGrid.Tests
         {
             var fakeGrid = new Mock<IBlazorGrid>();
 
-            var unit = RenderComponent<GridCol>(
+            var unit = RenderComponent<GridCol<string>>(
                 CascadingValue(fakeGrid.Object),
                 Parameter("title", "Unit test")
             );
 
-            unit.MarkupMatches("<div class=\"\"></div>");
+            unit.MarkupMatches("<div class=\"sortable\"><span class=\"blazor-grid-sort-icon\">‹›</span></div>");
         }
     }
 }

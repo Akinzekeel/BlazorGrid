@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using System;
+using System.Linq.Expressions;
 
 namespace BlazorGrid.Tests
 {
@@ -34,8 +36,9 @@ namespace BlazorGrid.Tests
             var grid = RenderComponent<BlazorGrid<MyDto>>(
                 Template<MyDto>(nameof(ChildContent), (dto) => (b) =>
                 {
-                    b.OpenComponent(0, typeof(GridCol));
-                    b.AddAttribute(1, nameof(GridCol.OrderBy), nameof(MyDto.Name));
+                    b.OpenComponent(0, typeof(GridCol<string>));
+                    b.AddAttribute(1, nameof(GridCol<string>.For), nameof(MyDto.Name));
+                    b.AddAttribute(2, nameof(GridCol<string>.ForExpression), (Expression<Func<string>>)(() => dto.Name));
                     b.CloseComponent();
                 })
             );
@@ -72,7 +75,7 @@ namespace BlazorGrid.Tests
             var grid = RenderComponent<BlazorGrid<MyDto>>(
                 Template<MyDto>(nameof(ChildContent), (dto) => (b) =>
                 {
-                    b.OpenComponent(0, typeof(GridCol));
+                    b.OpenComponent(0, typeof(GridCol<string>));
                     b.CloseComponent();
                 })
             );

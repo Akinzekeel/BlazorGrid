@@ -1,44 +1,54 @@
-﻿@implements IGridCol
+﻿@typeparam T
+@implements IGridCol<T>
 @if (Parent == null)
 {
-    <div @attributes="FinalAttributes">@ChildContent</div>
+    <div @attributes="FinalAttributes">
+        @if (ChildContent == null)
+        {
+            @For
+        }
+        else
+        {
+            @ChildContent
+        }
+    </div>
 }
 else
 {
-<div @onclick="_ => Parent.TryApplySorting(OrderBy)" class="@CssClass">
-    @if (!AlignRight)
-    {
-        @Caption
-    }
-    @if (IsFiltered)
-    {
-        <span class="blazor-grid-filter-icon @(IsFiltered ? "text-secondary" : "text-gray")">
-            *
-        </span>
-    }
-    else if (IsSortable)
-    {
-        <span class="blazor-grid-sort-icon">
-            @if (IsSorted)
-            {
-                if (Parent.OrderByDescending)
+    <div @onclick="_ => Parent.TryApplySorting(ForExpression)" class="@CssClass">
+        @if (!AlignRight)
+        {
+            @Caption
+        }
+        @if (IsFiltered)
+        {
+            <span class="blazor-grid-filter-icon @(IsFiltered ? "text-secondary" : "text-gray")">
+                *
+            </span>
+        }
+        else
+        {
+            <span class="blazor-grid-sort-icon">
+                @if (IsSorted)
                 {
-                    @:&rsaquo;
+                    if (Parent.OrderByDescending)
+                    {
+                        @:&rsaquo;
+                    }
+                    else
+                    {
+                        @:&lsaquo;
+                    }
                 }
                 else
                 {
-                    @:&lsaquo;
+                    @:&lsaquo;&rsaquo;
                 }
-            }
-            else
-            {
-                @:&lsaquo;&rsaquo;
-            }
-        </span>
-    }
-    @if (AlignRight)
-    {
-        @Caption
-    }
-</div>
+            </span>
+        }
+        @if (AlignRight)
+        {
+            @Caption
+        }
+    </div>
 }

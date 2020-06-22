@@ -16,15 +16,16 @@ namespace BlazorGrid.Components
 {
     public partial class BlazorGrid<TRow> : IDisposable, IBlazorGrid where TRow : class
     {
-        [Inject] public IGridProvider Provider { get; set; }
-        [Inject] public NavigationManager Nav { get; set; }
-
-        private bool IsLoadingMore { get; set; }
         public const int DefaultPageSize = 25;
 
+        [Inject] public IGridProvider Provider { get; set; }
+        [Inject] public NavigationManager Nav { get; set; }
         [Parameter] public string SourceUrl { get; set; }
         [Parameter] public RenderFragment<TRow> ChildContent { get; set; }
         [Parameter] public int PageSize { get; set; } = DefaultPageSize;
+        [Parameter] public TRow EmptyRow { get; set; }
+
+        private bool IsLoadingMore { get; set; }
 
         private string _Query;
 
@@ -203,18 +204,22 @@ namespace BlazorGrid.Components
             }
         }
 
-        public Task TryApplySorting(string PropertyName)
+        public Task TryApplySorting<T>(Expression<Func<T>> property)
         {
-            if (string.IsNullOrEmpty(PropertyName))
+            if (property == null)
+            {
                 return Task.CompletedTask;
+            }
 
-            if (OrderByPropertyName == PropertyName)
+            var prop = ExpressionHelper.GetPropertyName<TRow, T>(property);
+
+            if (OrderByPropertyName == prop)
             {
                 OrderByDescending = !OrderByDescending;
             }
             else
             {
-                OrderByPropertyName = PropertyName;
+                OrderByPropertyName = prop;
                 OrderByDescending = false;
             }
 
@@ -269,9 +274,10 @@ namespace BlazorGrid.Components
             StateHasChanged();
         }
 
-        public bool IsFilteredBy(string PropertyName)
+        public bool IsFilteredBy<T>(Expression<Func<T>> property)
         {
-            return Filter?.Filters.Any(x => x.Property == PropertyName) == true;
+            var prop = ExpressionHelper.GetPropertyName<TRow, T>(property);
+            return Filter?.Filters.Any(x => x.Property == prop) == true;
         }
 
         public void Dispose()
@@ -286,5 +292,7 @@ namespace BlazorGrid.Components
                 }
             }
         }
+
+        private TRow GetEmptyRow() => EmptyRow ?? Activator.CreateInstance<TRow>();
     }
 }

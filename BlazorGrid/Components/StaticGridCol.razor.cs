@@ -1,4 +1,4 @@
-using BlazorGrid.Interfaces;
+﻿using BlazorGrid.Interfaces;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
@@ -7,18 +7,16 @@ using System.Linq.Expressions;
 
 namespace BlazorGrid.Components
 {
-    public partial class GridCol<T> : IGridCol<T>
+    public partial class StaticGridCol : IGridCol
     {
         [CascadingParameter] internal IBlazorGrid Parent { get; set; }
         [Parameter] public string Caption { get; set; }
         [Parameter] public RenderFragment ChildContent { get; set; }
         [Parameter] public bool FitToContent { get; set; }
         [Parameter] public bool AlignRight { get; set; }
-        [Parameter] public T For { get; set; }
-        [Parameter] public Expression<Func<T>> ForExpression { get; set; }
         [Parameter(CaptureUnmatchedValues = true)] public IDictionary<string, object> Attributes { get; set; }
 
-        Expression IGridCol.ForExpression => ForExpression;
+        Expression IGridCol.ForExpression => null;
         private bool IsRegistered;
 
         private IDictionary<string, object> FinalAttributes
@@ -51,8 +49,6 @@ namespace BlazorGrid.Components
             {
                 var cls = new List<string>{
                     AlignRight ? "text-right" : "",
-                    "sortable",
-                    IsSorted ? "sorted" : ""
                 };
 
                 if (Attributes != null)
@@ -73,10 +69,7 @@ namespace BlazorGrid.Components
             }
         }
 
-        private bool IsSorted => false; // Parent?.OrderByPropertyName == ForExpression.ToString();
-
-        public bool IsFilterable => true;
-        private bool IsFiltered => false;// Parent?.IsFilteredBy(ForExpression) == true;
+        public bool IsFilterable => false;
 
         protected override void OnParametersSet()
         {
