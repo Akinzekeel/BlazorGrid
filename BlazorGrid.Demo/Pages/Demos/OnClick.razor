@@ -94,16 +94,16 @@ else
             <StaticGridCol FitToContent="true">
                 <img src="@context.Avatar" style="width: 20px; height: 20px;" />
             </StaticGridCol>
-            <GridCol For="() =>context.Id" Caption="#" FitToContent="true">
+            <GridCol For="() => context.Id" FitToContent="true">
                 @context.Id
             </GridCol>
-            <GridCol For="() =>context.FirstName" Caption="First name">
+            <GridCol For="() => context.FirstName">
                 @context.FirstName
             </GridCol>
-            <GridCol For="() =>context.LastName" Caption="Last name">
+            <GridCol For="() => context.LastName">
                 @context.LastName
             </GridCol>
-            <GridCol For="() =>context.Email" Caption="Email address">
+            <GridCol For="() => context.Email">
                 <a href="mailto:@context.Email">@context.Email</a>
             </GridCol>
         </BlazorGrid>

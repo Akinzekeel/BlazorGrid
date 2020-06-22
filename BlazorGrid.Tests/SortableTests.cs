@@ -37,8 +37,7 @@ namespace BlazorGrid.Tests
                 Template<MyDto>(nameof(ChildContent), (dto) => (b) =>
                 {
                     b.OpenComponent(0, typeof(GridCol<string>));
-                    b.AddAttribute(1, nameof(GridCol<string>.Value), nameof(MyDto.Name));
-                    b.AddAttribute(2, nameof(GridCol<string>.For), (Expression<Func<string>>)(() => dto.Name));
+                    b.AddAttribute(1, nameof(GridCol<string>.For), (Expression<Func<string>>)(() => dto.Name));
                     b.CloseComponent();
                 })
             );

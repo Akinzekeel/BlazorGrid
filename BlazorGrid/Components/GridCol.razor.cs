@@ -1,3 +1,4 @@
+using BlazorGrid.Helpers;
 using BlazorGrid.Interfaces;
 using Microsoft.AspNetCore.Components;
 using System;
@@ -101,6 +102,17 @@ namespace BlazorGrid.Components
                 IsRegistered = true;
                 Parent.Add(this);
             }
+        }
+
+        private string GetCaptionOrDefault()
+        {
+            if (string.IsNullOrEmpty(Caption))
+            {
+                // Attempt to get the DisplayName from the property
+                return DisplayNameHelper.GetDisplayName(For);
+            }
+
+            return Caption;
         }
     }
 }

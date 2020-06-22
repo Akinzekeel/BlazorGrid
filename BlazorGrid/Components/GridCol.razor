@@ -18,7 +18,7 @@ else
     <div @onclick="_ => Parent.TryApplySorting(For)" class="@CssClass">
         @if (!AlignRight)
         {
-            @Caption
+            @GetCaptionOrDefault()
         }
         @if (IsFiltered)
         {
@@ -48,7 +48,7 @@ else
         }
         @if (AlignRight)
         {
-            @Caption
+            @GetCaptionOrDefault()
         }
     </div>
 }

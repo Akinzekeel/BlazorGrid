@@ -32,9 +32,9 @@ else
 
     <div class="mt-2">
         <BlazorGrid Rows="Data" TRow="CultureInfo" EmptyRow="CultureInfo.CurrentCulture">
-            <GridCol For="() =>context.LCID" Caption="LCID">@context.LCID</GridCol>
-            <GridCol For="() =>context.ThreeLetterISOLanguageName" Caption="ISO code">@context.ThreeLetterISOLanguageName</GridCol>
-            <GridCol For="() =>context.DisplayName" Caption="Display name">@context.DisplayName</GridCol>
+            <StaticGridCol Caption="LCID">@context.LCID</StaticGridCol>
+            <StaticGridCol Caption="ISO code">@context.ThreeLetterISOLanguageName</StaticGridCol>
+            <StaticGridCol Caption="Display name">@context.DisplayName</StaticGridCol>
         </BlazorGrid>
     </div>
 }
