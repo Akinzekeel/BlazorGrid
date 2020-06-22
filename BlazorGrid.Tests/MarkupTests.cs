@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace BlazorGrid.Tests
 {
@@ -106,12 +108,12 @@ namespace BlazorGrid.Tests
                 Parameter(nameof(BlazorGrid<MyDto>.Rows), noData),
                 Template<MyDto>(nameof(ChildContent), (dto) => (b) =>
                 {
-                    b.OpenComponent(0, typeof(GridCol));
+                    b.OpenComponent(0, typeof(GridCol<string>));
                     b.AddMarkupContent(1, "<span></span>");
                     b.CloseComponent();
 
-                    b.OpenComponent(2, typeof(GridCol));
-                    b.AddAttribute(3, nameof(GridCol.FitToContent), true);
+                    b.OpenComponent(2, typeof(GridCol<string>));
+                    b.AddAttribute(3, nameof(GridCol<string>.FitToContent), true);
                     b.AddMarkupContent(4, "<span></span>");
                     b.CloseComponent();
                 })
@@ -132,8 +134,8 @@ namespace BlazorGrid.Tests
                 Parameter(nameof(BlazorGrid<MyDto>.Rows), noData),
                 Template<MyDto>(nameof(ChildContent), (dto) => (b) =>
                 {
-                    b.OpenComponent<GridCol>(0);
-                    b.AddAttribute(1, nameof(GridCol.OrderBy), nameof(dto.Name));
+                    b.OpenComponent<GridCol<string>>(0);
+                    b.AddAttribute(1, nameof(GridCol<string>.For), (Expression<Func<string>>)(() => dto.Name));
                     b.CloseComponent();
                 })
             );
@@ -151,13 +153,13 @@ namespace BlazorGrid.Tests
                 Parameter(nameof(BlazorGrid<MyDto>.Rows), noData),
                 Template<MyDto>(nameof(ChildContent), (dto) => (b) =>
                 {
-                    b.OpenComponent<GridCol>(0);
+                    b.OpenComponent<GridCol<string>>(0);
                     b.CloseComponent();
                 })
             );
 
             var th = grid.Find(".grid-header > *");
-            Assert.AreEqual("", th.ClassName);
+            Assert.AreEqual("sortable", th.ClassName);
         }
     }
 }

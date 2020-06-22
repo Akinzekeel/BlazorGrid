@@ -12,7 +12,69 @@
 <h1>Filters</h1>
 @if (ShowCode)
 {
-    <pre class="code" data-lang="Razor"><code class="bg-dark text-light"></code></pre>
+    <pre class="code" data-lang="Razor"><code class="bg-dark text-light">&lt;BlazorGrid @@ref="Grid" Filter="MyFilter" Query="@@FilterInput" TRow="Employee" SourceUrl="Data/employees.json"&gt;
+        &lt;StaticGridCol FitToContent="true"&gt;
+            &lt;img src="@@context.Avatar" style="width: 20px; height: 20px;" /&gt;
+        &lt;/StaticGridCol&gt;
+        &lt;GridCol For="() =&gt; context.Id" FitToContent="true" /&gt;
+        &lt;GridCol For="() =&gt; context.FirstName" /&gt;
+        &lt;GridCol For="() =&gt; context.LastName" /&gt;
+        &lt;GridCol For="() =&gt; context.Email"&gt;
+            &lt;a href="mailto:@@context.Email"&gt;@@context.Email&lt;/a&gt;
+        &lt;/GridCol&gt;
+    &lt;/BlazorGrid&gt;</code></pre>
+    <pre class="code" data-lang="C#"><code class="bg-dark text-light">@@code
+{
+    public bool ShowCode { get; set; }
+    public string FilterInput { get; set; }
+
+    public BlazorGrid.Components.BlazorGrid&lt;Employee&gt; Grid { get; set; }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender && Grid != null)
+        {
+            StateHasChanged();
+        }
+    }
+
+    private bool IsAddFilterMode { get; set; }
+    private FilterOperator AddOperator { get; set; }
+    private string AddProperty { get; set; }
+    private string AddValue { get; set; }
+
+    private void AddFilter()
+    {
+        IsAddFilterMode = false;
+
+        Grid.Filter.Filters.Add(new PropertyFilter
+        {
+            Operator = AddOperator,
+            Property = AddProperty,
+            Value = AddValue
+        });
+
+    }
+
+    private void CancelAddFilter()
+    {
+        IsAddFilterMode = false;
+        AddOperator = default;
+        AddProperty = default;
+        AddValue = default;
+
+    }
+
+    private void RemoveFilter(PropertyFilter filter)
+    {
+        Grid.Filter.Filters.Remove(filter);
+    }
+
+    private void ClearAll()
+    {
+        Grid.Filter.Filters.Clear();
+    }
+}</code></pre>
 }
 else
 {
@@ -40,9 +102,9 @@ else
                 <div class="form-group">
                     <div class="form-inline">
                         <select class="form-select select-sm" @bind="AddProperty">
-                            @foreach (var col in Grid.Columns.Where(x => !string.IsNullOrEmpty(x.FilterBy)))
+                            @foreach (var col in Grid.Columns.Where(x => x.IsFilterable))
                             {
-                                <option value="@col.FilterBy">@col.Caption</option>
+                                <option value="@col.For">@col.Caption</option>
                             }
                         </select>
                     </div>
@@ -82,25 +144,18 @@ else
                     Add filter
                 </a>
             }
-            <button class="btn btn-primary btn-sm" @onclick="ChangeOp">change op</button>
         </div>
     }
 
     <div class="mt-2">
         <BlazorGrid @ref="Grid" Filter="MyFilter" Query="@FilterInput" TRow="Employee" SourceUrl="Data/employees.json">
-            <GridCol FitToContent="true">
+            <StaticGridCol FitToContent="true">
                 <img src="@context.Avatar" style="width: 20px; height: 20px;" />
-            </GridCol>
-            <GridCol Caption="#" FitToContent="true" FilterBy="@nameof(context.Id)">
-                @context.Id
-            </GridCol>
-            <GridCol Caption="First name" FilterBy="@nameof(context.FirstName)">
-                @context.FirstName
-            </GridCol>
-            <GridCol Caption="Last name" FilterBy="@nameof(context.LastName)">
-                @context.LastName
-            </GridCol>
-            <GridCol Caption="Email address" FilterBy="@nameof(context.Email)">
+            </StaticGridCol>
+            <GridCol For="() => context.Id" FitToContent="true" />
+            <GridCol For="() => context.FirstName" />
+            <GridCol For="() => context.LastName" />
+            <GridCol For="() => context.Email">
                 <a href="mailto:@context.Email">@context.Email</a>
             </GridCol>
         </BlazorGrid>
@@ -156,10 +211,5 @@ else
     private void ClearAll()
     {
         Grid.Filter.Filters.Clear();
-    }
-
-    private void ChangeOp()
-    {
-        Grid.Filter.Connector = ConnectorType.Any;
     }
 }

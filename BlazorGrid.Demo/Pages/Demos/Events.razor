@@ -10,22 +10,16 @@
     </div>
 </div>
 <h1>Events</h1>
-@if(ShowCode)
+@if (ShowCode)
 {
     <pre class="code" data-lang="Razor"><code class="bg-dark text-light">&lt;BlazorGrid @@ref=&quot;grid&quot; TRow=&quot;Employee&quot; SourceUrl=&quot;Data/employees.json&quot;&gt;
-    &lt;GridCol FitToContent=&quot;true&quot;&gt;
+    &lt;StaticGridCol FitToContent=&quot;true&quot;&gt;
         &lt;img src=&quot;@@context.Avatar&quot; style=&quot;width: 20px; height: 20px;&quot; /&gt;
-    &lt;/GridCol&gt;
-    &lt;GridCol Caption=&quot;#&quot; FitToContent=&quot;true&quot;&gt;
-        @@context.Id
-    &lt;/GridCol&gt;
-    &lt;GridCol Caption=&quot;First name&quot;&gt;
-        @@context.FirstName
-    &lt;/GridCol&gt;
-    &lt;GridCol Caption=&quot;Last name&quot;&gt;
-        @@context.LastName
-    &lt;/GridCol&gt;
-    &lt;GridCol Caption=&quot;Email address&quot;&gt;
+    &lt;/StaticGridCol&gt;
+    &lt;GridCol For=&quot;() => context.Id&quot; FitToContent=&quot;true&quot; /&gt;
+    &lt;GridCol For=&quot;() => context.FirstName&quot; /&gt;
+    &lt;GridCol For=&quot;() => context.LastName&quot; /&gt;
+    &lt;GridCol For=&quot;() => context.Email&quot;&gt;
         &lt;a href=&quot;mailto:@@context.Email&quot;&gt;@@context.Email&lt;/a&gt;
     &lt;/GridCol&gt;
 &lt;/BlazorGrid&gt;
@@ -69,19 +63,19 @@ else
 
     <div class="mt-2">
         <BlazorGrid @ref="grid" TRow="Employee" SourceUrl="Data/employees.json">
-            <GridCol FitToContent="true">
+            <StaticGridCol FitToContent="true">
                 <img src="@context.Avatar" style="width: 20px; height: 20px;" />
-            </GridCol>
-            <GridCol Caption="#" FitToContent="true">
+            </StaticGridCol>
+            <GridCol For="() => context.Id" FitToContent="true">
                 @context.Id
             </GridCol>
-            <GridCol Caption="First name">
+            <GridCol For="() => context.FirstName">
                 @context.FirstName
             </GridCol>
-            <GridCol Caption="Last name">
+            <GridCol For="() => context.LastName">
                 @context.LastName
             </GridCol>
-            <GridCol Caption="Email address">
+            <GridCol For="() => context.Email">
                 <a href="mailto:@context.Email">@context.Email</a>
             </GridCol>
         </BlazorGrid>
@@ -95,7 +89,7 @@ else
 
     protected override void OnAfterRender(bool firstRender)
     {
-        if(firstRender)
+        if (firstRender)
         {
             grid.OnAfterRowClicked += rowClicked;
         }

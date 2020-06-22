@@ -35,8 +35,8 @@ namespace BlazorGrid.Tests
             var grid = RenderComponent<BlazorGrid<Model>>(
                 Template<Model>(nameof(ChildContent), (dto) => (b) =>
                 {
-                    b.OpenComponent(0, typeof(GridCol));
-                    b.AddAttribute(1, nameof(GridCol.Caption), nameof(Model.String));
+                    b.OpenComponent(0, typeof(GridCol<string>));
+                    b.AddAttribute(1, nameof(GridCol<string>.Caption), nameof(Model.String));
                     b.CloseComponent();
                 })
             );
@@ -77,8 +77,8 @@ namespace BlazorGrid.Tests
             var grid = RenderComponent<BlazorGrid<Model>>(
                 Template<Model>(nameof(ChildContent), (dto) => (b) =>
                 {
-                    b.OpenComponent(0, typeof(GridCol));
-                    b.AddAttribute(1, nameof(GridCol.Caption), nameof(Model.String));
+                    b.OpenComponent(0, typeof(GridCol<string>));
+                    b.AddAttribute(1, nameof(GridCol<string>.Caption), nameof(Model.String));
                     b.CloseComponent();
                 })
             );

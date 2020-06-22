@@ -1,16 +1,20 @@
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace BlazorGrid.Abstractions.Helpers
 {
     public static class ExpressionHelper
     {
-        public static string GetPropertyName<T>(Expression<Func<T, object>> expression)
-            => GetPropertyName(expression.Body);
+        public static string GetPropertyName<TType, TResult>(Expression<Func<TResult>> expression)
+            => GetPropertyName(expression.Body, typeof(TType));
+
+        public static string GetPropertyName<TType, TResult>(Expression<Func<TType, TResult>> expression)
+            => GetPropertyName(expression.Body, typeof(TType));
 
         public static string GetPropertyName(LambdaExpression expression)
-            => GetPropertyName(expression.Body);
+            => GetPropertyName(expression.Body, null);
 
         /// <summary>
         /// This method gets information about the property while
@@ -19,10 +23,12 @@ namespace BlazorGrid.Abstractions.Helpers
         /// </summary>
         /// <param name="expression"></param>
         /// <returns></returns>
-        private static string GetPropertyName(Expression body)
+        private static string GetPropertyName(Expression body, Type ignorePathUntil)
         {
             while (body.NodeType == ExpressionType.Convert || body.NodeType == ExpressionType.ConvertChecked)
+            {
                 body = ((UnaryExpression)body).Operand;
+            }
 
             List<string> result = new List<string>();
             MemberExpression me = body as MemberExpression;
@@ -30,11 +36,22 @@ namespace BlazorGrid.Abstractions.Helpers
             if (me != null && me.Expression.NodeType == ExpressionType.MemberAccess)
             {
                 var path = me.Expression as MemberExpression;
+                var ignorePath = ignorePathUntil != null && path.Expression.Type != ignorePathUntil;
 
                 do
                 {
-                    result.Add(path.Member.Name);
+                    if (!ignorePath)
+                    {
+                        result.Add(path.Member.Name);
+                    }
+
+                    if (ignorePath && (path.Member as PropertyInfo)?.PropertyType == ignorePathUntil)
+                    {
+                        ignorePath = false;
+                    }
+
                     path = path.Expression as MemberExpression;
+
                 } while (path != null && path.NodeType == ExpressionType.MemberAccess);
             }
 
@@ -42,7 +59,9 @@ namespace BlazorGrid.Abstractions.Helpers
             result.Add(propertyName);
 
             if (result.Count == 0)
+            {
                 throw new InvalidOperationException("Expression does not refer to a property: " + body.ToString());
+            }
 
             return string.Join(".", result);
         }
@@ -58,13 +77,14 @@ namespace BlazorGrid.Abstractions.Helpers
 
             foreach (var p in path)
             {
-
                 if (currentPath == null)
+                {
                     currentPath = Expression.Property(arg, p);
-
+                }
                 else
+                {
                     currentPath = Expression.Property(currentPath, p);
-
+                }
             }
 
             var selector = Expression.Lambda(currentPath, new ParameterExpression[] { arg });

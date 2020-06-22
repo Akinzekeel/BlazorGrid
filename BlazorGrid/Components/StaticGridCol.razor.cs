@@ -1,43 +1,22 @@
-using BlazorGrid.Abstractions.Helpers;
-using BlazorGrid.Helpers;
-using BlazorGrid.Interfaces;
+﻿using BlazorGrid.Interfaces;
 using Microsoft.AspNetCore.Components;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
 namespace BlazorGrid.Components
 {
-    public partial class GridCol<T> : IGridCol<T>
+    public partial class StaticGridCol : IGridCol
     {
         [CascadingParameter] internal IBlazorGrid Parent { get; set; }
         [Parameter] public string Caption { get; set; }
         [Parameter] public RenderFragment ChildContent { get; set; }
         [Parameter] public bool FitToContent { get; set; }
         [Parameter] public bool AlignRight { get; set; }
-
-        private Expression<Func<T>> _For;
-        private Func<T> _ForCompiled;
-
-        [Parameter]
-        public Expression<Func<T>> For
-        {
-            get => _For; set
-            {
-                _For = value;
-                _ForCompiled = _For?.Compile();
-            }
-        }
         [Parameter(CaptureUnmatchedValues = true)] public IDictionary<string, object> Attributes { get; set; }
 
-        Expression IGridCol.For => For;
+        Expression IGridCol.For => null;
         private bool IsRegistered;
-
-        private T GetAutoValue()
-        {
-            return _ForCompiled == null ? default : _ForCompiled.Invoke();
-        }
 
         private IDictionary<string, object> FinalAttributes
         {
@@ -69,8 +48,6 @@ namespace BlazorGrid.Components
             {
                 var cls = new List<string>{
                     AlignRight ? "text-right" : "",
-                    "sortable",
-                    IsSorted ? "sorted" : ""
                 };
 
                 if (Attributes != null)
@@ -91,10 +68,7 @@ namespace BlazorGrid.Components
             }
         }
 
-        private bool IsSorted => Parent?.IsSortedBy(For) == true;
-
-        public bool IsFilterable => true;
-        private bool IsFiltered => Parent?.IsFilteredBy(For) == true;
+        public bool IsFilterable => false;
 
         protected override void OnParametersSet()
         {
@@ -103,17 +77,6 @@ namespace BlazorGrid.Components
                 IsRegistered = true;
                 Parent.Add(this);
             }
-        }
-
-        private string GetCaptionOrDefault()
-        {
-            if (string.IsNullOrEmpty(Caption))
-            {
-                // Attempt to get the DisplayName from the property
-                return DisplayNameHelper.GetDisplayName(For);
-            }
-
-            return Caption;
         }
     }
 }

@@ -10,12 +10,12 @@
     </div>
 </div>
 <h1>Pre loaded data</h1>
-@if(ShowCode)
+@if (ShowCode)
 {
     <pre class="code" data-lang="Razor"><code class="bg-dark text-light">&lt;BlazorGrid Rows=&quot;Data&quot; TRow=&quot;CultureInfo&quot;&gt;
-    &lt;GridCol Caption=&quot;LCID&quot;&gt;@@context.LCID&lt;/GridCol&gt;
-    &lt;GridCol Caption=&quot;ISO code&quot;&gt;@@context.ThreeLetterISOLanguageName&lt;/GridCol&gt;
-    &lt;GridCol Caption=&quot;Display name&quot;&gt;@@context.DisplayName&lt;/GridCol&gt;
+    &lt;StaticGridCol Caption=&quot;LCID&quot;&gt;@@context.LCID&lt;/GridCol&gt;
+    &lt;StaticGridCol Caption=&quot;ISO code&quot;&gt;@@context.ThreeLetterISOLanguageName&lt;/GridCol&gt;
+    &lt;StaticGridCol Caption=&quot;Display name&quot;&gt;@@context.DisplayName&lt;/GridCol&gt;
 &lt;/BlazorGrid&gt;
 
 @@code
@@ -31,10 +31,10 @@ else
     <p>Pre loading data in this fashion is not ideal due to limited features and potentially worse performance, however it can be suitable for small amounts of data.</p>
 
     <div class="mt-2">
-        <BlazorGrid Rows="Data" TRow="CultureInfo">
-            <GridCol Caption="LCID">@context.LCID</GridCol>
-            <GridCol Caption="ISO code">@context.ThreeLetterISOLanguageName</GridCol>
-            <GridCol Caption="Display name">@context.DisplayName</GridCol>
+        <BlazorGrid Rows="Data" TRow="CultureInfo" EmptyRow="CultureInfo.CurrentCulture">
+            <StaticGridCol Caption="LCID">@context.LCID</StaticGridCol>
+            <StaticGridCol Caption="ISO code">@context.ThreeLetterISOLanguageName</StaticGridCol>
+            <StaticGridCol Caption="Display name">@context.DisplayName</StaticGridCol>
         </BlazorGrid>
     </div>
 }

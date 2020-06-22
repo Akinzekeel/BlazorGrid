@@ -1,7 +1,14 @@
 ﻿using Microsoft.AspNetCore.Components;
+using System;
+using System.Linq.Expressions;
 
 namespace BlazorGrid.Interfaces
 {
+    public interface IGridCol<T> : IGridCol
+    {
+        new Expression<Func<T>> For { get; }
+    }
+
     public interface IGridCol
     {
         string Caption { get; }
@@ -9,6 +16,7 @@ namespace BlazorGrid.Interfaces
         string CssClass { get; }
         bool AlignRight { get; }
         bool FitToContent { get; }
-        string FilterBy { get; }
+        bool IsFilterable { get; }
+        Expression For { get; }
     }
 }
