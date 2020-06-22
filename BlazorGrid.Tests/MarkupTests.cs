@@ -2,7 +2,6 @@ using BlazorGrid.Abstractions;
 using BlazorGrid.Components;
 using BlazorGrid.Tests.Mock;
 using Bunit;
-using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
