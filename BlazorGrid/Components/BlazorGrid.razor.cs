@@ -276,8 +276,24 @@ namespace BlazorGrid.Components
 
         public bool IsFilteredBy<T>(Expression<Func<T>> property)
         {
+            if (property == null)
+            {
+                return false;
+            }
+
             var prop = ExpressionHelper.GetPropertyName<TRow, T>(property);
             return Filter?.Filters.Any(x => x.Property == prop) == true;
+        }
+
+        public bool IsSortedBy<T>(Expression<Func<T>> property)
+        {
+            if (property == null)
+            {
+                return false;
+            }
+
+            var prop = ExpressionHelper.GetPropertyName<TRow, T>(property);
+            return OrderByPropertyName == prop;
         }
 
         public void Dispose()

@@ -1,3 +1,4 @@
+using BlazorGrid.Abstractions.Helpers;
 using BlazorGrid.Helpers;
 using BlazorGrid.Interfaces;
 using Microsoft.AspNetCore.Components;
@@ -90,10 +91,10 @@ namespace BlazorGrid.Components
             }
         }
 
-        private bool IsSorted => false; // Parent?.OrderByPropertyName == ForExpression.ToString();
+        private bool IsSorted => Parent?.IsSortedBy(For) == true;
 
         public bool IsFilterable => true;
-        private bool IsFiltered => false;// Parent?.IsFilteredBy(ForExpression) == true;
+        private bool IsFiltered => Parent?.IsFilteredBy(For) == true;
 
         protected override void OnParametersSet()
         {

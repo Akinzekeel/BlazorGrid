@@ -68,13 +68,18 @@ namespace BlazorGrid.Tests
             mockProvider.VerifyNoOtherCalls();
         }
 
-        [TestMethod]
-        public void Non_Sortable_Header_Click_Does_Nothing()
+        [DataTestMethod]
+        [DataRow(true)]
+        [DataRow(false)]
+        public void Can_Detect_Sorted_Column(bool desc)
         {
             var grid = RenderComponent<BlazorGrid<MyDto>>(
-                Template<MyDto>(nameof(ChildContent), (dto) => (b) =>
+                Parameter(nameof(BlazorGrid<MyDto>.DefaultOrderBy), (Expression<Func<MyDto, object>>)(x => x.Name)),
+                Parameter(nameof(BlazorGrid<MyDto>.DefaultOrderByDescending), desc),
+                Template<MyDto>(nameof(ChildContent), (dto) => b =>
                 {
                     b.OpenComponent(0, typeof(GridCol<string>));
+                    b.AddAttribute(1, nameof(GridCol<string>.For), (Expression<Func<string>>)(() => dto.Name));
                     b.CloseComponent();
                 })
             );
@@ -83,16 +88,14 @@ namespace BlazorGrid.Tests
                 It.IsAny<string>(),
                 0,
                 It.IsAny<int>(),
-                null,
-                false,
+                "Name",
+                desc,
                 It.IsAny<string>(),
                 It.IsAny<FilterDescriptor>()
             ), Times.Once());
 
             var th = grid.Find(".grid-header > *");
-            th.Click();
-
-            mockProvider.VerifyNoOtherCalls();
+            th.MarkupMatches("<div class=\"sorted sortable\"><span class=\"blazor-grid-sort-icon\">" + (desc ? "›" : "‹") + "</span></div>");
         }
     }
 }

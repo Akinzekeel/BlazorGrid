@@ -12,6 +12,7 @@ namespace BlazorGrid.Interfaces
         void Add(IGridCol col);
         Task TryApplySorting<T>(Expression<Func<T>> Property);
         bool IsFilteredBy<T>(Expression<Func<T>> Property);
+        bool IsSortedBy<T>(Expression<Func<T>> Property);
         IEnumerable<IGridCol> Columns { get; }
     }
 }
