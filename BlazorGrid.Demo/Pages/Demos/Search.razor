@@ -15,19 +15,13 @@
         @@bind-value=&quot;FilterInput&quot; @@bind-value:event=&quot;oninput&quot; /&gt;
 
 &lt;BlazorGrid Query="@@FilterInput" TRow=&quot;Employee&quot; SourceUrl=&quot;Data/employees.json&quot;&gt;
-    &lt;GridCol FitToContent=&quot;true&quot;&gt;
+    &lt;StaticGridCol FitToContent=&quot;true&quot;&gt;
         &lt;img src=&quot;@@context.Avatar&quot; style=&quot;width: 20px; height: 20px;&quot; /&gt;
-    &lt;/GridCol&gt;
-    &lt;GridCol Caption=&quot;#&quot; FitToContent=&quot;true&quot;&gt;
-        @@context.Id
-    &lt;/GridCol&gt;
-    &lt;GridCol Caption=&quot;First name&quot;&gt;
-        @@context.FirstName
-    &lt;/GridCol&gt;
-    &lt;GridCol Caption=&quot;Last name&quot;&gt;
-        @@context.LastName
-    &lt;/GridCol&gt;
-    &lt;GridCol Caption=&quot;Email address&quot;&gt;
+    &lt;/StaticGridCol&gt;
+    &lt;GridCol For=&quot;() => context.Id&quot; FitToContent=&quot;true&quot; /&gt;
+    &lt;GridCol For=&quot;() => context.FirstName&quot; /&gt;
+    &lt;GridCol For=&quot;() => context.LastName&quot; /&gt;
+    &lt;GridCol For=&quot;() => context.Email&quot;&gt;
         &lt;a href=&quot;mailto:@@context.Email&quot;&gt;@@context.Email&lt;/a&gt;
     &lt;/GridCol&gt;
 &lt;/BlazorGrid&gt;

@@ -12,19 +12,13 @@
 @if (ShowCode)
 {
     <pre class="code" data-lang="Razor"><code class="bg-dark text-light">&lt;BlazorGrid TRow=&quot;Employee&quot; SourceUrl=&quot;Data/employees.json&quot;&gt;
-    &lt;GridCol FitToContent=&quot;true&quot;&gt;
+    &lt;StaticGridCol FitToContent=&quot;true&quot;&gt;
         &lt;img src=&quot;@@context.Avatar&quot; style=&quot;width: 20px; height: 20px;&quot; /&gt;
-    &lt;/GridCol&gt;
-    &lt;GridCol Caption=&quot;#&quot; FitToContent=&quot;true&quot;&gt;
-        @@context.Id
-    &lt;/GridCol&gt;
-    &lt;GridCol Caption=&quot;First name&quot;&gt;
-        @@context.FirstName
-    &lt;/GridCol&gt;
-    &lt;GridCol Caption=&quot;Last name&quot;&gt;
-        @@context.LastName
-    &lt;/GridCol&gt;
-    &lt;GridCol Caption=&quot;Email address&quot;&gt;
+    &lt;/StaticGridCol&gt;
+    &lt;GridCol For=&quot;() => context.Id&quot; FitToContent=&quot;true&quot; /&gt;
+    &lt;GridCol For=&quot;() => context.FirstName&quot; /&gt;
+    &lt;GridCol For=&quot;() => context.LastName&quot; /&gt;
+    &lt;GridCol For=&quot;() => context.Email&quot;&gt;
         &lt;a href=&quot;mailto:@@context.Email&quot;&gt;@@context.Email&lt;/a&gt;
     &lt;/GridCol&gt;
 &lt;/BlazorGrid&gt;</code></pre>
@@ -33,7 +27,7 @@ else
 {
     <p>This example shows what the grid looks like with the minimum amount of configuration.</p>
     <p>For the purpose of this demo, all of the data is pulled from a static JSON file. Paging is handled by a custom provider which I wrote just for this demo.</p>
-
+    <p>The captions of the columns are based on the <code>DisplayAttributes</code> of the <code>Employee</code> (row) class.</p>
     <div class="mt-2">
         <BlazorGrid TRow="Employee" SourceUrl="Data/employees.json">
             <StaticGridCol FitToContent="true">

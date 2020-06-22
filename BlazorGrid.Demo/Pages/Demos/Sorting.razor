@@ -12,27 +12,24 @@
 @if (ShowCode)
 {
     <pre class="code" data-lang="Razor"><code class="bg-dark text-light">&lt;BlazorGrid TRow=&quot;Employee&quot; SourceUrl=&quot;Data/employees.json&quot;&gt;
-    &lt;GridCol FitToContent=&quot;true&quot;&gt;
+    &lt;StaticGridCol FitToContent=&quot;true&quot;&gt;
         &lt;img src=&quot;@@context.Avatar&quot; style=&quot;width: 20px; height: 20px;&quot; /&gt;
-    &lt;/GridCol&gt;
-    &lt;GridCol Caption=&quot;#&quot; FitToContent=&quot;true&quot; OrderBy=&quot;@@nameof(context.Id)&quot;&gt;
-        @@context.Id
-    &lt;/GridCol&gt;
-    &lt;GridCol Caption=&quot;First name&quot; OrderBy=&quot;@@nameof(context.FirstName)&quot;&gt;
-        @@context.FirstName
-    &lt;/GridCol&gt;
-    &lt;GridCol Caption=&quot;Last name&quot; OrderBy=&quot;@@nameof(context.LastName)&quot;&gt;
+    &lt;/StaticGridCol&gt;
+    &lt;GridCol For=&quot;() => context.Id&quot; FitToContent=&quot;true&quot; /&gt;
+    &lt;GridCol For=&quot;() => context.FirstName&quot; /&gt;
+    &lt;StaticGridCol Caption=&quot;Last name&quot;&gt;
         @@context.LastName
-    &lt;/GridCol&gt;
-    &lt;GridCol Caption=&quot;Email address&quot; OrderBy=&quot;@@nameof(context.Email)&quot;&gt;
+    &lt;/StaticGridCol&gt;
+    &lt;GridCol For=&quot;() => context.Email&quot;&gt;
         &lt;a href=&quot;mailto:@@context.Email&quot;&gt;@@context.Email&lt;/a&gt;
     &lt;/GridCol&gt;
 &lt;/BlazorGrid&gt;</code></pre>
 }
 else
 {
-    <p>In this example, some of the columns support sorting. This is achieved by providing the <code>GridCol</code> component with a value for the <code>OrderBy</code> parameter. When any of the header cells is clicked, the value of that parameter is then passed onto the <code>IGridProvider</code> which should return ordered data.</p>
-    <p>Apart from this user-definable sorting, you can also provide a default value to the grid by using the parameters <code>DefaultOrderBy</code> and <code>DefaultOrderByDescending</code>.</p>
+    <p>In this example, not all columns support sorting. By default, all <code>GridCol</code> elements support sorting &amp; filtering. When any of the corresponding header cells is clicked, the property name that was provided in the <code>For</code> parameter is passed onto the <code>IGridProvider</code> which should return ordered or filtered data.</p>
+    <p>You can also provide a default value to the grid by using the parameters <code>DefaultOrderBy</code> and <code>DefaultOrderByDescending</code>. Those will be used in the initial call to the provider before the user has interacted with the grid.</p>
+    <p>If you do not wish a column to support sorting or filtering, use the <code>StaticGridCol</code> instead. Keep in mind that this component has no <code>For</code> parameter and therefore requires you to provide the <code>ChildContent</code> to render.</p>
     <div class="card">
         <div class="card-body">
             <h5 class="card-title">Tip</h5>
@@ -47,7 +44,9 @@ else
             </StaticGridCol>
             <GridCol For="() => context.Id" FitToContent="true" />
             <GridCol For="() => context.FirstName" />
-            <GridCol For="() => context.LastName" />
+            <StaticGridCol Caption="Last name">
+                @context.LastName
+            </StaticGridCol>
             <GridCol For="() => context.Email">
                 <a href="mailto:@context.Email">@context.Email</a>
             </GridCol>
