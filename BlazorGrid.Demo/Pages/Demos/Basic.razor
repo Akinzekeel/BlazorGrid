@@ -39,10 +39,10 @@ else
             <StaticGridCol FitToContent="true">
                 <img src="@context.Avatar" style="width: 20px; height: 20px;" />
             </StaticGridCol>
-            <GridCol For="context.Id" Caption="#" FitToContent="true" />
-            <GridCol For="context.FirstName" Caption="First name" />
-            <GridCol For="context.LastName" Caption="Last name" />
-            <GridCol For="context.Email" Caption="Email address">
+            <GridCol For="() =>context.Id" Caption="#" FitToContent="true" />
+            <GridCol For="() =>context.FirstName" Caption="First name" />
+            <GridCol For="() =>context.LastName" Caption="Last name" />
+            <GridCol For="() =>context.Email" Caption="Email address">
                 <a href="mailto:@context.Email">@context.Email</a>
             </GridCol>
         </BlazorGrid>

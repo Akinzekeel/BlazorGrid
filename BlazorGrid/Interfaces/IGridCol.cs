@@ -6,7 +6,7 @@ namespace BlazorGrid.Interfaces
 {
     public interface IGridCol<T> : IGridCol
     {
-        new Expression<Func<T>> ForExpression { get; }
+        new Expression<Func<T>> For { get; }
     }
 
     public interface IGridCol
@@ -17,6 +17,6 @@ namespace BlazorGrid.Interfaces
         bool AlignRight { get; }
         bool FitToContent { get; }
         bool IsFilterable { get; }
-        Expression ForExpression { get; }
+        Expression For { get; }
     }
 }

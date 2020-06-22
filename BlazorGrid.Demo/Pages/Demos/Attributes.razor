@@ -59,16 +59,16 @@ else
             <StaticGridCol FitToContent="true">
                 <img src="@context.Avatar" style="width: 20px; height: 20px;" />
             </StaticGridCol>
-            <GridCol For="context.Id" Caption="#" FitToContent="true" class="bg-primary tooltip tooltip-right" data-tooltip="@(context == null ? null : string.Join(" ", context.FirstName, context.LastName))">
+            <GridCol For="() =>context.Id" Caption="#" FitToContent="true" class="bg-primary tooltip tooltip-right" data-tooltip="@(context == null ? null : string.Join(" ", context.FirstName, context.LastName))">
                 @context.Id
             </GridCol>
-            <GridCol For="context.FirstName" Caption="First name">
+            <GridCol For="() =>context.FirstName" Caption="First name">
                 @context.FirstName
             </GridCol>
-            <GridCol For="context.LastName" Caption="Last name">
+            <GridCol For="() =>context.LastName" Caption="Last name">
                 @context.LastName
             </GridCol>
-            <GridCol For="context.Email" Caption="Email address">
+            <GridCol For="() =>context.Email" Caption="Email address">
                 <a href="mailto:@context.Email">@context.Email</a>
             </GridCol>
         </BlazorGrid>

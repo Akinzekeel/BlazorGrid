@@ -14,12 +14,28 @@ namespace BlazorGrid.Components
         [Parameter] public RenderFragment ChildContent { get; set; }
         [Parameter] public bool FitToContent { get; set; }
         [Parameter] public bool AlignRight { get; set; }
-        [Parameter] public T For { get; set; }
-        [Parameter] public Expression<Func<T>> ForExpression { get; set; }
+
+        private Expression<Func<T>> _For;
+        private Func<T> _ForCompiled;
+
+        [Parameter]
+        public Expression<Func<T>> For
+        {
+            get => _For; set
+            {
+                _For = value;
+                _ForCompiled = _For?.Compile();
+            }
+        }
         [Parameter(CaptureUnmatchedValues = true)] public IDictionary<string, object> Attributes { get; set; }
 
-        Expression IGridCol.ForExpression => ForExpression;
+        Expression IGridCol.For => For;
         private bool IsRegistered;
+
+        private T GetAutoValue()
+        {
+            return _ForCompiled == null ? default : _ForCompiled.Invoke();
+        }
 
         private IDictionary<string, object> FinalAttributes
         {

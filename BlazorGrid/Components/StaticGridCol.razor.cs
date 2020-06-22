@@ -15,7 +15,7 @@ namespace BlazorGrid.Components
         [Parameter] public bool AlignRight { get; set; }
         [Parameter(CaptureUnmatchedValues = true)] public IDictionary<string, object> Attributes { get; set; }
 
-        Expression IGridCol.ForExpression => null;
+        Expression IGridCol.For => null;
         private bool IsRegistered;
 
         private IDictionary<string, object> FinalAttributes

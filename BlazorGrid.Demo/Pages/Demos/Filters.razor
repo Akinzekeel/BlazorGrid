@@ -42,7 +42,7 @@ else
                         <select class="form-select select-sm" @bind="AddProperty">
                             @foreach (var col in Grid.Columns.Where(x => x.IsFilterable))
                             {
-                                <option value="@col.ForExpression">@col.Caption</option>
+                                <option value="@col.For">@col.Caption</option>
                             }
                         </select>
                     </div>
@@ -91,16 +91,16 @@ else
             <StaticGridCol FitToContent="true">
                 <img src="@context.Avatar" style="width: 20px; height: 20px;" />
             </StaticGridCol>
-            <GridCol For="context.Id" Caption="#" FitToContent="true">
+            <GridCol For="() =>context.Id" Caption="#" FitToContent="true">
                 @context.Id
             </GridCol>
-            <GridCol For="context.FirstName" Caption="First name">
+            <GridCol For="() =>context.FirstName" Caption="First name">
                 @context.FirstName
             </GridCol>
-            <GridCol For="context.LastName" Caption="Last name">
+            <GridCol For="() =>context.LastName" Caption="Last name">
                 @context.LastName
             </GridCol>
-            <GridCol For="context.Email" Caption="Email address">
+            <GridCol For="() =>context.Email" Caption="Email address">
                 <a href="mailto:@context.Email">@context.Email</a>
             </GridCol>
         </BlazorGrid>
