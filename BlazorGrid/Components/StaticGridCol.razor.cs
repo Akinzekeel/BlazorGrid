@@ -78,5 +78,7 @@ namespace BlazorGrid.Components
                 Parent.Add(this);
             }
         }
+
+        public string GetCaptionOrDefault() => Caption;
     }
 }

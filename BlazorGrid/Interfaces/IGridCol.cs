@@ -18,5 +18,13 @@ namespace BlazorGrid.Interfaces
         bool FitToContent { get; }
         bool IsFilterable { get; }
         Expression For { get; }
+
+        /// <summary>
+        /// Returns the Caption property if it is not null,
+        /// otherwise will try to get the Display(Name) 
+        /// of the For Expression (if any)
+        /// </summary>
+        /// <returns>A caption or null</returns>
+        string GetCaptionOrDefault();
     }
 }

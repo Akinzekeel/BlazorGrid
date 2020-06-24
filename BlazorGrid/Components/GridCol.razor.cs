@@ -105,7 +105,7 @@ namespace BlazorGrid.Components
             }
         }
 
-        private string GetCaptionOrDefault()
+        public string GetCaptionOrDefault()
         {
             if (string.IsNullOrEmpty(Caption))
             {
