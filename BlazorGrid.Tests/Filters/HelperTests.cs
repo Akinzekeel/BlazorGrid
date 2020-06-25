@@ -110,5 +110,36 @@ namespace BlazorGrid.Filters.Tests
             Assert.AreEqual(20, filtered.First().IntVal);
             Assert.AreEqual(19, filtered.Last().IntVal);
         }
+
+        [TestMethod]
+        public void Can_Build_Filter_From_Descriptor_Int_EqualTo()
+        {
+            var descriptor = new FilterDescriptor()
+            {
+                Filters = new ObservableCollection<PropertyFilter>
+                {
+                    new PropertyFilter
+                    {
+                        Operator = FilterOperator.EqualTo,
+                        Property = nameof(Model.IntVal),
+                        Value = "20"
+                    }
+                }
+            };
+
+            var f = FilterHelper.Build<Model>(descriptor);
+
+            var data = new Model[]
+            {
+                new Model { IntVal = 40 },
+                new Model { IntVal = 20 },
+                new Model { IntVal = 19 }
+            };
+
+            var filtered = data.AsQueryable().Where(f);
+
+            Assert.AreEqual(1, filtered.Count());
+            Assert.AreEqual(20, filtered.Single().IntVal);
+        }
     }
 }
