@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>Akinzekeel.BlazorGrid.Filters</PackageId>
-    <Version>0.6.8-beta</Version>
+    <Version>0.7.3-beta</Version>
     <Authors>Majid Iqbal</Authors>
     <Company />
     <Description>Helper to convert the FilterDescriptor object into a Filter / Expression</Description>

@@ -1,6 +1,7 @@
 ﻿@page "/demos/filters"
 @layout DemoLayout
 @using BlazorGrid.Abstractions.Filters
+@using BlazorGrid.Abstractions.Helpers
 <div class="float-right my-2">
     <div class="form-group">
         <label class="form-switch">
@@ -101,32 +102,27 @@ else
             {
                 <div class="form-group">
                     <div class="form-inline">
-                        <select class="form-select select-sm" @bind="AddProperty">
+                        <select id="filterPropertySelect" class="form-select select-sm" @bind="AddProperty">
                             @foreach (var col in Grid.Columns.Where(x => x.IsFilterable))
                             {
-                                <option value="@col.For">@col.Caption</option>
+                                <option value="@col.PropertyName">@col.GetCaptionOrDefault()</option>
                             }
                         </select>
                     </div>
                     <div class="form-inline">
                         <select class="form-select select-sm" @bind="AddOperator">
-                            <option value="@FilterOperator.Contains">Contains</option>
-                            <option value="@FilterOperator.DoesNotContain">Does not contain</option>
-                            <option value="@FilterOperator.EndsWith">ends with</option>
-                            <option value="@FilterOperator.EqualTo">equals</option>
-                            <option value="@FilterOperator.GreaterThan">Greater than</option>
-                            <option value="@FilterOperator.GreaterThanOrEqualTo">Greater than or equal</option>
                             <option value="@FilterOperator.IsEmpty">Is empty</option>
                             <option value="@FilterOperator.IsNotEmpty">Is not empty</option>
-                            <option value="@FilterOperator.IsNotNull">Is not null</option>
-                            <option value="@FilterOperator.IsNotNullNorWhiteSpace">Is not null or white space</option>
-                            <option value="@FilterOperator.IsNull">Is null</option>
-                            <option value="@FilterOperator.IsNullOrWhiteSpace">Is null or white space</option>
-                            <option value="@FilterOperator.LessThan">Less than</option>
-                            <option value="@FilterOperator.LessThanOrEqualTo">Less then or equal</option>
-                            <option value="@FilterOperator.NotEqualTo">Not equal to</option>
-                            <option value="@FilterOperator.NotIn">Not in</option>
+                            <option value="@FilterOperator.Contains">Contains</option>
+                            <option value="@FilterOperator.DoesNotContain">Does not contain</option>
                             <option value="@FilterOperator.StartsWith">Starts with</option>
+                            <option value="@FilterOperator.EndsWith">Ends with</option>
+                            <option value="@FilterOperator.EqualTo">Is</option>
+                            <option value="@FilterOperator.NotEqualTo">Not equal to</option>
+                            <option value="@FilterOperator.GreaterThan">Greater than</option>
+                            <option value="@FilterOperator.LessThan">Less than</option>
+                            <option value="@FilterOperator.GreaterThanOrEqualTo">Greater than or equal</option>
+                            <option value="@FilterOperator.LessThanOrEqualTo">Less then or equal</option>
                         </select>
                     </div>
                     <div class="form-inline">
@@ -140,7 +136,7 @@ else
             }
             else
             {
-                <a class="btn btn-sm" @onclick="() => IsAddFilterMode = true">
+                <a id="addFilterBtn" class="btn btn-sm" @onclick="() => IsAddFilterMode = true">
                     Add filter
                 </a>
             }

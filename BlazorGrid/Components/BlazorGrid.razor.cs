@@ -211,7 +211,7 @@ namespace BlazorGrid.Components
                 return Task.CompletedTask;
             }
 
-            var prop = ExpressionHelper.GetPropertyName<TRow, T>(property);
+            var prop = GetPropertyName(property);
 
             if (OrderByPropertyName == prop)
             {
@@ -224,6 +224,11 @@ namespace BlazorGrid.Components
             }
 
             return LoadAsync(true);
+        }
+
+        public string GetPropertyName<T>(Expression<Func<T>> property)
+        {
+            return ExpressionHelper.GetPropertyName<TRow, T>(property);
         }
 
         private string GridColumns
@@ -281,7 +286,7 @@ namespace BlazorGrid.Components
                 return false;
             }
 
-            var prop = ExpressionHelper.GetPropertyName<TRow, T>(property);
+            var prop = GetPropertyName(property);
             return Filter?.Filters.Any(x => x.Property == prop) == true;
         }
 
@@ -292,7 +297,7 @@ namespace BlazorGrid.Components
                 return false;
             }
 
-            var prop = ExpressionHelper.GetPropertyName<TRow, T>(property);
+            var prop = GetPropertyName(property);
             return OrderByPropertyName == prop;
         }
 

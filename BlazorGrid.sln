@@ -13,6 +13,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorGrid.Abstractions", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorGrid.Filters", "BlazorGrid.Filters\BlazorGrid.Filters.csproj", "{EA0453F9-6D45-40B2-A406-BE3D59EB0CF6}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{103BF348-4979-4074-B2C2-B702990A4F74}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		build-abstractions.yml = build-abstractions.yml
+		build-demo.yml = build-demo.yml
+		build-filters.yml = build-filters.yml
+		build-main.yml = build-main.yml
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

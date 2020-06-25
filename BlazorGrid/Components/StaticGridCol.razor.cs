@@ -16,6 +16,8 @@ namespace BlazorGrid.Components
         [Parameter(CaptureUnmatchedValues = true)] public IDictionary<string, object> Attributes { get; set; }
 
         Expression IGridCol.For => null;
+        string IGridCol.PropertyName => null;
+
         private bool IsRegistered;
 
         private IDictionary<string, object> FinalAttributes
@@ -78,5 +80,7 @@ namespace BlazorGrid.Components
                 Parent.Add(this);
             }
         }
+
+        public string GetCaptionOrDefault() => Caption;
     }
 }

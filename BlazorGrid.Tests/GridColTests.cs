@@ -3,6 +3,11 @@ using BlazorGrid.Interfaces;
 using Bunit;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using System;
+using System.ComponentModel.DataAnnotations;
+using System.Globalization;
+using System.Linq.Expressions;
+using System.Threading;
 
 namespace BlazorGrid.Tests
 {
@@ -12,6 +17,12 @@ namespace BlazorGrid.Tests
         class MyDto
         {
             public string Name { get; set; }
+
+            [Display(Name = "My caption")]
+            public string NameWithCaption { get; set; }
+
+            [Display(Name = nameof(Resources.MyDtoCaption), ResourceType = typeof(Resources))]
+            public string NameWithResourceCaption { get; set; }
         }
 
         [TestMethod]
@@ -63,6 +74,71 @@ namespace BlazorGrid.Tests
             );
 
             unit.MarkupMatches("<div class=\"sortable\"><span class=\"blazor-grid-sort-icon\">‹›</span></div>");
+        }
+
+        [TestMethod]
+        public void Can_Set_Custom_Caption()
+        {
+            var fakeGrid = new Mock<IBlazorGrid>();
+            var m = new MyDto();
+
+            var col = RenderComponent<GridCol<string>>(
+                CascadingValue(fakeGrid.Object),
+                Parameter(nameof(GridCol<string>.Caption), "Unit test"),
+                Parameter(nameof(GridCol<string>.For), (Expression<Func<string>>)(() => m.Name))
+            );
+
+            col.MarkupMatches("<div class=\"sortable\">Unit test<span class=\"blazor-grid-sort-icon\">‹›</span></div>");
+        }
+
+        [TestMethod]
+        public void Custom_Caption_Override_Display_Name()
+        {
+            var fakeGrid = new Mock<IBlazorGrid>();
+            var m = new MyDto();
+
+            var col = RenderComponent<GridCol<string>>(
+                CascadingValue(fakeGrid.Object),
+                Parameter(nameof(GridCol<string>.Caption), "Unit test"),
+                Parameter(nameof(GridCol<string>.For), (Expression<Func<string>>)(() => m.NameWithCaption))
+            );
+
+            col.MarkupMatches("<div class=\"sortable\">Unit test<span class=\"blazor-grid-sort-icon\">‹›</span></div>");
+        }
+
+        [TestMethod]
+        public void Uses_Display_Name_As_Caption()
+        {
+            var fakeGrid = new Mock<IBlazorGrid>();
+            var m = new MyDto();
+
+            var col = RenderComponent<GridCol<string>>(
+                CascadingValue(fakeGrid.Object),
+                Parameter(nameof(GridCol<string>.For), (Expression<Func<string>>)(() => m.NameWithCaption))
+            );
+
+            col.MarkupMatches("<div class=\"sortable\">My caption<span class=\"blazor-grid-sort-icon\">‹›</span></div>");
+
+        }
+
+        [DataTestMethod]
+        [DataRow("de-de", "Meine Überschrift")]
+        [DataRow("en-us", "My caption")]
+        public void Uses_Display_Name_As_Caption_With_Resources(string locale, string expectedCaption)
+        {
+            var fakeGrid = new Mock<IBlazorGrid>();
+            var m = new MyDto();
+
+            var culture = CultureInfo.GetCultureInfo(locale);
+            Thread.CurrentThread.CurrentCulture = culture;
+            Thread.CurrentThread.CurrentUICulture = culture;
+
+            var col = RenderComponent<GridCol<string>>(
+                CascadingValue(fakeGrid.Object),
+                Parameter(nameof(GridCol<string>.For), (Expression<Func<string>>)(() => m.NameWithResourceCaption))
+            );
+
+            col.MarkupMatches($"<div class=\"sortable\">{expectedCaption}<span class=\"blazor-grid-sort-icon\">‹›</span></div>");
         }
     }
 }
