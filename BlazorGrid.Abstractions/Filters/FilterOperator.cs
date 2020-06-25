@@ -6,20 +6,21 @@
         NotEqualTo,
         LessThanOrEqualTo,
         LessThan,
-        IsNullOrWhiteSpace,
-        IsNull,
-        IsNotNullNorWhiteSpace,
-        IsNotNull,
         IsNotEmpty,
         StartsWith,
-        NotIn,
         GreaterThanOrEqualTo,
         GreaterThan,
         EqualTo,
         EndsWith,
         DoesNotContain,
         Contains,
+
+        //IsNullOrWhiteSpace,
+        //IsNull,
+        //IsNotNullNorWhiteSpace,
+        //IsNotNull,
         //Between,
+        //NotIn,
         //In
     }
 }
