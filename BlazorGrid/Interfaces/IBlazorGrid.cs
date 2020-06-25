@@ -14,5 +14,6 @@ namespace BlazorGrid.Interfaces
         bool IsFilteredBy<T>(Expression<Func<T>> Property);
         bool IsSortedBy<T>(Expression<Func<T>> Property);
         IEnumerable<IGridCol> Columns { get; }
+        string GetPropertyName<T>(Expression<Func<T>> Property);
     }
 }

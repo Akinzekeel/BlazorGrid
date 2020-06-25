@@ -12,7 +12,7 @@ namespace BlazorGrid.Tests.Demo
     public class FiltersPageTests : ComponentTestFixture
     {
         [TestMethod]
-        public void Can_Render_Page()
+        public void Can_Select_Filter_Property()
         {
             var provider = new Mock<IGridProvider>();
             Services.AddSingleton(provider.Object);
@@ -20,7 +20,21 @@ namespace BlazorGrid.Tests.Demo
             var nav = new MockNav();
             Services.AddSingleton<NavigationManager>(nav);
 
-            RenderComponent<BlazorGrid.Demo.Pages.Demos.Filters>();
+            var unit = RenderComponent<BlazorGrid.Demo.Pages.Demos.Filters>();
+
+            // Switch to "add filter mode"
+            unit.Find("#addFilterBtn").Click();
+
+            // Validate options
+            var options = unit.FindAll("#filterPropertySelect option");
+
+            Assert.AreEqual(4, options.Count);
+
+            foreach (var o in options)
+            {
+                Assert.IsTrue(o.HasAttribute("value"), "option element is missing the value attribute");
+                Assert.IsFalse(string.IsNullOrEmpty(o.GetAttribute("value")), "option element had an empty value attribute");
+            }
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿@page "/demos/filters"
 @layout DemoLayout
 @using BlazorGrid.Abstractions.Filters
+@using BlazorGrid.Abstractions.Helpers
 <div class="float-right my-2">
     <div class="form-group">
         <label class="form-switch">
@@ -101,10 +102,10 @@ else
             {
                 <div class="form-group">
                     <div class="form-inline">
-                        <select class="form-select select-sm" @bind="AddProperty">
+                        <select id="filterPropertySelect" class="form-select select-sm" @bind="AddProperty">
                             @foreach (var col in Grid.Columns.Where(x => x.IsFilterable))
                             {
-                                <option value="@col.For">@col.GetCaptionOrDefault()</option>
+                                <option value="@col.PropertyName">@col.GetCaptionOrDefault()</option>
                             }
                         </select>
                     </div>
@@ -135,7 +136,7 @@ else
             }
             else
             {
-                <a class="btn btn-sm" @onclick="() => IsAddFilterMode = true">
+                <a id="addFilterBtn" class="btn btn-sm" @onclick="() => IsAddFilterMode = true">
                     Add filter
                 </a>
             }

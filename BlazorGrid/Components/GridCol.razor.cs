@@ -1,4 +1,3 @@
-using BlazorGrid.Abstractions.Helpers;
 using BlazorGrid.Helpers;
 using BlazorGrid.Interfaces;
 using Microsoft.AspNetCore.Components;
@@ -17,6 +16,8 @@ namespace BlazorGrid.Components
         [Parameter] public bool FitToContent { get; set; }
         [Parameter] public bool AlignRight { get; set; }
 
+        public string PropertyName { get; private set; }
+
         private Expression<Func<T>> _For;
         private Func<T> _ForCompiled;
 
@@ -27,6 +28,7 @@ namespace BlazorGrid.Components
             {
                 _For = value;
                 _ForCompiled = _For?.Compile();
+                PropertyName = For == null ? null : Parent?.GetPropertyName(For);
             }
         }
         [Parameter(CaptureUnmatchedValues = true)] public IDictionary<string, object> Attributes { get; set; }
@@ -36,7 +38,7 @@ namespace BlazorGrid.Components
 
         private T GetAutoValue()
         {
-            return _ForCompiled == null ? default : _ForCompiled.Invoke();
+            return _For == null ? default : (_ForCompiled ??= _For.Compile()).Invoke();
         }
 
         private IDictionary<string, object> FinalAttributes
@@ -115,5 +117,6 @@ namespace BlazorGrid.Components
 
             return Caption;
         }
+
     }
 }
