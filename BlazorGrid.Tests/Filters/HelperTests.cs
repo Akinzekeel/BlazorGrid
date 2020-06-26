@@ -11,6 +11,7 @@ namespace BlazorGrid.Filters.Tests
         class Model
         {
             public int IntVal { get; set; }
+            public byte ByteVal { get; set; }
             public string StringVal { get; set; }
         }
 
@@ -140,6 +141,37 @@ namespace BlazorGrid.Filters.Tests
 
             Assert.AreEqual(1, filtered.Count());
             Assert.AreEqual(20, filtered.Single().IntVal);
+        }
+
+        [TestMethod]
+        public void Can_Build_Filter_From_Descriptor_Byte_EqualTo()
+        {
+            var descriptor = new FilterDescriptor()
+            {
+                Filters = new ObservableCollection<PropertyFilter>
+                {
+                    new PropertyFilter
+                    {
+                        Operator = FilterOperator.EqualTo,
+                        Property = nameof(Model.ByteVal),
+                        Value = "20"
+                    }
+                }
+            };
+
+            var f = FilterHelper.Build<Model>(descriptor);
+
+            var data = new Model[]
+            {
+                new Model { ByteVal = 40 },
+                new Model { ByteVal = 20 },
+                new Model { ByteVal = 19 }
+            };
+
+            var filtered = data.AsQueryable().Where(f);
+
+            Assert.AreEqual(1, filtered.Count());
+            Assert.AreEqual(20, filtered.Single().ByteVal);
         }
     }
 }

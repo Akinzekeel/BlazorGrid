@@ -50,6 +50,15 @@ namespace BlazorGrid.Filters
                         result.By(filter.Property, op, val, (Connector)descriptor.Connector);
                     }
                 }
+                else if (type == typeof(byte))
+                {
+                    // Cast to byte
+                    if (byte.TryParse(filter.Value, out var val))
+                    {
+                        // Apply filter
+                        result.By(filter.Property, op, val, (Connector)descriptor.Connector);
+                    }
+                }
                 else if (type == typeof(string))
                 {
                     // Apply filter
