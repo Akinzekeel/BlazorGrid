@@ -35,9 +35,10 @@ namespace BlazorGrid.Components
             get => _Query;
             set
             {
-
                 if (_Query == value)
+                {
                     return;
+                }
 
                 _Query = value;
 
@@ -51,7 +52,6 @@ namespace BlazorGrid.Components
                         await LoadAsync(true);
                     }
                 });
-
             }
         }
 
