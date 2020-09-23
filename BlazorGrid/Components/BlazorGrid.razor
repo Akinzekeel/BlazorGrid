@@ -9,12 +9,12 @@
         @if (LoadingError != null)
         {
             <div style="grid-column: span @ColumnsList.Count()">
-                <div class="empty text-error">
-                    <div class="empty-title">
+                <div class="@Config.Styles.PlaceholderWrapperClass">
+                    <div class="@Config.Styles.ErrorHeadingClass">
                         <h2>@Resources.LoadingError_Title</h2>
                     </div>
-                    <div class="empty-subtitle">@Resources.LoadingError_Text</div>
-                    <small class="d-block">@LoadingError.Message</small>
+                    <div class="@Config.Styles.ErrorSubHeadingClass">@Resources.LoadingError_Text</div>
+                    <small class="@Config.Styles.ErrorTextClass">@LoadingError.Message</small>
                     @if (System.Diagnostics.Debugger.IsAttached)
                     {
                         <code style="line-break: auto">@LoadingError.StackTrace</code>
@@ -25,26 +25,26 @@
         else if (Rows == null)
         {
             <div style="grid-column: span @ColumnsList.Count()">
-                <div class="empty">
-                    <div class="empty-title">
-                        <h2 class="loading"></h2>
+                <div class="@Config.Styles.PlaceholderWrapperClass">
+                    <div class="@Config.Styles.LoadingSpinnerOuterClass">
+                        <div class="@Config.Styles.LoadingSpinnerInnerClass"></div>
                     </div>
-                    <div class="empty-subtitle">@Resources.Loading_Text</div>
+                    <div class="@Config.Styles.LoadingTextClass">@Resources.Loading_Text</div>
                 </div>
             </div>
         }
         else if (Rows.Count == 0)
         {
             <div style="grid-column: span @ColumnsList.Count()">
-                <div class="empty">
-                    <h5 class="empty-title">@Resources.Empty_Title</h5>
+                <div class="@Config.Styles.PlaceholderWrapperClass">
+                    <h5 class="@Config.Styles.NoDataHeadingClass">@Resources.Empty_Title</h5>
                     @if (string.IsNullOrEmpty(QueryDebounced))
                     {
-                        <p class="empty-subtitle">@Resources.Empty_Text</p>
+                        <p class="@Config.Styles.NoDataTextClass">@Resources.Empty_Text</p>
                     }
                     else
                     {
-                        <p class="empty-subtitle">@Resources.Empty_Text_Filtered</p>
+                        <p class="@Config.Styles.NoDataTextClass">@Resources.Empty_Text_Filtered</p>
                     }
                 </div>
             </div>
@@ -56,16 +56,20 @@
                 var index = i;
                 var r = Rows.ElementAt(i);
                 var clickable = OnClick.HasDelegate || Href != null;
-                <div class="grid-row @(clickable ? "clickable" : "")" @onclick="_ => OnRowClicked(r, index)">
+                <div class="grid-row @(clickable ? Config.Styles.RowClickableClass : "")" @onclick="_ => OnRowClicked(r, index)">
                     @ChildContent(r)
                 </div>
             }
             <div style="grid-column: span @ColumnsList.Count()">
-                <div class="empty pt-3">
-                    <div class="empty-subtitle">@string.Format(Resources.Footer_RowCount, Rows.Count, TotalCount)</div>
+                <div class="@Config.Styles.FooterWrapperClass">
+                    <div class="@Config.Styles.FooterTextClass">@string.Format(Resources.Footer_RowCount, Rows.Count, TotalCount)</div>
                     @if (Rows.Count < TotalCount)
                     {
-                        <button disabled="@IsLoadingMore" class="btn btn-secondary @(IsLoadingMore ? "loading" : "")" @onclick="() => LoadMoreAsync()">@Resources.Footer_LoadMoreBtnLabel</button>
+                        <button disabled="@IsLoadingMore"
+                                class="@Config.Styles.FooterButtonClass @(IsLoadingMore ? Config.Styles.FooterButtonLoadingClass : "")"
+                                @onclick="() => LoadMoreAsync()">
+                            @Resources.Footer_LoadMoreBtnLabel
+                        </button>
                     }
                 </div>
             </div>

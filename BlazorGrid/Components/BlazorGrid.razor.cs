@@ -19,6 +19,7 @@ namespace BlazorGrid.Components
         public const int DefaultPageSize = 25;
 
         [Inject] public IGridProvider Provider { get; set; }
+        [Inject] public IBlazorGridConfig Config { get; set; }
         [Inject] public NavigationManager Nav { get; set; }
         [Parameter] public string SourceUrl { get; set; }
         [Parameter] public RenderFragment<TRow> ChildContent { get; set; }

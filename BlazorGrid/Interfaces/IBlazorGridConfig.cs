@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BlazorGrid.Interfaces
+﻿namespace BlazorGrid.Interfaces
 {
-    public class IBlazorGridConfig
+    public interface IBlazorGridConfig
     {
         public IBlazorGridConfigStyles Styles { get; set; }
     }
