@@ -1,0 +1,12 @@
+﻿<div class="alert alert-light bg-light border-info text-dark">
+    <h6 class="alert-heading text-info">
+        <i class="fa fa-lightbulb-o mr-2"></i>
+        <span>@Heading</span>
+    </h6>
+    @ChildContent
+</div>
+@code
+{
+    [Parameter] public string Heading { get; set; } = "Tip";
+    [Parameter] public RenderFragment ChildContent { get; set; }
+}

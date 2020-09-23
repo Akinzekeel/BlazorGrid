@@ -1,0 +1,12 @@
+﻿<div class="alert alert-light bg-light border-danger text-dark">
+    <h6 class="alert-heading text-danger">
+        <i class="fa fa-exclamation-triangle mr-2"></i>
+        <span>@Heading</span>
+    </h6>
+    @ChildContent
+</div>
+@code
+{
+    [Parameter] public string Heading { get; set; } = "Caution";
+    [Parameter] public RenderFragment ChildContent { get; set; }
+}

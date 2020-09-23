@@ -1,18 +1,22 @@
 @layout DemoLayout
 @page "/demos/pre-loaded"
 @using System.Globalization
-<div class="float-right my-2">
-    <div class="form-group">
-        <label class="form-switch">
-            <input type="checkbox" @bind-value="ShowCode">
-            <i class="form-icon"></i> View source
-        </label>
-    </div>
-</div>
 <h1>Pre loaded data</h1>
-@if (ShowCode)
-{
-    <pre class="code" data-lang="Razor"><code class="bg-dark text-light">&lt;BlazorGrid Rows=&quot;Data&quot; TRow=&quot;CultureInfo&quot;&gt;
+
+<p>BlazorGrid has basic support for displaying client-side data. The following grid uses a list of .Net's <code>CultureInfo</code> objects without any provider. Sorting, paging and filtering is not supported because those features depend on a provider.</p>
+<p>Pre loading data in this fashion is not ideal due to limited features and potentially worse performance, however it can be suitable for small amounts of data.</p>
+
+<Tabs>
+    <Tab Caption="Result" class="p-3 overflow-auto" style="max-height: 500px;">
+        <BlazorGrid Rows="Data" TRow="CultureInfo" EmptyRow="CultureInfo.CurrentCulture">
+            <StaticGridCol Caption="LCID">@context.LCID</StaticGridCol>
+            <StaticGridCol Caption="ISO code">@context.ThreeLetterISOLanguageName</StaticGridCol>
+            <StaticGridCol Caption="Display name">@context.DisplayName</StaticGridCol>
+        </BlazorGrid>
+    </Tab>
+    <Tab Caption="Code" class="p-3">
+        <h6>Razor</h6>
+        <pre class="pre-scrollable"><code>&lt;BlazorGrid Rows=&quot;Data&quot; TRow=&quot;CultureInfo&quot;&gt;
     &lt;StaticGridCol Caption=&quot;LCID&quot;&gt;@@context.LCID&lt;/GridCol&gt;
     &lt;StaticGridCol Caption=&quot;ISO code&quot;&gt;@@context.ThreeLetterISOLanguageName&lt;/GridCol&gt;
     &lt;StaticGridCol Caption=&quot;Display name&quot;&gt;@@context.DisplayName&lt;/GridCol&gt;
@@ -24,20 +28,8 @@
         .GetCultures(CultureTypes.NeutralCultures)
         .ToList();
 }</code></pre>
-}
-else
-{
-    <p>BlazorGrid has basic support for displaying client-side data. The following grid uses a list of .Net's <code>CultureInfo</code> objects without any provider. Sorting, paging and filtering is not supported because those features depend on a provider.</p>
-    <p>Pre loading data in this fashion is not ideal due to limited features and potentially worse performance, however it can be suitable for small amounts of data.</p>
-
-    <div class="mt-2">
-        <BlazorGrid Rows="Data" TRow="CultureInfo" EmptyRow="CultureInfo.CurrentCulture">
-            <StaticGridCol Caption="LCID">@context.LCID</StaticGridCol>
-            <StaticGridCol Caption="ISO code">@context.ThreeLetterISOLanguageName</StaticGridCol>
-            <StaticGridCol Caption="Display name">@context.DisplayName</StaticGridCol>
-        </BlazorGrid>
-    </div>
-}
+    </Tab>
+</Tabs>
 @code
 {
     public bool ShowCode { get; set; }

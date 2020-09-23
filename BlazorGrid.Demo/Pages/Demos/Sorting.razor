@@ -1,44 +1,18 @@
 @layout DemoLayout
 @page "/demos/sorting"
-<div class="float-right my-2">
-    <div class="form-group">
-        <label class="form-switch">
-            <input type="checkbox" @bind-value="ShowCode">
-            <i class="form-icon"></i> View source
-        </label>
-    </div>
-</div>
 <h1>Sorting</h1>
-@if (ShowCode)
-{
-    <pre class="code" data-lang="Razor"><code class="bg-dark text-light">&lt;BlazorGrid TRow=&quot;Employee&quot; SourceUrl=&quot;Data/employees.json&quot;&gt;
-    &lt;StaticGridCol FitToContent=&quot;true&quot;&gt;
-        &lt;img src=&quot;@@context.Avatar&quot; style=&quot;width: 20px; height: 20px;&quot; /&gt;
-    &lt;/StaticGridCol&gt;
-    &lt;GridCol For=&quot;() => context.Id&quot; FitToContent=&quot;true&quot; /&gt;
-    &lt;GridCol For=&quot;() => context.FirstName&quot; /&gt;
-    &lt;StaticGridCol Caption=&quot;Last name&quot;&gt;
-        @@context.LastName
-    &lt;/StaticGridCol&gt;
-    &lt;GridCol For=&quot;() => context.Email&quot;&gt;
-        &lt;a href=&quot;mailto:@@context.Email&quot;&gt;@@context.Email&lt;/a&gt;
-    &lt;/GridCol&gt;
-&lt;/BlazorGrid&gt;</code></pre>
-}
-else
-{
-    <p>In this example, not all columns support sorting. By default, all <code>GridCol</code> elements support sorting &amp; filtering. When any of the corresponding header cells is clicked, the property name that was provided in the <code>For</code> parameter is passed onto the <code>IGridProvider</code> which should return ordered or filtered data.</p>
-    <p>You can also provide a default value to the grid by using the parameters <code>DefaultOrderBy</code> and <code>DefaultOrderByDescending</code>. Those will be used in the initial call to the provider before the user has interacted with the grid.</p>
-    <p>If you do not wish a column to support sorting or filtering, use the <code>StaticGridCol</code> instead. Keep in mind that this component has no <code>For</code> parameter and therefore requires you to provide the <code>ChildContent</code> to render.</p>
-    <div class="card">
-        <div class="card-body">
-            <h5 class="card-title">Tip</h5>
-            <code>BlazorGrid.Abstractions.Extensions</code> contains extension methods for ordering IQueryables only by providing a string. Once you add the namespace, simply call <code>myQuery.OrderBy("someProperty")</code>.
-        </div>
-    </div>
 
-    <div class="mt-2">
-        <BlazorGrid TRow="Employee" SourceUrl="Data/employees.json">
+<p>In this example, not all columns support sorting. By default, all <code>GridCol</code> elements support sorting &amp; filtering. When any of the corresponding header cells is clicked, the property name that was provided in the <code>For</code> parameter is passed onto the <code>IGridProvider</code> which should return ordered or filtered data.</p>
+<p>You can also provide a default value to the grid by using the parameters <code>DefaultOrderBy</code> and <code>DefaultOrderByDescending</code>. Those will be used in the initial call to the provider before the user has interacted with the grid.</p>
+<p>If you do not wish a column to support sorting or filtering, use the <code>StaticGridCol</code> instead. Keep in mind that this component has no <code>For</code> parameter and therefore requires you to provide the <code>ChildContent</code> to render.</p>
+
+<Tip>
+    <code>BlazorGrid.Abstractions.Extensions</code> contains extension methods for ordering IQueryables only by providing a string. Once you add the namespace, simply call <code>myQuery.OrderBy("someProperty")</code>.
+</Tip>
+
+<Tabs>
+    <Tab Caption="Result" class="p-3 overflow-auto" style="max-height: 340px;">
+        <BlazorGrid TRow="Employee" SourceUrl="data/employees.json">
             <StaticGridCol FitToContent="true">
                 <img src="@context.Avatar" style="width: 20px; height: 20px;" />
             </StaticGridCol>
@@ -51,9 +25,21 @@ else
                 <a href="mailto:@context.Email">@context.Email</a>
             </GridCol>
         </BlazorGrid>
-    </div>
-}
-@code
-{
-    public bool ShowCode { get; set; }
-}
+    </Tab>
+    <Tab Caption="Code" class="p-3">
+        <h6>Razor</h6>
+        <pre class="code"><code>&lt;BlazorGrid TRow=&quot;Employee&quot; SourceUrl=&quot;data/employees.json&quot;&gt;
+    &lt;StaticGridCol FitToContent=&quot;true&quot;&gt;
+        &lt;img src=&quot;@@context.Avatar&quot; style=&quot;width: 20px; height: 20px;&quot; /&gt;
+    &lt;/StaticGridCol&gt;
+    &lt;GridCol For=&quot;() => context.Id&quot; FitToContent=&quot;true&quot; /&gt;
+    &lt;GridCol For=&quot;() => context.FirstName&quot; /&gt;
+    &lt;StaticGridCol Caption=&quot;Last name&quot;&gt;
+        @@context.LastName
+    &lt;/StaticGridCol&gt;
+    &lt;GridCol For=&quot;() => context.Email&quot;&gt;
+        &lt;a href=&quot;mailto:@@context.Email&quot;&gt;@@context.Email&lt;/a&gt;
+    &lt;/GridCol&gt;
+&lt;/BlazorGrid&gt;</code></pre>
+    </Tab>
+</Tabs>

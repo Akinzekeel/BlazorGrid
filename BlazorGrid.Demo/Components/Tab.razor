@@ -1,0 +1,24 @@
+﻿@if (tabIndex == Parent.ActiveTabIndex)
+{
+    <div class="tab-pane active" @attributes="Attributes">
+        @ChildContent
+    </div>
+}
+@code
+{
+    [CascadingParameter] public Tabs Parent { get; set; }
+
+    [Parameter] public string Caption { get; set; }
+    [Parameter] public RenderFragment ChildContent { get; set; }
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object> Attributes { get; set; }
+
+    private int tabIndex = -1;
+
+    protected override void OnParametersSet()
+    {
+        if (tabIndex == -1)
+        {
+            tabIndex = Parent.Add(this);
+        }
+    }
+}

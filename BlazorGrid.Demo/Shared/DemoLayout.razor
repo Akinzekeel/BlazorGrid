@@ -1,56 +1,40 @@
 @inherits LayoutComponentBase
-<StackPanel Orientation="Orientation.Vertical" style="height:100vh;width:100vw;">
+<div class="min-vh-100 d-flex flex-column">
     <TopNav />
-    <div class="container grid-lg py-2">
-        <StackPanel Orientation="Orientation.Horizontal">
-            <StackItem class="pr-2">
-                <ul class="menu mr-2" style="position: sticky; top: 0;">
-                    <li class="menu-item">
-                        <NavLink class="" href="/demos/basic">
-                            Basic example
-                        </NavLink>
-                    </li>
-                    <li class="menu-item">
-                        <NavLink class="" href="/demos/sorting">
-                            Sorting
-                        </NavLink>
-                    </li>
-                    <li class="menu-item">
-                        <NavLink class="" href="/demos/on-click">
-                            OnClick action
-                        </NavLink>
-                    </li>
-                    <li class="menu-item">
-                        <NavLink class="" href="/demos/events">
-                            Events
-                        </NavLink>
-                    </li>
-                    <li class="menu-item">
-                        <NavLink class="" href="/demos/pre-loaded">
-                            Pre-loaded data
-                        </NavLink>
-                    </li>
-                    <li class="menu-item">
-                        <NavLink class="" href="/demos/search">
-                            Search
-                        </NavLink>
-                    </li>
-                    <li class="menu-item">
-                        <NavLink class="" href="/demos/filters">
-                            Filters
-                        </NavLink>
-                    </li>
-                    <li class="menu-item">
-                        <NavLink class="" href="/demos/attributes">
-                            Attributes
-                        </NavLink>
-                    </li>
-                </ul>
-            </StackItem>
-            <ScrollView style="min-height: 100vh">
-                @Body
-            </ScrollView>
-        </StackPanel>
+    <div class="flex-grow-1 d-flex">
+        <!-- Demo navigation -->
+        <div class="pt-3" id="demo-menu">
+            <div class="menu">
+                <NavLink class="menu-item" href="/demos/basic">
+                    Basic grid
+                </NavLink>
+                <NavLink class="menu-item" href="/demos/sorting">
+                    Sorting
+                </NavLink>
+                <NavLink class="menu-item" href="/demos/on-click">
+                    OnClick action
+                </NavLink>
+                <NavLink class="menu-item" href="/demos/events">
+                    Events
+                </NavLink>
+                <NavLink class="menu-item" href="/demos/pre-loaded">
+                    Pre-loaded data
+                </NavLink>
+                <NavLink class="menu-item" href="/demos/search">
+                    Search
+                </NavLink>
+                @*<NavLink class="menu-item" href="/demos/filters">
+                        Filters
+                    </NavLink>*@
+                <NavLink class="menu-item" href="/demos/attributes">
+                    Attributes
+                </NavLink>
+            </div>
+        </div>
+        <!-- Content -->
+        <div class="px-5 py-3 flex-grow-1 overflow-auto">
+            @Body
+        </div>
     </div>
     <PageFooter />
-</StackPanel>
+</div>

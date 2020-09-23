@@ -1,20 +1,35 @@
 @page "/demos/search"
 @layout DemoLayout
-<div class="float-right my-2">
-    <div class="form-group">
-        <label class="form-switch">
-            <input type="checkbox" @bind-value="ShowCode">
-            <i class="form-icon"></i> View source
-        </label>
-    </div>
-</div>
 <h1>Search</h1>
-@if (ShowCode)
-{
-    <pre class="code" data-lang="Razor"><code class="bg-dark text-light">&lt;input type=&quot;text&quot; class=&quot;form-input input-lg&quot; placeholder=&quot;Filter&quot;
+
+<p>The grid component has a <code>Query</code> property which can be set to any value. The property has a builtin 300 ms debounce, so even if you bind it to a text input with the <code>oninput</code> event, it will not flood the provider with unnecessary requests.</p>
+<p>The value of the <code>Query</code> property is then included in the call to the provider and can be sent to the server or used for your own custom search &amp; filtering purposes.</p>
+
+<div class="my-3">
+    <h6>Type something into the text box to try the filter</h6>
+    <input type="text" class="form-control form-control-lg" placeholder="Filter" @bind-value="FilterInput" @bind-value:event="oninput" />
+</div>
+
+<Tabs>
+    <Tab Caption="Result" class="p-3 overflow-auto" style="max-height: 500px;">
+        <BlazorGrid Query="@FilterInput" TRow="Employee" SourceUrl="data/employees.json">
+            <StaticGridCol FitToContent="true">
+                <img src="@context.Avatar" style="width: 20px; height: 20px;" />
+            </StaticGridCol>
+            <GridCol For="() => context.Id" FitToContent="true" />
+            <GridCol For="() => context.FirstName" />
+            <GridCol For="() => context.LastName" />
+            <GridCol For="() => context.Email">
+                <a href="mailto:@context.Email">@context.Email</a>
+            </GridCol>
+        </BlazorGrid>
+    </Tab>
+    <Tab Caption="Code" class="p-3">
+        <h6>Razor</h6>
+        <pre class="pre-scrollable"><code>&lt;input type=&quot;text&quot; class=&quot;form-input input-lg&quot; placeholder=&quot;Filter&quot;
         @@bind-value=&quot;FilterInput&quot; @@bind-value:event=&quot;oninput&quot; /&gt;
 
-&lt;BlazorGrid Query="@@FilterInput" TRow=&quot;Employee&quot; SourceUrl=&quot;Data/employees.json&quot;&gt;
+&lt;BlazorGrid Query="@@FilterInput" TRow=&quot;Employee&quot; SourceUrl=&quot;data/employees.json&quot;&gt;
     &lt;StaticGridCol FitToContent=&quot;true&quot;&gt;
         &lt;img src=&quot;@@context.Avatar&quot; style=&quot;width: 20px; height: 20px;&quot; /&gt;
     &lt;/StaticGridCol&gt;
@@ -30,31 +45,10 @@
 {
     public string FilterInput { get; set; }
 }</code></pre>
-}
-else
-{
-    <p>The grid component has a <code>Query</code> property which can be set to any value. The property has a builtin 300 ms debounce, so even if you bind it to a text input with the <code>oninput</code> event, it will not flood the provider with unnecessary requests.</p>
-    <p>The value of the <code>Query</code> property is then included in the call to the provider and can be sent to the server or used for your own custom search &amp; filtering purposes.</p>
+    </Tab>
+</Tabs>
 
-    <h6>Type something into the text box to try the filter</h6>
-    <input type="text" class="form-input input-lg" placeholder="Filter" @bind-value="FilterInput" @bind-value:event="oninput" />
-
-    <div class="mt-2">
-        <BlazorGrid Query="@FilterInput" TRow="Employee" SourceUrl="Data/employees.json">
-            <StaticGridCol FitToContent="true">
-                <img src="@context.Avatar" style="width: 20px; height: 20px;" />
-            </StaticGridCol>
-            <GridCol For="() => context.Id" FitToContent="true" />
-            <GridCol For="() => context.FirstName" />
-            <GridCol For="() => context.LastName" />
-            <GridCol For="() => context.Email">
-                <a href="mailto:@context.Email">@context.Email</a>
-            </GridCol>
-        </BlazorGrid>
-    </div>
-}
 @code
 {
-    public bool ShowCode { get; set; }
     public string FilterInput { get; set; }
 }

@@ -10,7 +10,7 @@ sass.compiler = require('node-sass');
 var files = {
     css: {
         themes: {
-            main: "./Styles/App.scss"
+            main: "./Styles/app.scss"
         }
     }
 };
@@ -34,9 +34,14 @@ function compileCss(done) {
     done();
 }
 
-function copyContent() {
-    return gulp.src("./Content/**/*")
+function copyContent(done) {
+    gulp.src("./Content/**/*")
         .pipe(gulp.dest("./wwwroot/dist"));
+
+    gulp.src("./Styles/font-awesome/fonts/**/*")
+        .pipe(gulp.dest("./wwwroot/dist/fonts"));
+
+    done();
 }
 
 gulp.task("default", (done) => {

@@ -1,151 +1,120 @@
 @layout DemoLayout
 @page "/demos/on-click"
 @inject NavigationManager nav
-<div class="float-right my-2">
-    <div class="form-group">
-        <label class="form-switch">
-            <input type="checkbox" @bind-value="ShowCode">
-            <i class="form-icon"></i> View source
-        </label>
-    </div>
-</div>
 <h1>OnClick actions</h1>
-@if (ShowCode)
-{
-    <div class="overflow-auto">
-        <pre class="code overflow-auto" data-lang="Razor"><code class="bg-dark text-light">&lt;BlazorGrid TRow=&quot;Employee&quot; SourceUrl=&quot;Data/employees.json&quot; OnClick=&quot;row =&gt; ShowDetails(row)&quot;&gt;
-    &lt;StaticGridCol FitToContent=&quot;true&quot;&gt;
-        &lt;img src=&quot;@@context.Avatar&quot; style=&quot;width: 20px; height: 20px;&quot; /&gt;
-    &lt;/StaticGridCol&gt;
-    &lt;GridCol For=&quot;() => context.Id&quot; FitToContent=&quot;true&quot; /&gt;
-    &lt;GridCol For=&quot;() => context.FirstName&quot; /&gt;
-    &lt;GridCol For=&quot;() => context.LastName&quot; /&gt;
-    &lt;GridCol For=&quot;() => context.Email&quot;&gt;
-        &lt;a href=&quot;mailto:@@context.Email&quot;&gt;@@context.Email&lt;/a&gt;
-    &lt;/GridCol&gt;
-&lt;/BlazorGrid&gt;
 
-@@if(ShowModal &amp;&amp; _clickedRow != null)
-{
-    &lt;div class=&quot;modal modal-sm active&quot;&gt;
-        &lt;a @@onclick=&quot;() =&gt; ShowModal = false&quot; class=&quot;modal-overlay&quot; aria-label=&quot;Close&quot;&gt;&lt;/a&gt;
-        &lt;div class=&quot;modal-container&quot;&gt;
-            &lt;div class=&quot;modal-header&quot;&gt;
-                &lt;a @@onclick=&quot;() =&gt; ShowModal = false&quot; class=&quot;btn btn-clear float-right&quot; aria-label=&quot;Close&quot;&gt;&lt;/a&gt;
-                &lt;div class=&quot;modal-title h5&quot;&gt;You clicked on the following row&lt;/div&gt;
-            &lt;/div&gt;
-            &lt;div class=&quot;modal-body&quot;&gt;
-            &lt;div class=&quot;content&quot;&gt;
-                &lt;dl&gt;
-                    &lt;dt&gt;Id&lt;/dt&gt;
-                    &lt;dd&gt;@@_clickedRow.Id&lt;/dd&gt;
-                    &lt;dt&gt;First name&lt;/dt&gt;
-                    &lt;dd&gt;@@_clickedRow.FirstName&lt;/dd&gt;
-                    &lt;dt&gt;Last name&lt;/dt&gt;
-                    &lt;dd&gt;@@_clickedRow.LastName&lt;/dd&gt;
-                    &lt;dt&gt;Email address&lt;/dt&gt;
-                    &lt;dd&gt;@@_clickedRow.Email&lt;/dd&gt;
-                &lt;/dl&gt;
-            &lt;/div&gt;
-            &lt;/div&gt;
-            &lt;div class=&quot;modal-footer&quot;&gt;
-                &lt;button class=&quot;btn btn-sm btn-primary&quot; @@onclick=&quot;() =&gt; ShowModal = false&quot;&gt;Close&lt;/button&gt;
-            &lt;/div&gt;
-        &lt;/div&gt;
+<p>Grid rows can invoke an action when clicked. Simply provide a delegate to the grid's <code>OnClick</code> event handler which takes a parameter of type <code>TRow</code>.</p>
+<p>Alternatively, you may also set a function of type <code>Func&lt;TRow, string&gt;</code> to the <code>Href</code> parameter of the grid. This is a shorthand for calling the <code>NavigationManager.NavigateTo(string)</code>.</p>
+
+<Tip>
+    <span>All rows in the grid will have a CSS class <code>clickable</code> if you provide either a delegate or a function to the aforementioned parameters. You can use this class for additional styling if necessary.</span>
+</Tip>
+
+<Tabs>
+    <Tab Caption="Result" class="p-3">
+        <div class="row">
+            <div class="col-9 overflow-auto" style="max-height: 340px;">
+                <BlazorGrid TRow="Employee" SourceUrl="data/employees.json" OnClick="row => ShowDetails(row)">
+                    <StaticGridCol FitToContent="true">
+                        <img src="@context.Avatar" style="width: 20px; height: 20px;" />
+                    </StaticGridCol>
+                    <GridCol For="() => context.Id" FitToContent="true">
+                        @context.Id
+                    </GridCol>
+                    <GridCol For="() => context.FirstName">
+                        @context.FirstName
+                    </GridCol>
+                    <GridCol For="() => context.LastName">
+                        @context.LastName
+                    </GridCol>
+                    <GridCol For="() => context.Email">
+                        <a href="mailto:@context.Email">@context.Email</a>
+                    </GridCol>
+                </BlazorGrid>
+            </div>
+            <div class="col-3">
+                @if (ClickedRow != null)
+                {
+                    <dl>
+                        <dt>Id</dt>
+                        <dd>@ClickedRow.Id</dd>
+                        <dt>First name</dt>
+                        <dd>@ClickedRow.FirstName</dd>
+                        <dt>Last name</dt>
+                        <dd>@ClickedRow.LastName</dd>
+                        <dt>Email address</dt>
+                        <dd>@ClickedRow.Email</dd>
+                    </dl>
+                }
+                else
+                {
+                    <p>Click on a row to see the details here.</p>
+                }
+            </div>
+        </div>
+
+    </Tab>
+    <Tab Caption="Code" class="p-3">
+        <h6>Razor</h6>
+        <pre class="pre-scrollable"><code>&lt;div class=&quot;row&quot;&gt;
+    &lt;div class=&quot;col-9&quot;&gt;
+        &lt;BlazorGrid TRow=&quot;Employee&quot; SourceUrl=&quot;data/employees.json&quot; OnClick=&quot;row =&gt; ShowDetails(row)&quot;&gt;
+            &lt;StaticGridCol FitToContent=&quot;true&quot;&gt;
+                &lt;img src=&quot;@@context.Avatar&quot; style=&quot;width: 20px; height: 20px;&quot; /&gt;
+            &lt;/StaticGridCol&gt;
+            &lt;GridCol For=&quot;() => context.Id&quot; FitToContent=&quot;true&quot; /&gt;
+            &lt;GridCol For=&quot;() => context.FirstName&quot; /&gt;
+            &lt;GridCol For=&quot;() => context.LastName&quot; /&gt;
+            &lt;GridCol For=&quot;() => context.Email&quot;&gt;
+                &lt;a href=&quot;mailto:@@context.Email&quot;&gt;@@context.Email&lt;/a&gt;
+            &lt;/GridCol&gt;
+        &lt;/BlazorGrid&gt;
     &lt;/div&gt;
-}
+    &lt;div class=&quot;col-3&quot;&gt;
+        @@if (ClickedRow != null)
+        {
+            &lt;dl&gt;
+                &lt;dt&gt;Id&lt;/dt&gt;
+                &lt;dd&gt;@@ClickedRow.Id&lt;/dd&gt;
+                &lt;dt&gt;First name&lt;/dt&gt;
+                &lt;dd&gt;@@ClickedRow.FirstName&lt;/dd&gt;
+                &lt;dt&gt;Last name&lt;/dt&gt;
+                &lt;dd&gt;@@ClickedRow.LastName&lt;/dd&gt;
+                &lt;dt&gt;Email address&lt;/dt&gt;
+                &lt;dd&gt;@@ClickedRow.Email&lt;/dd&gt;
+            &lt;/dl&gt;
+        }
+        else
+        {
+            &lt;p&gt;Click on a row to see the details here.&lt;/p&gt;
+        }
+    &lt;/div&gt;
+&lt;/div&gt;
 
 @@code
 {
-    public bool ShowModal { get; set; }
-
-    private Employee _clickedRow;
+    private Employee ClickedRow;
 
     private void ShowDetails(Employee row)
     {
         if(row != null)
         {
-            _clickedRow = row;
-            ShowModal = true;
+            ClickedRow = row;
         }
     }
 }</code></pre>
-    </div>
-}
-else
-{
-    <p>Grid rows can invoke an action when clicked. Simply provide a delegate to the grid's <code>OnClick</code> event handler which takes a parameter of type <code>TRow</code>.</p>
-    <p>Alternatively, you may also set a function of type <code>Func&lt;TRow, string&gt;</code> to the <code>Href</code> parameter of the grid. This is a shorthand for calling the <code>NavigationManager.NavigateTo(string)</code>.</p>
-    <div class="card">
-        <div class="card-body">
-            <h4 class="card-title">Tip</h4>
-            <span>All rows in the grid will have a CSS class <code>clickable</code> if you provide either a delegate or a function to the aforementioned parameters. You can use this class for additional styling if necessary.</span>
-        </div>
-    </div>
+    </Tab>
+</Tabs>
 
-    <div class="mt-2">
-        <BlazorGrid TRow="Employee" SourceUrl="Data/employees.json" OnClick="row => ShowDetails(row)">
-            <StaticGridCol FitToContent="true">
-                <img src="@context.Avatar" style="width: 20px; height: 20px;" />
-            </StaticGridCol>
-            <GridCol For="() => context.Id" FitToContent="true">
-                @context.Id
-            </GridCol>
-            <GridCol For="() => context.FirstName">
-                @context.FirstName
-            </GridCol>
-            <GridCol For="() => context.LastName">
-                @context.LastName
-            </GridCol>
-            <GridCol For="() => context.Email">
-                <a href="mailto:@context.Email">@context.Email</a>
-            </GridCol>
-        </BlazorGrid>
-    </div>
-
-    @if (ShowModal && _clickedRow != null)
-    {
-        <div class="modal modal-sm active">
-            <a @onclick="() => ShowModal = false" class="modal-overlay" aria-label="Close"></a>
-            <div class="modal-container">
-                <div class="modal-header">
-                    <a @onclick="() => ShowModal = false" class="btn btn-clear float-right" aria-label="Close"></a>
-                    <div class="modal-title h5">You clicked on the following row</div>
-                </div>
-                <div class="modal-body">
-                    <div class="content">
-                        <dl>
-                            <dt>Id</dt>
-                            <dd>@_clickedRow.Id</dd>
-                            <dt>First name</dt>
-                            <dd>@_clickedRow.FirstName</dd>
-                            <dt>Last name</dt>
-                            <dd>@_clickedRow.LastName</dd>
-                            <dt>Email address</dt>
-                            <dd>@_clickedRow.Email</dd>
-                        </dl>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-sm btn-primary" @onclick="() => ShowModal = false">Close</button>
-                </div>
-            </div>
-        </div>
-    }
-}
 @code
 {
-    public bool ShowCode { get; set; }
-    public bool ShowModal { get; set; }
-
-    private Employee _clickedRow;
+    private Employee ClickedRow;
 
     private void ShowDetails(Employee row)
     {
         if (row != null)
         {
-            _clickedRow = row;
-            ShowModal = true;
+            ClickedRow = row;
         }
     }
 }

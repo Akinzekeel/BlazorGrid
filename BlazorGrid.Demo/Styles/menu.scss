@@ -1,0 +1,33 @@
+﻿@import "bootstrap/scss/_variables.scss";
+@import "bootstrap/scss/_functions.scss";
+
+.menu {
+    @extend .list-group;
+    @extend .list-group-flush;
+
+    .menu-item {
+        @extend .list-group-item;
+        @extend .list-group-item-action;
+        border: none;
+        padding: map-get($spacers, 2) $list-group-item-padding-x;
+        white-space: nowrap;
+        position: relative;
+
+        &.active {
+            background-color: $list-group-bg;
+            color: $list-group-action-color;
+            font-weight: $font-weight-bold;
+
+            &::before {
+                display: block;
+                width: $border-width * 3;
+                content: ' ';
+                height: $line-height-base * 1rem;
+                background: $primary;
+                position: absolute;
+                left: 0;
+                box-shadow: 0 0 10px 1px rgba($primary, .2);
+            }
+        }
+    }
+}

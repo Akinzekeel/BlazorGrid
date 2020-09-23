@@ -1,15 +1,34 @@
-$bg-color: #f9f9f9;
-$mono-font-family: monospace;
+$light: #f9f9f9;
+$primary: #20af71;
+$font-family-monospace: monospace;
 
-@import "Spectre/spectre.scss";
-@import "Spectre/spectre-icons.scss";
+@import "bootstrap/scss/bootstrap.scss";
 @import "../../BlazorGrid/Content/BlazorGrid.scss";
+@import "font-awesome/css/font-awesome.css";
+@import "menu.scss";
 
 body,
-app,
-.h-100 {
+app {
     height: 100%;
-    background-color: $bg-color;
+    width: 100%;
+    cursor: default;
+    background-color: $body-bg;
+    user-select: none;
+    overflow-y: scroll;
+}
+
+code {
+    font-size: $font-size-base * 1.1;
+    user-select: all;
+    cursor: text;
+}
+
+pre code {
+    font-size: $font-size-base;
+}
+
+.nav.nav-tabs .nav-link {
+    cursor: pointer;
 }
 
 #content {
@@ -25,7 +44,7 @@ app,
 }
 
 .overflow-none {
-    overflow: none !important;
+    overflow: hidden !important;
 }
 
 .form-group {
@@ -33,7 +52,12 @@ app,
 }
 
 #attributes-demo-grid {
-    .grid-row:first-child {
+    .grid-header.grid-row{
         display: none;
     }
+}
+
+#demo-menu {
+    box-shadow: 2px 0 20px 0 rgba(0,0,0,.1);
+    min-width: 200px;
 }

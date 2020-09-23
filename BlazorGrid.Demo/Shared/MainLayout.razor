@@ -1,12 +1,8 @@
 ﻿@inherits LayoutComponentBase
-<StackPanel Orientation="Orientation.Vertical" style="height: 100vh; width: 100vw;">
-    <StackItem>
-        <TopNav />
-    </StackItem>
-    <ScrollView>
-        <div class="container grid-lg py-2">
-            @Body
-        </div>
-    </ScrollView>
+<div class="min-vh-100 d-flex flex-column">
+    <TopNav />
+    <div class="flex-grow-1">
+        @Body
+    </div>
     <PageFooter />
-</StackPanel>
+</div>
