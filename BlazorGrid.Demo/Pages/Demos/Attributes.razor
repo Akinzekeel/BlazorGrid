@@ -32,7 +32,7 @@
     &lt;StaticGridCol FitToContent=&quot;true&quot;&gt;
         &lt;img src=&quot;@@context.Avatar&quot; style=&quot;width: 20px; height: 20px;&quot; /&gt;
     &lt;/StaticGridCol&gt;
-    &lt;GridCol For=&quot;() => context.Id&quot; FitToContent=&quot;true&quot; class=&quot;bg-primary tooltip tooltip-right&quot; data-tooltip=&quot;@@string.Join(&quot; &quot;, context.FirstName, context.LastName)&quot; /&gt;
+    &lt;GridCol For=&quot;() => context.Id&quot; FitToContent=&quot;true&quot; class=&quot;text-primary&quot; title=&quot;@@string.Join(&quot; &quot;, context.FirstName, context.LastName)&quot; /&gt;
     &lt;GridCol For=&quot;() => context.FirstName&quot; /&gt;
     &lt;GridCol For=&quot;() => context.LastName&quot; /&gt;
     &lt;GridCol For=&quot;() => context.Email&quot;&gt;
