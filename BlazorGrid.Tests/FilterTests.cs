@@ -1,6 +1,9 @@
 ﻿using BlazorGrid.Abstractions;
 using BlazorGrid.Abstractions.Filters;
 using BlazorGrid.Components;
+using BlazorGrid.Config;
+using BlazorGrid.Config.Styles;
+using BlazorGrid.Interfaces;
 using BlazorGrid.Tests.Mock;
 using Bunit;
 using Microsoft.AspNetCore.Components;
@@ -26,6 +29,7 @@ namespace BlazorGrid.Tests
         {
             mockProvider = new Mock<IGridProvider>();
             Services.AddTransient(_ => mockProvider.Object);
+            Services.AddSingleton<IBlazorGridConfig>(_ => new DefaultConfig() { Styles = new SpectreStyles() });
             Services.AddTransient<NavigationManager>(_ => new MockNav());
         }
 

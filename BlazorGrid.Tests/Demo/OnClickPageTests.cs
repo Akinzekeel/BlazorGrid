@@ -1,5 +1,8 @@
 ﻿using BlazorGrid.Abstractions;
+using BlazorGrid.Config;
+using BlazorGrid.Config.Styles;
 using BlazorGrid.Demo.Pages.Demos;
+using BlazorGrid.Interfaces;
 using BlazorGrid.Tests.Mock;
 using Bunit;
 using Microsoft.AspNetCore.Components;
@@ -20,6 +23,8 @@ namespace BlazorGrid.Tests.Demo
 
             var nav = new MockNav();
             Services.AddSingleton<NavigationManager>(nav);
+
+            Services.AddSingleton<IBlazorGridConfig>(_ => new DefaultConfig { Styles = new SpectreStyles() });
 
             RenderComponent<OnClick>();
         }
