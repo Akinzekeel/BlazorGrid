@@ -26,6 +26,7 @@ namespace BlazorGrid.Components
         [Parameter] public int PageSize { get; set; } = DefaultPageSize;
         [Parameter] public TRow EmptyRow { get; set; }
 
+        private bool PauseRendering;
         private bool IsLoadingMore { get; set; }
 
         private string _Query;
@@ -121,6 +122,11 @@ namespace BlazorGrid.Components
 
                 return string.Join(' ', cls).Trim();
             }
+        }
+
+        protected override bool ShouldRender()
+        {
+            return !PauseRendering;
         }
 
         protected override void OnAfterRender(bool firstRender)
@@ -252,26 +258,32 @@ namespace BlazorGrid.Components
         }
 
         public int LastClickedRowIndex { get; private set; } = -1;
-        private void OnRowClicked(TRow r, int index)
+
+        private async Task OnRowClicked(int index)
         {
-            if (r == null)
-            {
-                return;
-            }
-
+            PauseRendering = true;
             LastClickedRowIndex = index;
-            var onClickUrl = Href?.Invoke(r);
 
-            if (onClickUrl != null)
+            try
             {
-                Nav.NavigateTo(onClickUrl);
-            }
-            else if (OnClick.HasDelegate)
-            {
-                OnClick.InvokeAsync(r);
-            }
+                var r = Rows.ElementAt(index);
+                var onClickUrl = Href?.Invoke(r);
 
-            OnAfterRowClicked?.Invoke(this, index);
+                if (onClickUrl != null)
+                {
+                    Nav.NavigateTo(onClickUrl);
+                }
+                else if (OnClick.HasDelegate)
+                {
+                    await OnClick.InvokeAsync(r);
+                }
+
+                OnAfterRowClicked?.Invoke(this, index);
+            }
+            finally
+            {
+                PauseRendering = false;
+            }
         }
 
         public void Add(IGridCol col)

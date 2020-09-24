@@ -56,7 +56,7 @@
                 var index = i;
                 var r = Rows.ElementAt(i);
                 var clickable = OnClick.HasDelegate || Href != null;
-                <div class="grid-row @(clickable ? Config.Styles.RowClickableClass : "")" @onclick="_ => OnRowClicked(r, index)">
+                <div class="grid-row @(clickable ? Config.Styles.RowClickableClass : "")" @onclick="_ => OnRowClicked(index)">
                     @ChildContent(r)
                 </div>
             }
