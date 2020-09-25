@@ -12,6 +12,7 @@
     "yargs-parser": ">=13.1.2"
   },
   "scripts": {
-    "build": "gulp default"
+    "build": "gulp default",
+    "publish": "dotnet publish -c Release"
   }
 }
