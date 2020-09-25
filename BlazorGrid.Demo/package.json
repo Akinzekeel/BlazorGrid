@@ -8,6 +8,10 @@
     "gulp-sass": "4.0.2",
     "gulp-rename": "1.4.0",
     "rimraf": "2.6.3",
-    "lodash": ">=4.17.19"
+    "lodash": ">=4.17.19",
+    "yargs-parser": ">=13.1.2"
+  },
+  "scripts": {
+    "build": "gulp default" 
   }
 }
