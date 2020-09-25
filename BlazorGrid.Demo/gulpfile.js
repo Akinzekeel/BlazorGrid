@@ -25,7 +25,7 @@ gulp.task("clean", (done) => {
 });
 
 function compileCss(done) {
-    gulp.src(files.css.themes.main)
+    gulp.src(files.css.themes.main, { allowEmpty: true })
         .pipe(sass().on("error", sass.logError))
         .pipe(minify())
         .pipe(ren("app.min.css"))

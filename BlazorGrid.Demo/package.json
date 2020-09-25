@@ -12,6 +12,6 @@
     "yargs-parser": ">=13.1.2"
   },
   "scripts": {
-    "build": "npm run --prefix ./BlazorGrid.Demo/ gulp default" 
+    "build": "gulp default"
   }
 }
