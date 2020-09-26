@@ -1,0 +1,21 @@
+﻿@import './spectre/_variables.scss';
+
+$bzg-cell-padding-x: $layout-spacing !default;
+$bzg-cell-padding-y: $layout-spacing !default;
+$bzg-cell-hover-bg: $component-hover-color !default;
+$bzg-cell-hover-color: $body-font-color !default;
+$bzg-cell-active-bg: $component-active-color !default;
+$bzg-cell-active-color: $body-font-color !default;
+$bzg-cell-border-bottom-width: 1px !default;
+$bzg-cell-border-color: $border-color !default;
+
+$bzg-header-bg-color: $body-bg !default;
+$bzg-header-sort-icon-content: '‹›' !default;
+$bzg-header-sort-icon-font-size: $font-size-lg !default;
+$bzg-header-sort-icon-active-color: $primary-color !default;
+$bzg-header-filter-icon-color: $secondary-color !default;
+$bzg-header-cell-hover-bg: $bzg-cell-hover-bg !default;
+$bzg-header-cell-hover-color: $primary-color-light !default;
+$bzg-header-cell-hover-left-border-width: 2px !default;
+
+@import 'blazorgrid.scss';

@@ -22,29 +22,11 @@ else
         }
         @if (IsFiltered)
         {
-            <span class="blazor-grid-filter-icon @(IsFiltered ? "text-secondary" : "text-gray")">
-                *
-            </span>
+            <span class="blazor-grid-filter-icon @(IsFiltered ? "active" : "")" />
         }
         else
         {
-            <span class="blazor-grid-sort-icon">
-                @if (IsSorted)
-                {
-                    if (Parent.OrderByDescending)
-                    {
-                        @:&rsaquo;
-                    }
-                    else
-                    {
-                        @:&lsaquo;
-                    }
-                }
-                else
-                {
-                    @:&lsaquo;&rsaquo;
-                }
-            </span>
+            <span class="@SortIconCssClass()" />
         }
         @if (AlignRight)
         {

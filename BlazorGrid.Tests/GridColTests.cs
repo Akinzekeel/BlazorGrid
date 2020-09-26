@@ -49,7 +49,7 @@ namespace BlazorGrid.Tests
                 Parameter(nameof(GridCol<string>.AlignRight), true)
             );
 
-            unit.MarkupMatches("<div class=\"text-right sortable my-custom-class\"><span class=\"blazor-grid-sort-icon\">‹›</span></div>");
+            unit.MarkupMatches("<div class=\"text-right sortable my-custom-class\"><span class=\"blazor-grid-sort-icon\"></span></div>");
         }
 
         [TestMethod]
@@ -73,7 +73,7 @@ namespace BlazorGrid.Tests
                 Parameter("title", "Unit test")
             );
 
-            unit.MarkupMatches("<div class=\"sortable\"><span class=\"blazor-grid-sort-icon\">‹›</span></div>");
+            unit.MarkupMatches("<div class=\"sortable\"><span class=\"blazor-grid-sort-icon\"></span></div>");
         }
 
         [TestMethod]
@@ -88,7 +88,7 @@ namespace BlazorGrid.Tests
                 Parameter(nameof(GridCol<string>.For), (Expression<Func<string>>)(() => m.Name))
             );
 
-            col.MarkupMatches("<div class=\"sortable\">Unit test<span class=\"blazor-grid-sort-icon\">‹›</span></div>");
+            col.MarkupMatches("<div class=\"sortable\">Unit test<span class=\"blazor-grid-sort-icon\"></span></div>");
         }
 
         [TestMethod]
@@ -103,7 +103,7 @@ namespace BlazorGrid.Tests
                 Parameter(nameof(GridCol<string>.For), (Expression<Func<string>>)(() => m.NameWithCaption))
             );
 
-            col.MarkupMatches("<div class=\"sortable\">Unit test<span class=\"blazor-grid-sort-icon\">‹›</span></div>");
+            col.MarkupMatches("<div class=\"sortable\">Unit test<span class=\"blazor-grid-sort-icon\"></span></div>");
         }
 
         [TestMethod]
@@ -117,7 +117,7 @@ namespace BlazorGrid.Tests
                 Parameter(nameof(GridCol<string>.For), (Expression<Func<string>>)(() => m.NameWithCaption))
             );
 
-            col.MarkupMatches("<div class=\"sortable\">My caption<span class=\"blazor-grid-sort-icon\">‹›</span></div>");
+            col.MarkupMatches("<div class=\"sortable\">My caption<span class=\"blazor-grid-sort-icon\"></span></div>");
 
         }
 
@@ -138,7 +138,7 @@ namespace BlazorGrid.Tests
                 Parameter(nameof(GridCol<string>.For), (Expression<Func<string>>)(() => m.NameWithResourceCaption))
             );
 
-            col.MarkupMatches($"<div class=\"sortable\">{expectedCaption}<span class=\"blazor-grid-sort-icon\">‹›</span></div>");
+            col.MarkupMatches($"<div class=\"sortable\">{expectedCaption}<span class=\"blazor-grid-sort-icon\"></span></div>");
         }
     }
 }

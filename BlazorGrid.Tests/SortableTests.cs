@@ -99,7 +99,7 @@ namespace BlazorGrid.Tests
             ), Times.Once());
 
             var th = grid.Find(".grid-header > *");
-            th.MarkupMatches("<div class=\"sorted sortable\"><span class=\"blazor-grid-sort-icon\">" + (desc ? "›" : "‹") + "</span></div>");
+            th.MarkupMatches("<div class=\"sorted sortable\"><span class=\"blazor-grid-sort-icon active " + (desc ? "sorted-desc" : "sorted-asc") + "\"></span></div>");
         }
     }
 }

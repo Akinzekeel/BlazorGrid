@@ -9,32 +9,39 @@ sass.compiler = require('node-sass');
 
 var files = {
     css: {
-        themes: {
-            main: "./Content/BlazorGrid.scss"
-        }
+        spectre: "./Content/blazorgrid-spectre.scss",
+        bootstrap: "./Content/blazorgrid-bootstrap.scss"
     }
 };
-
-gulp.task("watch", () => {
-    gulp.watch("./Content/**/*", compileCss);
-});
 
 gulp.task("clean", (done) => {
     rimraf("wwwroot/dist/**/*", done);
 });
 
-function compileCss(done) {
-    gulp.src(files.css.themes.main)
-        .pipe(sass().on("error", sass.logError))
-        .pipe(minify())
-        .pipe(ren("blazor-grid.min.css"))
-        .pipe(gulp.dest("./wwwroot/dist"));
+gulp.task("watch", () => {
+    gulp.watch([files.css.spectre, files.css.bootstrap], (done) => gulp.parallel(
+        cssTask(files.css.spectre),
+        cssTask(files.css.bootstrap)
+    )(done));
+});
 
-    done();
+function cssTask(src) {
+    return function (done) {
+        gulp.src(src)
+            .pipe(sass().on("error", sass.logError))
+            .pipe(minify())
+            .pipe(ren({
+                extname: ".min.css"
+            }))
+            .pipe(gulp.dest("./wwwroot/dist"));
+
+        done();
+    }
 }
 
 gulp.task("default", (done) => {
-    return gulp.series(
-        compileCss
+    return gulp.parallel(
+        cssTask(files.css.spectre),
+        cssTask(files.css.bootstrap)
     )(done);
 });

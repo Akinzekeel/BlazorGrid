@@ -37,6 +37,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Content\blazorgrid-bootstrap.scss" />
+    <None Remove="Content\blazorgrid-spectre.scss" />
+    <None Remove="Content\bootstrap\scss\_functions.scss" />
+    <None Remove="Content\bootstrap\scss\_variables.scss" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Update="Resources\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>

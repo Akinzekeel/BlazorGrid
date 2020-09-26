@@ -118,5 +118,25 @@ namespace BlazorGrid.Components
             return Caption;
         }
 
+        private string SortIconCssClass()
+        {
+            var cls = "blazor-grid-sort-icon";
+
+            if (IsSorted)
+            {
+                cls += " active";
+
+                if (Parent.OrderByDescending)
+                {
+                    cls += " sorted-desc";
+                }
+                else
+                {
+                    cls += " sorted-asc";
+                }
+            }
+
+            return cls;
+        }
     }
 }

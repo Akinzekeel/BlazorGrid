@@ -45,7 +45,7 @@ function copyContent(done) {
 }
 
 gulp.task("default", (done) => {
-    return gulp.series(
+    return gulp.parallel(
         compileCss,
         copyContent
     )(done);

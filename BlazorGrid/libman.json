@@ -1,0 +1,14 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "twitter-bootstrap@4.5.2",
+      "destination": "Content/bootstrap",
+      "files": [
+        "scss/_variables.scss",
+        "scss/_functions.scss"
+      ]
+    }
+  ]
+}
