@@ -8,7 +8,7 @@ trigger:
       - '**/build-*.yml'
 
 pool:
-  vmImage: 'windows-latest'
+  vmImage: 'ubuntu-latest'
 
 variables:
   buildPlatform: 'Any CPU'
@@ -26,37 +26,23 @@ steps:
   inputs:
     gulpFile: 'BlazorGrid/gulpfile.js'
     targets: 'default'
-    enableCodeCoverage: false
 
 - task: NuGetToolInstaller@1
-
-- task: DotNetCoreCLI@2
-  displayName: 'Restore BlazorGrid'
-  inputs:
-    command: restore
-    projects: 'BlazorGrid/BlazorGrid.csproj'
-    arguments: '-c $(buildConfiguration)'
-
-- task: DotNetCoreCLI@2
-  displayName: 'Restore BlazorGrid.Tests'
-  inputs:
-    command: restore
-    projects: 'BlazorGrid.Tests/BlazorGrid.Tests.csproj'
-    arguments: '-c $(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
   displayName: 'Build BlazorGrid'
   inputs:
     command: 'build'
     projects: 'BlazorGrid/BlazorGrid.csproj'
-    arguments: '-c $(buildConfiguration) -o $(Build.ArtifactStagingDirectory) --no-restore'
+    configuration: $(buildConfiguration)
+    arguments: '-o $(Build.ArtifactStagingDirectory)'
 
 - task: DotNetCoreCLI@2
   displayName: 'Test'
   inputs:
     command: 'test'
     projects: 'BlazorGrid.Tests/BlazorGrid.Tests.csproj'
-    arguments: '-c $(buildConfiguration) --no-restore'
+    configuration: $(buildConfiguration)
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish artifacts'
