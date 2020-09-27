@@ -197,10 +197,10 @@ namespace MyBlazorProject
 &lt;p&gt;This component demonstrates fetching data from the server.&lt;/p&gt;
 
 &lt;BlazorGrid TRow="WeatherForecast" DefaultOrderBy="x =&gt; x.Date" SourceUrl="weatherforecast"&gt;
-    &lt;GridCol For="() =&gt; context.Date"&gt;@@context.Date.ToShortDateString()&lt;/GridCol&gt;
-    &lt;GridCol For="() =&gt; context.TemperatureC" /&gt;
-    &lt;GridCol For="() =&gt; context.TemperatureF" /&gt;
-    &lt;GridCol For="() =&gt; context.Summary" /&gt;
+    &lt;GridCol Caption="Date" For="() =&gt; context.Date"&gt;@@context.Date.ToShortDateString()&lt;/GridCol&gt;
+    &lt;GridCol Caption="Celsius" For="() =&gt; context.TemperatureC" /&gt;
+    &lt;GridCol Caption="Fahrenheit" For="() =&gt; context.TemperatureF" /&gt;
+    &lt;GridCol Caption="Summary" For="() =&gt; context.Summary" /&gt;
 &lt;/BlazorGrid&gt;
 
 @@code

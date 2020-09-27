@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Akinzekeel.BlazorGrid" Version="0.7.5-preview" />
+    <PackageReference Include="Akinzekeel.BlazorGrid" Version="0.7.6-preview" />
     <PackageReference Include="Akinzekeel.BlazorGrid.Filters" Version="0.7.4-beta" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="3.2.1" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Build" Version="3.2.1" PrivateAssets="all" />
