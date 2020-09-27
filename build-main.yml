@@ -8,7 +8,7 @@ trigger:
       - '**/build-*.yml'
 
 pool:
-  vmImage: 'windows-latest'
+  vmImage: 'ubuntu-latest'
 
 variables:
   buildPlatform: 'Any CPU'
@@ -26,7 +26,6 @@ steps:
   inputs:
     gulpFile: 'BlazorGrid/gulpfile.js'
     targets: 'default'
-    enableCodeCoverage: false
 
 - task: NuGetToolInstaller@1
 
@@ -35,14 +34,15 @@ steps:
   inputs:
     command: restore
     projects: 'BlazorGrid/BlazorGrid.csproj'
-    arguments: '-c $(buildConfiguration)'
+    arguments: '/Property:Configuration=$(buildConfiguration)'
+    verbosityRestore: Normal
 
 - task: DotNetCoreCLI@2
   displayName: 'Restore BlazorGrid.Tests'
   inputs:
     command: restore
     projects: 'BlazorGrid.Tests/BlazorGrid.Tests.csproj'
-    arguments: '-c $(buildConfiguration)'
+    arguments: '/Property:Configuration=$(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
   displayName: 'Build BlazorGrid'
