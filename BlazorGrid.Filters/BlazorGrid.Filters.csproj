@@ -18,7 +18,11 @@
     <PackageReference Include="Akinzekeel.ExpressionBuilder" Version="20200621.4.0" />
   </ItemGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="'$(Configuration)' != 'Release'">
+    <ProjectReference Include="..\BlazorGrid.Abstractions\BlazorGrid.Abstractions.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(Configuration)' == 'Release'">
     <PackageReference Include="Akinzekeel.BlazorGrid.Abstractions" Version="0.7.4-beta" />
   </ItemGroup>
 
