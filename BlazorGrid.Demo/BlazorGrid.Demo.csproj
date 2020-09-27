@@ -15,10 +15,4 @@
     <PackageReference Include="Akinzekeel.StackPanel" Version="0.1-preview" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Content Update="wwwroot\data\employees.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
 </Project>
