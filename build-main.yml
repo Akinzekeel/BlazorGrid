@@ -33,8 +33,8 @@ steps:
   displayName: 'Restore BlazorGrid'
   inputs:
     command: restore
+    configuration: $(buildConfiguration)
     projects: 'BlazorGrid/BlazorGrid.csproj'
-    arguments: '/Property:Configuration=$(buildConfiguration)'
     verbosityRestore: Normal
 
 - task: DotNetCoreCLI@2
@@ -42,21 +42,23 @@ steps:
   inputs:
     command: restore
     projects: 'BlazorGrid.Tests/BlazorGrid.Tests.csproj'
-    arguments: '/Property:Configuration=$(buildConfiguration)'
+    configuration: $(buildConfiguration)
 
 - task: DotNetCoreCLI@2
   displayName: 'Build BlazorGrid'
   inputs:
     command: 'build'
     projects: 'BlazorGrid/BlazorGrid.csproj'
-    arguments: '-c $(buildConfiguration) -o $(Build.ArtifactStagingDirectory) --no-restore'
+    configuration: $(buildConfiguration)
+    arguments: '-o $(Build.ArtifactStagingDirectory) --no-restore'
 
 - task: DotNetCoreCLI@2
   displayName: 'Test'
   inputs:
     command: 'test'
     projects: 'BlazorGrid.Tests/BlazorGrid.Tests.csproj'
-    arguments: '-c $(buildConfiguration) --no-restore'
+    configuration: $(buildConfiguration)
+    arguments: '--no-restore'
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish artifacts'
