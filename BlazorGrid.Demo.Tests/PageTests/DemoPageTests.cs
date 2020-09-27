@@ -2,8 +2,8 @@
 using BlazorGrid.Config;
 using BlazorGrid.Config.Styles;
 using BlazorGrid.Demo.Pages.Examples;
+using BlazorGrid.Demo.Tests.Mock;
 using BlazorGrid.Interfaces;
-using BlazorGrid.Tests.Mock;
 using Bunit;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,7 +13,7 @@ using Moq;
 namespace BlazorGrid.Tests.Demo
 {
     [TestClass]
-    public class PreLoadedPageTests : ComponentTestFixture
+    public class ExamplesPageTests : ComponentTestFixture
     {
         [TestMethod]
         public void Can_Render_Page()
@@ -26,7 +26,7 @@ namespace BlazorGrid.Tests.Demo
 
             Services.AddSingleton<IBlazorGridConfig>(_ => new DefaultConfig { Styles = new SpectreStyles() });
 
-            RenderComponent<PreLoaded>();
+            RenderComponent<Basic>();
         }
     }
 }

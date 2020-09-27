@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Components;
 
-namespace BlazorGrid.Tests.Mock
+namespace BlazorGrid.Demo.Tests.Mock
 {
     internal class MockNav : NavigationManager
     {

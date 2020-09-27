@@ -1,8 +1,8 @@
 ﻿using BlazorGrid.Abstractions;
 using BlazorGrid.Config;
 using BlazorGrid.Config.Styles;
+using BlazorGrid.Demo.Tests.Mock;
 using BlazorGrid.Interfaces;
-using BlazorGrid.Tests.Mock;
 using Bunit;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
