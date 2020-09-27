@@ -8,13 +8,14 @@
     .menu-item {
         @extend .list-group-item;
         @extend .list-group-item-action;
-        border: none;
+        border: none !important;
         padding: map-get($spacers, 2) $list-group-item-padding-x;
         white-space: nowrap;
         position: relative;
+        background: none;
 
         &.active {
-            background-color: $list-group-bg;
+            background: none;
             color: $list-group-action-color;
             font-weight: $font-weight-bold;
 

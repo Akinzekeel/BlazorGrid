@@ -1,7 +1,7 @@
 ﻿using BlazorGrid.Abstractions;
 using BlazorGrid.Config;
 using BlazorGrid.Config.Styles;
-using BlazorGrid.Demo.Pages.Demos;
+using BlazorGrid.Demo.Pages.Examples;
 using BlazorGrid.Interfaces;
 using BlazorGrid.Tests.Mock;
 using Bunit;

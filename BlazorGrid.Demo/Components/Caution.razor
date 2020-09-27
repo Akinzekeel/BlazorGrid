@@ -1,4 +1,4 @@
-﻿<div class="alert alert-light bg-light border-danger text-dark">
+﻿<div class="@ClassNames()" @attributes="OtherAttributes">
     <h6 class="alert-heading text-danger">
         <i class="fa fa-exclamation-triangle mr-2"></i>
         <span>@Heading</span>
@@ -9,4 +9,19 @@
 {
     [Parameter] public string Heading { get; set; } = "Caution";
     [Parameter] public RenderFragment ChildContent { get; set; }
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object> Attributes { get; set; }
+
+    private IEnumerable<KeyValuePair<string, object>> OtherAttributes => Attributes?.Where(x => x.Key != "class");
+
+    private string ClassNames()
+    {
+        var classes = "alert alert-light bg-light border-danger text-dark";
+
+        if (Attributes != null && Attributes.ContainsKey("class"))
+        {
+            classes += " " + Attributes["class"];
+        }
+
+        return classes;
+    }
 }

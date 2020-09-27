@@ -1,5 +1,5 @@
-@page "/demos/attributes"
-@layout DemoLayout
+@page "/examples/attributes"
+@layout ExampleLayout
 <h1>Attributes</h1>
 
 <p>Both the <code>BlazorGrid</code> and the <code>GridCol</code> components support custom attributes as well as custom CSS classes.</p>
@@ -14,7 +14,7 @@
 
 <Tabs>
     <Tab Caption="Result" class="p-3 overflow-auto" style="max-height: 500px;">
-        <BlazorGrid TRow="Employee" SourceUrl="data/employees.json" id="attributes-demo-grid">
+        <BlazorGrid TRow="Employee" SourceUrl="data/employees.json" id="attributes-example-grid">
             <StaticGridCol FitToContent="true">
                 <img src="@context.Avatar" style="width: 20px; height: 20px;" />
             </StaticGridCol>
@@ -28,7 +28,7 @@
     </Tab>
     <Tab Caption="Code" class="p-3">
         <h6>Razor</h6>
-        <pre class="pre-scrollable"><code>&lt;BlazorGrid TRow=&quot;Employee&quot; SourceUrl=&quot;data/employees.json&quot; id=&quot;attributes-demo-grid&quot;&gt;
+        <pre class="pre-scrollable"><code>&lt;BlazorGrid TRow=&quot;Employee&quot; SourceUrl=&quot;data/employees.json&quot; id=&quot;attributes-example-grid&quot;&gt;
     &lt;StaticGridCol FitToContent=&quot;true&quot;&gt;
         &lt;img src=&quot;@@context.Avatar&quot; style=&quot;width: 20px; height: 20px;&quot; /&gt;
     &lt;/StaticGridCol&gt;
@@ -41,7 +41,7 @@
 &lt;/BlazorGrid&gt;</code></pre>
 
         <h6>SCSS</h6>
-        <pre class="pre-scrollable"><code>#attributes-demo-grid &#123;
+        <pre class="pre-scrollable"><code>#attributes-example-grid &#123;
     .grid-header.grid-row &#123;
         display: none;
     &#125;

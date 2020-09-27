@@ -1,0 +1,223 @@
+﻿@page "/getting-started"
+<div class="container my-4">
+    <h1>Getting started</h1>
+    <p class="lead">Follow this quick guide to get started with BlazorGrid in just a few minutes. After you finished setting it up and got the basic grid working, you can head over to the <a href="/examples">examples</a> or the <a href="/docs">documentation</a> to learn more about customization.</p>
+
+    <h3 class="mt-5">Part A: Setting up your backend</h3>
+    <Tabs class="mt-3" Style="Tabs.TabsStyle.Buttons">
+        <Tab Caption="Web Api">
+            @{
+                int ol = 1;
+            }
+            <h5 class="mt-4">@(ol++). Install the NuGet package</h5>
+            <p>In your Web Api project, you are recommended (although not required) to install the <code>Akinzekeel.BlazorGrid.Abstractions</code> package. This package contains models and helpers to make it much easier to query and serialize data for the grid.</p>
+            <p>Alternatively, you can use the dotnet CLI:</p>
+            <pre class="pre-scrollable"><code>dotnet add package Akinzekeel.BlazorGrid</code></pre>
+
+            <h5 class="mt-4">@(ol++). Add a function to query data</h5>
+            <p>Create a controller named <code>WeatherForecastController.cs</code> and add the following code to it:</p>
+            <pre class="pre-scrollable"><code>using System;
+using System.Collections.Generic;
+using System.Linq;
+using BlazorGrid.Abstractions;
+using Microsoft.AspNetCore.Mvc;
+using BlazorGrid.Abstractions.Extensions;
+
+namespace MyApi.Controllers
+{
+    [ApiController]
+    [Route("[controller]")]
+    public class WeatherForecastController : ControllerBase
+    {
+        private static readonly IQueryable&lt;WeatherForecast&gt; WeatherData;
+        private static readonly string[] Summaries = new[]
+        {
+            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+        };
+
+        static WeatherForecastController()
+        {
+            var rng = new Random();
+
+            // Statically set the weather data so the filtering and sorting
+            // won't cause new random data to be generated on every request
+            WeatherData = Enumerable.Range(1, 200).Select(index =&gt; new WeatherForecast
+            {
+                Date = DateTime.Now.AddDays(index),
+                TemperatureC = rng.Next(-20, 55),
+                Summary = Summaries[rng.Next(Summaries.Length)]
+            })
+            .AsQueryable();
+        }
+
+        [HttpGet]
+        [Route("")]
+        public IActionResult Index([FromQuery] BlazorGridRequest request)
+        {
+            if (request.Offset &lt; 0)
+            {
+                return BadRequest();
+            }
+
+            if (request.Length &lt; 1)
+            {
+                return BadRequest("Invalid length (must be 1 or more)");
+            }
+            else if (request.Length &gt; 100)
+            {
+                return BadRequest("Invalid length (must be 100 or less)");
+            }
+
+            var q = WeatherData;
+
+            if (request.Query != null)
+            {
+                // Apply filtering based on the search query from the
+                // data grid's search input box
+                q = q.Where(x =&gt; x.Summary.IndexOf(request.Query) &gt; -1);
+            }
+
+            var totalCount = q.Count();
+
+            if (totalCount == 0)
+            {
+                // Nothing matches the filters
+                return Ok(new BlazorGridResult&lt;WeatherForecast&gt;
+                {
+                    Data = new List&lt;WeatherForecast&gt;(),
+                    TotalCount = 0
+                });
+            }
+
+            // Apply ordering
+            if (request.OrderBy != null)
+            {
+                // These are extension methods to apply sorting
+                // with Linq based only on the property name
+                if (request.OrderByDescending)
+                {
+                    q = q.OrderByDescending(request.OrderBy);
+                }
+                else
+                {
+                    q = q.OrderBy(request.OrderBy);
+                }
+            }
+
+            // Apply paging
+            if (request.Offset &gt; 0)
+            {
+                q = q.Skip(request.Offset);
+            }
+
+            if (totalCount &gt; request.Length)
+            {
+                q = q.Take(request.Length);
+            }
+
+            var rows = q.ToList();
+
+            return Ok(new BlazorGridResult&lt;WeatherForecast&gt;
+            {
+                Data = rows,
+                TotalCount = totalCount
+            });
+        }
+    }
+}</code></pre>
+
+            <h5 class="mt-4">@(ol++). Adjust Json serialization settings</h5>
+            <p>This step is recommended if you are using Blazor WebAssembly. By default, Web Api projects will use lowercase for Json property names when serializing objects. This can be problematic because by default, Blazor WebAssembly is not configured to handle this and will fail to deserialize the objects correctly, causing the Grid to display a "No data" error message.</p>
+            <p>Disabling the renaming of Json properties is easy. Just go to <code>Startup.cs</code> and change this line:</p>
+            <pre class="pre-scrollable"><code>services.AddControllers();</code></pre>
+            <p>To this:</p>
+            <pre class="pre-scrollable"><code>services.AddControllers()
+    .AddJsonOptions(o =>
+    {
+        o.JsonSerializerOptions.PropertyNamingPolicy = null;
+    });</code></pre>
+
+            <p>That's all we need in the backend for now! Continue with part B below to set up your frontend.</p>
+        </Tab>
+        <Tab Caption="Azure Functions">
+            <Caution class="my-4">Sorry, this part of the documentation isn't finished yet. Please refer to Web Api for now and make amendments where needed.</Caution>
+        </Tab>
+        <Tab Caption="Blazor server-side">
+            <Caution class="my-4">Sorry, this part of the documentation isn't finished yet. Please refer to Web Api for now and make amendments where needed.</Caution>
+        </Tab>
+    </Tabs>
+    <hr class="my-5" />
+    <h3>Part B: Setting up your Blazor frontend</h3>
+    <Tabs class="mt-3" Style="Tabs.TabsStyle.Buttons">
+        <Tab Caption="Blazor WebAssembly">
+            @{
+                int ol = 1;
+            }
+            <h5 class="mt-4">@(ol++). Install the NuGet package</h5>
+            <p>In Visual Studio, open up the NuGet package manager, then find and install <code>Akinzekeel.BlazorGrid</code>. Note that you may have to enable listing preview version.</p>
+            <p>Alternatively, you can use the dotnet command:</p>
+            <code>dotnet add package Akinzekeel.BlazorGrid</code>
+
+            <h5 class="mt-4">@(ol++). Add a reference to the CSS file</h5>
+            <p>BlazorGrid comes with builtin support for <em>Bootstrap</em> and <em>Spectre</em>. Open your <code>wwwroot/index.html</code> file (or <code>Pages/_Host.cshtml</code> for Blazor server-side) and add the following line in the <code>&lt;head&gt;</code>:</p>
+            <pre class="pre-scrollable"><code>&lt;link href="_content/Akinzekeel.BlazorGrid/dist/blazorgrid-bootstrap.min.css" rel="stylesheet" /&gt;</code></pre>
+
+            <h5 class="mt-4">@(ol++). Set up dependency injection</h5>
+            <p>Open your <code>Program.cs</code> file and add the following:</p>
+            <pre class="pre-scrollable"><code><mark>using BlazorGrid.Providers;</mark>
+<mark>using BlazorGrid.Extensions;</mark>
+...
+
+namespace MyBlazorProject
+{
+    public class Program
+    {
+        public static async Task Main(string[] args)
+        {
+            var builder = WebAssemblyHostBuilder.CreateDefault(args);
+            builder.RootComponents.Add&lt;App&gt;("app");
+
+            builder.Services.AddTransient(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+            <mark>builder.Services.AddBlazorGrid&lt;DefaultHttpProvider&gt;();</mark>
+
+            await builder.Build().RunAsync();
+        }
+    }
+}</code></pre>
+
+            <Caution>If you are not fetching the data from this same project (Asp.Net Core hosted), then you have to change <code>builder.HostEnvironment.BaseAddress</code> with the base Uri of your backend (Api / Azure Functions / etc)., for example <code>new Uri("https://localhost:44375/")</code>.</Caution>
+
+            <h5 class="mt-4">@(ol++). Make your first BlazorGrid</h5>
+            <p>Continuing with the weather forecast example from the Web Api, go to <code>Pages/FetchData.razor</code> and change the code as following:</p>
+            <pre class="pre-scrollable"><code>@@page "/fetchdata"
+@@inject HttpClient Http
+@@using BlazorGrid.Components
+&lt;h1&gt;Weather forecast&lt;/h1&gt;
+
+&lt;p&gt;This component demonstrates fetching data from the server.&lt;/p&gt;
+
+&lt;BlazorGrid TRow="WeatherForecast" DefaultOrderBy="x =&gt; x.Date" SourceUrl="weatherforecast"&gt;
+    &lt;GridCol For="() =&gt; context.Date"&gt;@@context.Date.ToShortDateString()&lt;/GridCol&gt;
+    &lt;GridCol For="() =&gt; context.TemperatureC" /&gt;
+    &lt;GridCol For="() =&gt; context.TemperatureF" /&gt;
+    &lt;GridCol For="() =&gt; context.Summary" /&gt;
+&lt;/BlazorGrid&gt;
+
+@@code
+{
+    public class WeatherForecast
+    {
+        public DateTime Date { get; set; }
+        public int TemperatureC { get; set; }
+        public string Summary { get; set; }
+        public int TemperatureF { get; set; }
+    }
+}</code></pre>
+            <p>That's it! Start your project(s) and head over to the FetchData page to see the grid in action.</p>
+        </Tab>
+        <Tab Caption="Blazor server side">
+            <Caution class="my-4">Sorry, this part of the documentation isn't finished yet. Please refer to Blazor WebAssembly for now and make amendments where needed.</Caution>
+        </Tab>
+    </Tabs>
+
+</div>

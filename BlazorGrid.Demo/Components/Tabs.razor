@@ -1,4 +1,4 @@
-﻿<ul class="nav nav-tabs">
+﻿<ul @attributes="OtherAttributes" class="@NavClass()">
     @for (int i = 0; i < Children.Count; i++)
     {
         var j = i;
@@ -15,10 +15,41 @@
 </CascadingValue>
 @code
 {
+    public enum TabsStyle
+    {
+        Tabs,
+        Buttons
+    }
+
+    [Parameter] public TabsStyle Style { get; set; }
     [Parameter] public RenderFragment ChildContent { get; set; }
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object> Attributes { get; set; }
 
     public int ActiveTabIndex { get; private set; }
     private List<Tab> Children { get; set; } = new List<Tab>();
+
+    private IEnumerable<KeyValuePair<string, object>> OtherAttributes => Attributes?.Where(x => x.Key != "class");
+
+    private string NavClass()
+    {
+        var classes = "nav";
+
+        if (Attributes?.ContainsKey("class") == true)
+        {
+            classes += " " + Attributes["class"];
+        }
+
+        if(Style == TabsStyle.Buttons)
+        {
+            classes += " nav-pills";
+        }
+        else
+        {
+            classes += " nav-tabs";
+        }
+
+        return classes;
+    }
 
     public int Add(Tab child)
     {

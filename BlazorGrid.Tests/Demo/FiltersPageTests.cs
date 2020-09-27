@@ -25,7 +25,7 @@ namespace BlazorGrid.Tests.Demo
 
             Services.AddSingleton<IBlazorGridConfig>(_ => new DefaultConfig { Styles = new SpectreStyles() });
 
-            var unit = RenderComponent<BlazorGrid.Demo.Pages.Demos.Filters>();
+            var unit = RenderComponent<BlazorGrid.Demo.Pages.Examples.Filters>();
 
             // Switch to "add filter mode"
             unit.Find("#addFilterBtn").Click();

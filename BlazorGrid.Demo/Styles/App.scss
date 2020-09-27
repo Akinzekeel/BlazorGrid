@@ -1,5 +1,6 @@
 $light: #f9f9f9;
-$primary: #20af71;
+$primary: #613ccd;
+$warning: #f1a500;
 $font-family-monospace: monospace;
 
 @import "bootstrap/scss/bootstrap.scss";
@@ -19,7 +20,7 @@ app {
 
 code {
     font-size: $font-size-base * 1.1;
-    user-select: all;
+    user-select: text;
     cursor: text;
 }
 
@@ -27,8 +28,41 @@ pre code {
     font-size: $font-size-base;
 }
 
-.nav.nav-tabs .nav-link {
-    cursor: pointer;
+.pre-scrollable{
+    border: $border-width solid $primary;
+    background-color: $light;
+    border-radius: $border-radius;
+    padding: map-get($spacers, 2);
+}
+
+.nav {
+    .nav-link:not(:disabled) {
+        cursor: pointer;
+    }
+
+    &.nav-pills, &.nav-tabs {
+        .nav-link {
+            &:hover {
+                background-color: $gray-100;
+            }
+
+            &:active {
+                background-color: $gray-200;
+            }
+        }
+    }
+
+    &.nav-pills {
+        .nav-item + .nav-item {
+            margin-left: map-get($spacers, 2);
+        }
+
+        .nav-link {
+            &.active {
+                background-color: $primary;
+            }
+        }
+    }
 }
 
 #content {
@@ -51,12 +85,13 @@ pre code {
     font-weight: bold;
 }
 
-#attributes-demo-grid {
+#attributes-example-grid {
     .grid-header.grid-row {
         display: none;
     }
 }
 
-#demo-menu {
+.sidebar {
     min-width: 200px;
+    background: $light;
 }
