@@ -10,43 +10,33 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
+variables:
+  buildConfiguration: 'Release'
+
 steps:
-
-- task: DotNetCoreCLI@2
-  displayName: 'Restore BlazorGrid.Demo'
-  inputs:
-    command: restore
-    projects: 'BlazorGrid.Demo/BlazorGrid.Demo.csproj'
-    arguments: '-c $(buildConfiguration)'
-
-- task: DotNetCoreCLI@2
-  displayName: 'Restore BlazorGrid.Demo.Tests'
-  inputs:
-    command: restore
-    projects: 'BlazorGrid.Demo.Tests/BlazorGrid.Demo.Tests.csproj'
-    arguments: '-c $(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
   displayName: 'Build BlazorGrid.Demo'
   inputs:
     command: build
+    configuration: $(buildConfiguration)
     projects: 'BlazorGrid.Demo/BlazorGrid.Demo.csproj'
-    arguments: '-c $(buildConfiguration) --no-restore'
 
 - task: DotNetCoreCLI@2
   displayName: 'Test'
   inputs:
     command: test
+    configuration: $(buildConfiguration)
     projects: 'BlazorGrid.Demo.Tests/BlazorGrid.Demo.Tests.csproj'
-    arguments: '-c $(buildConfiguration) --no-restore'
 
 - task: DotNetCoreCLI@2
   displayName: 'Publish'
   inputs:
     command: publish
     zipAfterPublish: false
+    configuration: $(buildConfiguration)
     projects: 'BlazorGrid.Demo/BlazorGrid.Demo.csproj'
-    arguments: '-c $(Build.Configuration) -o $(Build.ArtifactStagingDirectory)'
+    arguments: '-o $(Build.ArtifactStagingDirectory)'
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish'
