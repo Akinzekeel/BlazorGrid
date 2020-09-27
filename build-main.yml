@@ -31,18 +31,32 @@ steps:
 - task: NuGetToolInstaller@1
 
 - task: DotNetCoreCLI@2
-  displayName: 'Build'
+  displayName: 'Restore BlazorGrid'
+  inputs:
+    command: restore
+    projects: 'BlazorGrid/BlazorGrid.csproj'
+    arguments: '-c $(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Restore BlazorGrid.Tests'
+  inputs:
+    command: restore
+    projects: 'BlazorGrid.Tests/BlazorGrid.Tests.csproj'
+    arguments: '-c $(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Build BlazorGrid'
   inputs:
     command: 'build'
     projects: 'BlazorGrid/BlazorGrid.csproj'
-    arguments: '-c $(buildConfiguration) -o $(Build.ArtifactStagingDirectory)'
+    arguments: '-c $(buildConfiguration) -o $(Build.ArtifactStagingDirectory) --no-restore'
 
 - task: DotNetCoreCLI@2
   displayName: 'Test'
   inputs:
     command: 'test'
     projects: 'BlazorGrid.Tests/BlazorGrid.Tests.csproj'
-    arguments: ''
+    arguments: '-c $(buildConfiguration) --no-restore'
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish artifacts'
