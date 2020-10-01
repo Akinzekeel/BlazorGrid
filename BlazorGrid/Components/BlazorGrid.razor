@@ -2,102 +2,105 @@
 <CascadingValue Value="this" IsFixed="true">
     @ChildContent(GetEmptyRow())
 </CascadingValue>
-<div @attributes="FinalAttributes">
-    <div class="grid-scrollview" style="grid-template-columns: @GridColumns">
-        <header class="grid-row grid-header">
-            @foreach (var col in ColumnsList)
-            {
-                <div @onclick="() => TryApplySorting(col)" class="@col.CssClass">
-                    @if (!col.AlignRight)
-                    {
-                        @col.GetCaptionOrDefault()
-                    }
-                    @if (IsFilteredBy(col))
-                    {
-                        <span class="blazor-grid-filter-icon active" />
-                    }
-                    else
-                    {
-                        <span class="@col.SortIconCssClass()" />
-                    }
-                    @if (col.AlignRight)
-                    {
-                        @col.GetCaptionOrDefault()
-                    }
-                </div>
-            }
-        </header>
-        @if (LoadingError != null)
-        {
-            <div style="grid-column: span @ColumnsList.Count()">
-                <div class="@Config.Styles.PlaceholderWrapperClass">
-                    <div class="@Config.Styles.ErrorHeadingClass">
-                        <h2>@Resources.LoadingError_Title</h2>
-                    </div>
-                    <div class="@Config.Styles.ErrorSubHeadingClass">@Resources.LoadingError_Text</div>
-                    <small class="@Config.Styles.ErrorTextClass">@LoadingError.Message</small>
-                    @if (System.Diagnostics.Debugger.IsAttached)
-                    {
-                        <code style="line-break: auto">@LoadingError.StackTrace</code>
-                    }
-                </div>
-            </div>
-        }
-        else if (Rows == null)
-        {
-            <div style="grid-column: span @ColumnsList.Count()">
-                <div class="@Config.Styles.PlaceholderWrapperClass">
-                    <div class="@Config.Styles.LoadingSpinnerOuterClass">
-                        <div class="@Config.Styles.LoadingSpinnerInnerClass"></div>
-                    </div>
-                    <div class="@Config.Styles.LoadingTextClass">@Resources.Loading_Text</div>
-                </div>
-            </div>
-        }
-        else if (Rows.Count == 0)
-        {
-            <div style="grid-column: span @ColumnsList.Count()">
-                <div class="@Config.Styles.PlaceholderWrapperClass">
-                    <h5 class="@Config.Styles.NoDataHeadingClass">@Resources.Empty_Title</h5>
-                    @if (string.IsNullOrEmpty(QueryDebounced))
-                    {
-                        <p class="@Config.Styles.NoDataTextClass">@Resources.Empty_Text</p>
-                    }
-                    else
-                    {
-                        <p class="@Config.Styles.NoDataTextClass">@Resources.Empty_Text_Filtered</p>
-                    }
-                </div>
-            </div>
-        }
-        else
-        {
-            for (int i = 0; i < Rows.Count; i++)
-            {
-                var index = i;
-                var cls = "grid-row";
-
-                if (OnClick.HasDelegate || Href != null)
+@if (ColumnsList.Any())
+{
+    <div @attributes="FinalAttributes">
+        <div class="grid-scrollview" style="grid-template-columns: @GridColumns">
+            <header class="grid-row grid-header">
+                @foreach (var col in ColumnsList)
                 {
-                    cls += " " + Config.Styles.RowClickableClass;
+                    <div @onclick="() => TryApplySorting(col)" class="@col.CssClass">
+                        @if (!col.AlignRight)
+                        {
+                            @col.GetCaptionOrDefault()
+                        }
+                        @if (IsFilteredBy(col))
+                        {
+                            <span class="blazor-grid-filter-icon active" />
+                        }
+                        else
+                        {
+                            <span class="@col.SortIconCssClass()" />
+                        }
+                        @if (col.AlignRight)
+                        {
+                            @col.GetCaptionOrDefault()
+                        }
+                    </div>
                 }
-                <div class="@cls" @onclick="_ => OnRowClicked(index)">
-                    @ChildContent(Rows.ElementAt(index))
+            </header>
+            @if (LoadingError != null)
+            {
+                <div style="grid-column: span @ColumnsList.Count()">
+                    <div class="@Config.Styles.PlaceholderWrapperClass">
+                        <div class="@Config.Styles.ErrorHeadingClass">
+                            <h2>@Resources.LoadingError_Title</h2>
+                        </div>
+                        <div class="@Config.Styles.ErrorSubHeadingClass">@Resources.LoadingError_Text</div>
+                        <small class="@Config.Styles.ErrorTextClass">@LoadingError.Message</small>
+                        @if (System.Diagnostics.Debugger.IsAttached)
+                        {
+                            <code style="line-break: auto">@LoadingError.StackTrace</code>
+                        }
+                    </div>
                 </div>
             }
-            <div style="grid-column: span @ColumnsList.Count()">
-                <div class="@Config.Styles.FooterWrapperClass">
-                    <div class="@Config.Styles.FooterTextClass">@string.Format(Resources.Footer_RowCount, Rows.Count, TotalCount)</div>
-                    @if (Rows.Count < TotalCount)
-                    {
-                        <button disabled="@IsLoadingMore"
-                                class="@Config.Styles.FooterButtonClass @(IsLoadingMore ? Config.Styles.FooterButtonLoadingClass : "")"
-                                @onclick="() => LoadMoreAsync()">
-                            @Resources.Footer_LoadMoreBtnLabel
-                        </button>
-                    }
+            else if (Rows == null)
+            {
+                <div style="grid-column: span @ColumnsList.Count()">
+                    <div class="@Config.Styles.PlaceholderWrapperClass">
+                        <div class="@Config.Styles.LoadingSpinnerOuterClass">
+                            <div class="@Config.Styles.LoadingSpinnerInnerClass"></div>
+                        </div>
+                        <div class="@Config.Styles.LoadingTextClass">@Resources.Loading_Text</div>
+                    </div>
                 </div>
-            </div>
-        }
+            }
+            else if (Rows.Count == 0)
+            {
+                <div style="grid-column: span @ColumnsList.Count()">
+                    <div class="@Config.Styles.PlaceholderWrapperClass">
+                        <h5 class="@Config.Styles.NoDataHeadingClass">@Resources.Empty_Title</h5>
+                        @if (string.IsNullOrEmpty(QueryDebounced))
+                        {
+                            <p class="@Config.Styles.NoDataTextClass">@Resources.Empty_Text</p>
+                        }
+                        else
+                        {
+                            <p class="@Config.Styles.NoDataTextClass">@Resources.Empty_Text_Filtered</p>
+                        }
+                    </div>
+                </div>
+            }
+            else
+            {
+                for (int i = 0; i < Rows.Count; i++)
+                {
+                    var index = i;
+                    var cls = "grid-row";
+
+                    if (OnClick.HasDelegate || Href != null)
+                    {
+                        cls += " " + Config.Styles.RowClickableClass;
+                    }
+                    <div class="@cls" @onclick="_ => OnRowClicked(index)">
+                        @ChildContent(Rows.ElementAt(index))
+                    </div>
+                }
+                <div style="grid-column: span @ColumnsList.Count()">
+                    <div class="@Config.Styles.FooterWrapperClass">
+                        <div class="@Config.Styles.FooterTextClass">@string.Format(Resources.Footer_RowCount, Rows.Count, TotalCount)</div>
+                        @if (Rows.Count < TotalCount)
+                        {
+                            <button disabled="@IsLoadingMore"
+                                    class="@Config.Styles.FooterButtonClass @(IsLoadingMore ? Config.Styles.FooterButtonLoadingClass : "")"
+                                    @onclick="() => LoadMoreAsync()">
+                                @Resources.Footer_LoadMoreBtnLabel
+                            </button>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
     </div>
-</div>
+}

@@ -23,7 +23,7 @@ namespace BlazorGrid.Components
 
         protected override bool ShouldRender()
         {
-            return false;
+            return !IsRegistered;
         }
 
         private IDictionary<string, object> FinalAttributes
@@ -90,5 +90,10 @@ namespace BlazorGrid.Components
         public string GetCaptionOrDefault() => Caption;
 
         public string SortIconCssClass() => null;
+
+        public void Unlink()
+        {
+            IsRegistered = false;
+        }
     }
 }

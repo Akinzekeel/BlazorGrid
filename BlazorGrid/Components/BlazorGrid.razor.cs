@@ -69,7 +69,7 @@ namespace BlazorGrid.Components
         public string OrderByPropertyName { get; private set; }
         public bool OrderByDescending { get; private set; }
         private int TotalCount { get; set; }
-        private IList<IGridCol> ColumnsList { get; set; } = new List<IGridCol>();
+        private IList<IGridCol> ColumnsList = new List<IGridCol>();
         public IEnumerable<IGridCol> Columns => ColumnsList;
         private Exception LoadingError { get; set; }
 
@@ -315,6 +315,11 @@ namespace BlazorGrid.Components
 
             if (p.ContainsKey(nameof(ChildContent)))
             {
+                foreach (var c in ColumnsList)
+                {
+                    c.Unlink();
+                }
+
                 ColumnsList.Clear();
             }
 

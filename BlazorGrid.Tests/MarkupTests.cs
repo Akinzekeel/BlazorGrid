@@ -1,4 +1,6 @@
+using AngleSharp.Css.Dom;
 using BlazorGrid.Abstractions;
+using BlazorGrid.Abstractions.Filters;
 using BlazorGrid.Components;
 using BlazorGrid.Config;
 using BlazorGrid.Config.Styles;
@@ -6,11 +8,13 @@ using BlazorGrid.Interfaces;
 using BlazorGrid.Tests.Mock;
 using Bunit;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace BlazorGrid.Tests
@@ -26,22 +30,40 @@ namespace BlazorGrid.Tests
         [TestInitialize]
         public void Initialize()
         {
+            var row = new MyDto { Name = "Unit Test" };
+
             var provider = new Mock<IGridProvider>();
-            Services.AddTransient(_ => provider.Object);
-            Services.AddSingleton<IBlazorGridConfig>(_ => new DefaultConfig { Styles = new SpectreStyles() });
-            Services.AddTransient<NavigationManager>(_ => new MockNav());
+
+            provider.Setup(x => x.GetAsync<MyDto>(
+                It.IsAny<string>(),
+                It.IsAny<int>(),
+                It.IsAny<int>(),
+                It.IsAny<string>(),
+                It.IsAny<bool>(),
+                It.IsAny<string>(),
+                It.IsAny<FilterDescriptor>()
+            )).ReturnsAsync(new BlazorGridResult<MyDto>
+            {
+                TotalCount = 1,
+                Data = new List<MyDto> { row }
+            }).Verifiable();
+
+            Services.AddSingleton(provider.Object);
+            Services.AddSingleton<IBlazorGridConfig>(new DefaultConfig { Styles = new SpectreStyles() });
+            Services.AddSingleton<NavigationManager>(new MockNav());
         }
 
         [TestMethod]
         public void Has_Outer_Classes()
         {
-            var noData = new List<MyDto>();
-
             var grid = RenderComponent<BlazorGrid<MyDto>>(
-                Parameter(nameof(BlazorGrid<MyDto>.Rows), noData),
                 Template<MyDto>(nameof(ChildContent), (dto) => (b) =>
                 {
+                    Expression<Func<string>> f = () => dto.Name;
 
+                    b.OpenComponent<GridCol<string>>(0);
+                    b.AddAttribute(1, nameof(GridCol<string>.For), f);
+                    b.CloseComponent();
                 })
             );
 
@@ -52,14 +74,16 @@ namespace BlazorGrid.Tests
         [TestMethod]
         public void Can_Merge_ClassNames()
         {
-            var noData = new List<MyDto>();
-
             var grid = RenderComponent<BlazorGrid<MyDto>>(
                 Parameter("class", "my-custom-class"),
-                Parameter(nameof(BlazorGrid<MyDto>.Rows), noData),
                 Template<MyDto>(nameof(ChildContent), (dto) => (b) =>
                 {
 
+                    Expression<Func<string>> f = () => dto.Name;
+
+                    b.OpenComponent<GridCol<string>>(0);
+                    b.AddAttribute(1, nameof(GridCol<string>.For), f);
+                    b.CloseComponent();
                 })
             );
 
@@ -70,14 +94,15 @@ namespace BlazorGrid.Tests
         [TestMethod]
         public void Can_Have_Custom_Attributes()
         {
-            var noData = new List<MyDto>();
-
             var grid = RenderComponent<BlazorGrid<MyDto>>(
                 Parameter("data-custom", "my-custom-value"),
-                Parameter(nameof(BlazorGrid<MyDto>.Rows), noData),
                 Template<MyDto>(nameof(ChildContent), (dto) => (b) =>
                 {
+                    Expression<Func<string>> f = () => dto.Name;
 
+                    b.OpenComponent<GridCol<string>>(0);
+                    b.AddAttribute(1, nameof(GridCol<string>.For), f);
+                    b.CloseComponent();
                 })
             );
 
@@ -89,13 +114,14 @@ namespace BlazorGrid.Tests
         [TestMethod]
         public void Has_Inner_Classes()
         {
-            var noData = new List<MyDto>();
-
             var grid = RenderComponent<BlazorGrid<MyDto>>(
-                Parameter(nameof(BlazorGrid<MyDto>.Rows), noData),
                 Template<MyDto>(nameof(ChildContent), (dto) => (b) =>
                 {
+                    Expression<Func<string>> f = () => dto.Name;
 
+                    b.OpenComponent<GridCol<string>>(0);
+                    b.AddAttribute(1, nameof(GridCol<string>.For), f);
+                    b.CloseComponent();
                 })
             );
 
@@ -164,6 +190,115 @@ namespace BlazorGrid.Tests
 
             var th = grid.Find(".grid-header > *");
             Assert.AreEqual("sortable", th.ClassName);
+        }
+
+        [TestMethod]
+        public void Can_Modify_Columns()
+        {
+            var row = new MyDto();
+            Expression<Func<string>> colFor = () => row.Name;
+
+            var grid = RenderComponent<BlazorGrid<MyDto>>(
+                Template<MyDto>(nameof(ChildContent), (context) => (RenderTreeBuilder builder) =>
+                {
+                    builder.OpenComponent<GridCol<string>>(0);
+                    builder.AddAttribute(1, nameof(GridCol<string>.For), colFor);
+                    builder.AddAttribute(2, "Caption", "Name");
+                    builder.CloseComponent();
+
+                    builder.OpenComponent<GridCol<string>>(3);
+                    builder.AddAttribute(4, nameof(GridCol<string>.For), colFor);
+                    builder.AddAttribute(5, "Caption", "Also name");
+                    builder.CloseComponent();
+                })
+            );
+
+            // Verify that two columns are rendered
+            var rowElement = grid.FindAll(".grid-row").First();
+            rowElement.MarkupMatches("<header class=\"grid-row grid-header\">" +
+                "<div class=\"sortable\">Name<span class=\"blazor-grid-sort-icon\"></span></div>" +
+                "<div class=\"sortable\">Also name<span class=\"blazor-grid-sort-icon\"></span></div>" +
+                "</header>"
+            );
+
+            var colspan = grid.Find(".grid-header + .grid-row + div");
+            var columnStyle = colspan.GetStyle().First(x => x.Name == "grid-column-start");
+            Assert.AreEqual("span 2", columnStyle.Value);
+
+            // Change the ChildContent to only contain one column
+            grid.SetParametersAndRender(
+                Template<MyDto>(nameof(ChildContent), (context) => (RenderTreeBuilder builder) =>
+                {
+                    builder.OpenComponent<GridCol<string>>(0);
+                    builder.AddAttribute(1, nameof(GridCol<string>.For), colFor);
+                    builder.AddAttribute(2, "Caption", "Name");
+                    builder.CloseComponent();
+                })
+            );
+
+            // Verify that only one column is rendered
+            rowElement = grid.FindAll(".grid-row").First();
+            rowElement.MarkupMatches("<header class=\"grid-row grid-header\">" +
+                "<div class=\"sortable\">Name<span class=\"blazor-grid-sort-icon\"></span></div>" +
+                "</header>"
+            );
+
+            colspan = grid.Find(".grid-header + .grid-row + div");
+            columnStyle = colspan.GetStyle().First(x => x.Name == "grid-column-start");
+            Assert.AreEqual("span 1", columnStyle.Value);
+        }
+
+        [TestMethod]
+        public void Can_Set_Custom_Attributes()
+        {
+            var row = new MyDto { Name = "Unit test" };
+            Expression<Func<string>> colFor = () => row.Name;
+
+            var grid = RenderComponent<BlazorGrid<MyDto>>(
+                Template<MyDto>(nameof(ChildContent), (context) => (RenderTreeBuilder builder) =>
+                {
+                    builder.OpenComponent<GridCol<string>>(0);
+                    builder.AddAttribute(1, nameof(GridCol<string>.For), colFor);
+                    builder.AddAttribute(2, "title", "Hello world");
+                    builder.CloseComponent();
+                })
+            );
+
+            var rowElement = grid.FindAll(".grid-row").Last();
+            rowElement.MarkupMatches("<div class=\"grid-row\"><div title=\"Hello world\">Unit test</div></div>");
+        }
+
+        [TestMethod]
+        public void Header_Ignores_Custom_Attributes()
+        {
+            var row = new MyDto { Name = "Unit test" };
+            Expression<Func<string>> colFor = () => row.Name;
+
+            var grid = RenderComponent<BlazorGrid<MyDto>>(
+                Template<MyDto>(nameof(ChildContent), (context) => (RenderTreeBuilder builder) =>
+                {
+                    builder.OpenComponent<GridCol<string>>(0);
+                    builder.AddAttribute(1, nameof(GridCol<string>.For), colFor);
+                    builder.AddAttribute(2, "title", "Hello world");
+                    builder.CloseComponent();
+                })
+            );
+
+            var rowElement = grid.FindAll(".grid-row").First();
+            rowElement.MarkupMatches("<header class=\"grid-row grid-header\"><div class=\"sortable\"><span class=\"blazor-grid-sort-icon\"></span></div></header>");
+        }
+
+        [TestMethod]
+        public void No_Columns_Does_Not_Render_Anything()
+        {
+            var grid = RenderComponent<BlazorGrid<MyDto>>(
+                Template<MyDto>(nameof(ChildContent), (context) => (RenderTreeBuilder b) =>
+                {
+
+                })
+            );
+
+            grid.MarkupMatches("");
         }
     }
 }

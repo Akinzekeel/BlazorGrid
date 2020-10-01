@@ -28,5 +28,6 @@ namespace BlazorGrid.Interfaces
         /// </summary>
         /// <returns>A caption or null</returns>
         string GetCaptionOrDefault();
+        void Unlink();
     }
 }
