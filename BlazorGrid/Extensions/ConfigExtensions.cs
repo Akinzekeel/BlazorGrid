@@ -26,11 +26,6 @@ namespace BlazorGrid.Extensions
 
                 configuration?.Invoke(config);
 
-                if (config.Styles == null)
-                {
-                    config.Styles = new BootstrapStyles();
-                }
-
                 return config;
             });
         }
