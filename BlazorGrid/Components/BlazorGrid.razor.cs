@@ -26,7 +26,6 @@ namespace BlazorGrid.Components
         [Parameter] public int PageSize { get; set; } = DefaultPageSize;
         [Parameter] public TRow EmptyRow { get; set; }
 
-        private bool PauseRendering;
         private bool IsLoadingMore { get; set; }
 
         private string _Query;
@@ -124,11 +123,6 @@ namespace BlazorGrid.Components
             }
         }
 
-        protected override bool ShouldRender()
-        {
-            return !PauseRendering;
-        }
-
         protected override void OnAfterRender(bool firstRender)
         {
             if (firstRender)
@@ -211,22 +205,21 @@ namespace BlazorGrid.Components
             }
         }
 
-        public Task TryApplySorting<T>(Expression<Func<T>> property)
+        public Task TryApplySorting(IGridCol column)
         {
-            if (property == null)
+            if (column.PropertyName == null)
             {
                 return Task.CompletedTask;
             }
 
-            var prop = GetPropertyName(property);
-
-            if (OrderByPropertyName == prop)
+            // Change direction if it's already sorted
+            if (OrderByPropertyName == column.PropertyName)
             {
                 OrderByDescending = !OrderByDescending;
             }
             else
             {
-                OrderByPropertyName = prop;
+                OrderByPropertyName = column.PropertyName;
                 OrderByDescending = false;
             }
 
@@ -242,7 +235,9 @@ namespace BlazorGrid.Components
         {
             get
             {
-                var sizes = ColumnsList.Select(col => col.FitToContent ? "max-content" : "auto");
+                var sizes = ColumnsList
+                    .Select(col => col.FitToContent ? "max-content" : "auto");
+
                 return string.Join(' ', sizes);
             }
         }
@@ -261,29 +256,21 @@ namespace BlazorGrid.Components
 
         private async Task OnRowClicked(int index)
         {
-            PauseRendering = true;
             LastClickedRowIndex = index;
 
-            try
-            {
-                var r = Rows.ElementAt(index);
-                var onClickUrl = Href?.Invoke(r);
+            var r = Rows.ElementAt(index);
+            var onClickUrl = Href?.Invoke(r);
 
-                if (onClickUrl != null)
-                {
-                    Nav.NavigateTo(onClickUrl);
-                }
-                else if (OnClick.HasDelegate)
-                {
-                    await OnClick.InvokeAsync(r);
-                }
-
-                OnAfterRowClicked?.Invoke(this, index);
-            }
-            finally
+            if (onClickUrl != null)
             {
-                PauseRendering = false;
+                Nav.NavigateTo(onClickUrl);
             }
+            else if (OnClick.HasDelegate)
+            {
+                await OnClick.InvokeAsync(r);
+            }
+
+            OnAfterRowClicked?.Invoke(this, index);
         }
 
         public void Add(IGridCol col)
@@ -292,26 +279,46 @@ namespace BlazorGrid.Components
             StateHasChanged();
         }
 
-        public bool IsFilteredBy<T>(Expression<Func<T>> property)
+        public bool IsFilteredBy(IGridCol column)
         {
-            if (property == null)
+            if (column.PropertyName == null)
             {
                 return false;
             }
 
-            var prop = GetPropertyName(property);
-            return Filter?.Filters.Any(x => x.Property == prop) == true;
+            return Filter?.Filters.Any(x => x.Property == column.PropertyName) == true;
         }
 
-        public bool IsSortedBy<T>(Expression<Func<T>> property)
+        public bool IsSortedBy(IGridCol column)
         {
-            if (property == null)
+            if (column.PropertyName == null)
             {
                 return false;
             }
 
-            var prop = GetPropertyName(property);
-            return OrderByPropertyName == prop;
+            return OrderByPropertyName == column.PropertyName;
+        }
+
+        /// <summary>
+        /// Generate an empty row object. This is used when writing
+        /// the grid header.
+        /// </summary>
+        /// <returns>A new row object</returns>
+        private TRow GetEmptyRow()
+        {
+            return EmptyRow ?? Activator.CreateInstance<TRow>();
+        }
+
+        public override Task SetParametersAsync(ParameterView parameters)
+        {
+            var p = parameters.ToDictionary();
+
+            if (p.ContainsKey(nameof(ChildContent)))
+            {
+                ColumnsList.Clear();
+            }
+
+            return base.SetParametersAsync(parameters);
         }
 
         public void Dispose()
@@ -326,7 +333,5 @@ namespace BlazorGrid.Components
                 }
             }
         }
-
-        private TRow GetEmptyRow() => EmptyRow ?? Activator.CreateInstance<TRow>();
     }
 }

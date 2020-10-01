@@ -19,6 +19,7 @@ namespace BlazorGrid.Interfaces
         bool IsFilterable { get; }
         Expression For { get; }
         string PropertyName { get; }
+        string SortIconCssClass();
 
         /// <summary>
         /// Returns the Caption property if it is not null,

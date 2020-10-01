@@ -1,10 +1,31 @@
 @typeparam TRow
+<CascadingValue Value="this" IsFixed="true">
+    @ChildContent(GetEmptyRow())
+</CascadingValue>
 <div @attributes="FinalAttributes">
     <div class="grid-scrollview" style="grid-template-columns: @GridColumns">
         <header class="grid-row grid-header">
-            <CascadingValue Value="this" IsFixed="true">
-                @ChildContent(GetEmptyRow())
-            </CascadingValue>
+            @foreach (var col in ColumnsList)
+            {
+                <div @onclick="() => TryApplySorting(col)" class="@col.CssClass">
+                    @if (!col.AlignRight)
+                    {
+                        @col.GetCaptionOrDefault()
+                    }
+                    @if (IsFilteredBy(col))
+                    {
+                        <span class="blazor-grid-filter-icon active" />
+                    }
+                    else
+                    {
+                        <span class="@col.SortIconCssClass()" />
+                    }
+                    @if (col.AlignRight)
+                    {
+                        @col.GetCaptionOrDefault()
+                    }
+                </div>
+            }
         </header>
         @if (LoadingError != null)
         {
@@ -54,10 +75,14 @@
             for (int i = 0; i < Rows.Count; i++)
             {
                 var index = i;
-                var r = Rows.ElementAt(i);
-                var clickable = OnClick.HasDelegate || Href != null;
-                <div class="grid-row @(clickable ? Config.Styles.RowClickableClass : "")" @onclick="_ => OnRowClicked(index)">
-                    @ChildContent(r)
+                var cls = "grid-row";
+
+                if (OnClick.HasDelegate || Href != null)
+                {
+                    cls += " " + Config.Styles.RowClickableClass;
+                }
+                <div class="@cls" @onclick="_ => OnRowClicked(index)">
+                    @ChildContent(Rows.ElementAt(index))
                 </div>
             }
             <div style="grid-column: span @ColumnsList.Count()">

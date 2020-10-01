@@ -13,24 +13,3 @@
         }
     </div>
 }
-else
-{
-    <div @onclick="_ => Parent.TryApplySorting(For)" class="@CssClass">
-        @if (!AlignRight)
-        {
-            @GetCaptionOrDefault()
-        }
-        @if (IsFiltered)
-        {
-            <span class="blazor-grid-filter-icon @(IsFiltered ? "active" : "")" />
-        }
-        else
-        {
-            <span class="@SortIconCssClass()" />
-        }
-        @if (AlignRight)
-        {
-            @GetCaptionOrDefault()
-        }
-    </div>
-}

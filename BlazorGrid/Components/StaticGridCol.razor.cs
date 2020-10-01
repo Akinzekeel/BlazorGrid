@@ -1,5 +1,6 @@
 ﻿using BlazorGrid.Interfaces;
 using Microsoft.AspNetCore.Components;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -19,6 +20,11 @@ namespace BlazorGrid.Components
         string IGridCol.PropertyName => null;
 
         private bool IsRegistered;
+
+        protected override bool ShouldRender()
+        {
+            return false;
+        }
 
         private IDictionary<string, object> FinalAttributes
         {
@@ -82,5 +88,7 @@ namespace BlazorGrid.Components
         }
 
         public string GetCaptionOrDefault() => Caption;
+
+        public string SortIconCssClass() => null;
     }
 }

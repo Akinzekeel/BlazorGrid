@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace BlazorGrid.Components
 {
@@ -16,7 +17,25 @@ namespace BlazorGrid.Components
         [Parameter] public bool FitToContent { get; set; }
         [Parameter] public bool AlignRight { get; set; }
 
-        public string PropertyName { get; private set; }
+        private bool IsPropertyNameQueried;
+        private string PropertyNameCached;
+        public string PropertyName
+        {
+            get
+            {
+                if (!IsPropertyNameQueried)
+                {
+                    IsPropertyNameQueried = true;
+
+                    if (For != null)
+                    {
+                        PropertyNameCached = Parent.GetPropertyName(For);
+                    }
+                }
+
+                return PropertyNameCached;
+            }
+        }
 
         private Expression<Func<T>> _For;
         private Func<T> _ForCompiled;
@@ -28,9 +47,12 @@ namespace BlazorGrid.Components
             {
                 _For = value;
                 _ForCompiled = _For?.Compile();
-                PropertyName = For == null ? null : Parent?.GetPropertyName(For);
+
+                IsPropertyNameQueried = false;
+                PropertyNameCached = null;
             }
         }
+
         [Parameter(CaptureUnmatchedValues = true)] public IDictionary<string, object> Attributes { get; set; }
 
         Expression IGridCol.For => For;
@@ -45,10 +67,12 @@ namespace BlazorGrid.Components
         {
             get
             {
-                var attr = new Dictionary<string, object>
+                var attr = new Dictionary<string, object>();
+
+                if (!string.IsNullOrEmpty(CssClass))
                 {
-                    { "class", CssClass }
-                };
+                    attr.Add("class", CssClass);
+                }
 
                 if (Attributes != null)
                 {
@@ -70,10 +94,18 @@ namespace BlazorGrid.Components
             get
             {
                 var cls = new List<string>{
-                    AlignRight ? "text-right" : "",
-                    "sortable",
-                    IsSorted ? "sorted" : ""
+                    AlignRight ? "text-right" : ""
                 };
+
+                if (Parent != null)
+                {
+                    cls.Add("sortable");
+
+                    if (IsSorted)
+                    {
+                        cls.Add("sorted");
+                    }
+                }
 
                 if (Attributes != null)
                 {
@@ -93,10 +125,8 @@ namespace BlazorGrid.Components
             }
         }
 
-        private bool IsSorted => Parent?.IsSortedBy(For) == true;
-
+        private bool IsSorted => Parent?.IsSortedBy(this) == true;
         public bool IsFilterable => true;
-        private bool IsFiltered => Parent?.IsFilteredBy(For) == true;
 
         protected override void OnParametersSet()
         {
@@ -118,7 +148,7 @@ namespace BlazorGrid.Components
             return Caption;
         }
 
-        private string SortIconCssClass()
+        public string SortIconCssClass()
         {
             var cls = "blazor-grid-sort-icon";
 
@@ -137,6 +167,11 @@ namespace BlazorGrid.Components
             }
 
             return cls;
+        }
+
+        protected override bool ShouldRender()
+        {
+            return false;
         }
     }
 }
