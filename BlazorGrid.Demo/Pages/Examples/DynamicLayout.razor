@@ -1,0 +1,79 @@
+﻿@page "/examples/dynamic-layout"
+@layout ExampleLayout
+<h1>Dynamic layout</h1>
+<p>There are cases where you may want to dynamically change the columns. For example, if you are using the grid inside a container which the user can minimize, then it may be a good idea to hide one or more columns.</p>
+<p>BlazorGrid supports such scenarios as you can see here. You can click the <i>Toggle avatars</i> button to hide or show the first column.</p>
+<Tabs>
+    <Tab Caption="Result" class="p-3">
+        <div class="row">
+            <div class="col-9">
+                <BlazorGrid TRow="Employee" SourceUrl="data/employees.json" style="max-height: 340px;">
+                    @if (ShowAvatars)
+                    {
+                        <StaticGridCol FitToContent="true">
+                            <img src="@context.Avatar" style="width: 20px; height: 20px;" />
+                        </StaticGridCol>
+                    }
+                    <GridCol For="() => context.Id" FitToContent="true" />
+                    <GridCol For="() => context.FirstName" />
+                    <GridCol For="() => context.LastName" />
+                    <GridCol For="() => context.Email">
+                        <a href="mailto:@context.Email">@context.Email</a>
+                    </GridCol>
+                </BlazorGrid>
+            </div>
+            <div class="col-3">
+                <button class="btn btn-secondary"
+                        @onclick="() => ShowAvatars =! ShowAvatars">
+                    Toggle avatars
+                </button>
+            </div>
+        </div>
+    </Tab>
+    <Tab Caption="Code" class="p-3">
+        <h6>Razor</h6>
+        <pre class="pre-scrollable"><code>&lt;div class="row"&gt;
+    &lt;div class="col-9 overflow-auto" style="max-height: 340px;"&gt;
+        &lt;BlazorGrid TRow="Employee" SourceUrl="data/employees.json"&gt;
+            @@if (ShowAvatars)
+            {
+                &lt;StaticGridCol FitToContent="true"&gt;
+                    &lt;img src="@@context.Avatar" style="width: 20px; height: 20px;" /&gt;
+                &lt;/StaticGridCol&gt;
+            }
+            &lt;GridCol For="() =&gt; context.Id" FitToContent="true" /&gt;
+            &lt;GridCol For="() =&gt; context.FirstName" /&gt;
+            &lt;GridCol For="() =&gt; context.LastName" /&gt;
+            &lt;GridCol For="() =&gt; context.Email"&gt;
+                &lt;a href="mailto:@@context.Email"&gt;@@context.Email&lt;/a&gt;
+            &lt;/GridCol&gt;
+        &lt;/BlazorGrid&gt;
+    &lt;/div&gt;
+    &lt;div class="col-3"&gt;
+        &lt;button class="btn btn-secondary"
+                @@onclick="() =&gt; ShowAvatars =! ShowAvatars"&gt;
+            Toggle avatars
+        &lt;/button&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+@@code
+{
+    private bool ShowAvatars { get; set; } = true;
+
+    private void ToggleAvatars()
+    {
+        ShowAvatars = !ShowAvatars;
+    }
+}</code></pre>
+    </Tab>
+</Tabs>
+@code
+{
+    private bool ShowAvatars { get; set; } = true;
+
+    private void ToggleAvatars()
+    {
+        ShowAvatars = !ShowAvatars;
+    }
+}
