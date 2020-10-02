@@ -1,8 +1,6 @@
-using BlazorGrid.Abstractions;
 using BlazorGrid.Config.Styles;
 using BlazorGrid.Demo.Providers;
 using BlazorGrid.Extensions;
-using BlazorGrid.Providers;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using System;

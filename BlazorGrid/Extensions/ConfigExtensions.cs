@@ -1,6 +1,5 @@
 ﻿using BlazorGrid.Abstractions;
 using BlazorGrid.Config;
-using BlazorGrid.Config.Styles;
 using BlazorGrid.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using System;
