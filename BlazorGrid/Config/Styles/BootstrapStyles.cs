@@ -13,8 +13,8 @@ namespace BlazorGrid.Config.Styles
         public string ErrorTextClass => "d-block text-danger small";
         public string NoDataHeadingClass => "h6 text-muted";
         public string NoDataTextClass => "text-muted small";
-        public string FooterWrapperClass => "p-3 text-center";
-        public string FooterTextClass => "text-muted my-3";
+        public string FooterWrapperClass => "m-5 text-center";
+        public string FooterTextClass => "text-muted mb-3";
         public string FooterButtonClass => "btn btn-secondary";
         public string FooterButtonLoadingClass => "";
         public string RowClickableClass => "clickable";
