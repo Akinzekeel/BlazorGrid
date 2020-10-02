@@ -11,8 +11,8 @@
 </div>
 
 <Tabs>
-    <Tab Caption="Result" class="p-3 overflow-auto" style="max-height: 500px;">
-        <BlazorGrid Query="@FilterInput" TRow="Employee" SourceUrl="data/employees.json">
+    <Tab Caption="Result" class="p-3 overflow-auto">
+        <BlazorGrid Query="@FilterInput" TRow="Employee" SourceUrl="data/employees.json" style="max-height: 340px;">
             <StaticGridCol FitToContent="true">
                 <img src="@context.Avatar" style="width: 20px; height: 20px;" />
             </StaticGridCol>

@@ -5,8 +5,8 @@
 <p>For the purpose of this demo, all of the data is pulled from a static JSON file. Paging is handled by a custom provider which I wrote just for this demo.</p>
 <p>The captions of the columns are based on the <code>DisplayAttributes</code> of the <code>Employee</code> (row) class.</p>
 <Tabs>
-    <Tab Caption="Result" class="p-3 overflow-auto" style="max-height: 340px;">
-        <BlazorGrid TRow="Employee" SourceUrl="data/employees.json">
+    <Tab Caption="Result" class="p-3">
+        <BlazorGrid TRow="Employee" SourceUrl="data/employees.json" style="max-height: 340px;">
             <StaticGridCol FitToContent="true">
                 <img src="@context.Avatar" style="width: 20px; height: 20px;" />
             </StaticGridCol>

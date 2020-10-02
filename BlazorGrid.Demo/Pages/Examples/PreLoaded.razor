@@ -7,8 +7,8 @@
 <p>Pre loading data in this fashion is not ideal due to limited features and potentially worse performance, however it can be suitable for small amounts of data.</p>
 
 <Tabs>
-    <Tab Caption="Result" class="p-3 overflow-auto" style="max-height: 500px;">
-        <BlazorGrid Rows="Data" TRow="CultureInfo" EmptyRow="CultureInfo.CurrentCulture">
+    <Tab Caption="Result" class="p-3 overflow-auto">
+        <BlazorGrid Rows="Data" TRow="CultureInfo" EmptyRow="CultureInfo.CurrentCulture" style="max-height: 500px;">
             <StaticGridCol Caption="LCID">@context.LCID</StaticGridCol>
             <StaticGridCol Caption="ISO code">@context.ThreeLetterISOLanguageName</StaticGridCol>
             <StaticGridCol Caption="Display name">@context.DisplayName</StaticGridCol>
