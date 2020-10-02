@@ -3,20 +3,20 @@
 
 $bzg-cell-padding-x: $table-cell-padding !default;
 $bzg-cell-padding-y: $table-cell-padding !default;
-$bzg-cell-hover-bg: $table-hover-bg !default;
-$bzg-cell-hover-color: $table-hover-color !default;
-$bzg-cell-active-bg: $table-active-bg !default;
-$bzg-cell-active-color: $table-hover-color !default;
-$bzg-cell-border-bottom-width: $table-border-width !default;
-$bzg-cell-border-color: $table-border-color !default;
+$bzg-cell-hover-bg: $list-group-hover-bg !default;
+$bzg-cell-hover-color: $list-group-action-hover-color !default;
+$bzg-cell-active-bg: $list-group-action-active-bg !default;
+$bzg-cell-active-color: $list-group-action-active-color !default;
+$bzg-cell-border-bottom-width: $list-group-border-width !default;
+$bzg-cell-border-color: $list-group-border-color !default;
 
-$bzg-header-bg-color: $body-bg !default;
+$bzg-header-bg-color: $list-group-bg !default;
 $bzg-header-sort-icon-content: '‹›' !default;
 $bzg-header-sort-icon-font-size: $font-size-lg !default;
 $bzg-header-sort-icon-active-color: $primary !default;
 $bzg-header-filter-icon-color: $secondary !default;
 $bzg-header-cell-hover-bg: $bzg-cell-hover-bg !default;
-$bzg-header-cell-hover-color: $table-hover-color !default;
+$bzg-header-cell-hover-color: $primary !default;
 $bzg-header-cell-hover-left-border-width: 2px !default;
 
 @import 'blazorgrid.scss';
