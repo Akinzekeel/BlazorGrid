@@ -221,9 +221,15 @@ namespace BlazorGrid.Tests
                 "</header>"
             );
 
+            // Verify colspan
             var colspan = grid.Find(".grid-header + .grid-row + div");
             var columnStyle = colspan.GetStyle().First(x => x.Name == "grid-column-start");
             Assert.AreEqual("span 2", columnStyle.Value);
+
+            // Verify column sizes
+            var scroller = grid.Find(".grid-scrollview");
+            var scrollerStyle = scroller.GetStyle().First(x => x.Name == "grid-template-columns");
+            Assert.AreEqual("auto auto", scrollerStyle.Value);
 
             // Change the ChildContent to only contain one column
             grid.SetParametersAndRender(
@@ -243,9 +249,15 @@ namespace BlazorGrid.Tests
                 "</header>"
             );
 
+            // Verify colspan
             colspan = grid.Find(".grid-header + .grid-row + div");
             columnStyle = colspan.GetStyle().First(x => x.Name == "grid-column-start");
             Assert.AreEqual("span 1", columnStyle.Value);
+
+            // Verify column sizes
+            scroller = grid.Find(".grid-scrollview");
+            scrollerStyle = scroller.GetStyle().First(x => x.Name == "grid-template-columns");
+            Assert.AreEqual("auto", scrollerStyle.Value);
         }
 
         [TestMethod]
