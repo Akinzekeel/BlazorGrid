@@ -10,24 +10,40 @@ using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace BlazorGrid.Components
 {
     public partial class BlazorGrid<TRow> : IDisposable, IBlazorGrid where TRow : class
     {
+#if DEBUG
+        internal int RenderCount;
+#endif
         public const int DefaultPageSize = 25;
+        private readonly Type typeInfo = typeof(BlazorGrid<TRow>);
+        private static readonly string[] ObservableParameterNames = new string[]
+        {
+            nameof(SourceUrl),
+            nameof(Query),
+            nameof(OnClick),
+            nameof(Href),
+            nameof(Attributes),
+            nameof(Rows)
+        };
 
         [Inject] public IGridProvider Provider { get; set; }
         [Inject] public IBlazorGridConfig Config { get; set; }
         [Inject] public NavigationManager Nav { get; set; }
+
         [Parameter] public string SourceUrl { get; set; }
         [Parameter] public RenderFragment<TRow> ChildContent { get; set; }
         [Parameter] public int PageSize { get; set; } = DefaultPageSize;
         [Parameter] public TRow EmptyRow { get; set; }
 
+        private bool AreColumnsAdded;
+        private bool IgnoreRender;
         private bool IsLoadingMore { get; set; }
-
         private string _Query;
 
         [Parameter]
@@ -69,7 +85,7 @@ namespace BlazorGrid.Components
         public string OrderByPropertyName { get; private set; }
         public bool OrderByDescending { get; private set; }
         private int TotalCount { get; set; }
-        private IList<IGridCol> ColumnsList = new List<IGridCol>();
+        private readonly IList<IGridCol> ColumnsList = new List<IGridCol>();
         public IEnumerable<IGridCol> Columns => ColumnsList;
         private Exception LoadingError { get; set; }
 
@@ -133,7 +149,7 @@ namespace BlazorGrid.Components
                     OrderByDescending = DefaultOrderByDescending;
                 }
 
-                if (Rows == null)
+                if (Rows is null)
                 {
                     InvokeAsync(() => LoadAsync(true));
                 }
@@ -142,15 +158,27 @@ namespace BlazorGrid.Components
                 Filter.PropertyChanged += OnFilterChanged;
                 Filter.Filters.CollectionChanged += OnFilterCollectionChanged;
             }
+
+            if (AreColumnsAdded)
+            {
+                IgnoreRender = true;
+            }
+            else
+            {
+                // Now that the columns are processed, trigger another render
+                AreColumnsAdded = true;
+                StateHasChanged();
+            }
+
+#if DEBUG
+            RenderCount++;
+#endif
         }
 
         private void OnFilterCollectionChanged(object sender, NotifyCollectionChangedEventArgs e) => Reload();
         private void OnFilterChanged(object sender, PropertyChangedEventArgs e) => Reload();
 
-        public Task Reload()
-        {
-            return LoadAsync(true);
-        }
+        public Task Reload() => InvokeAsync(() => LoadAsync(true));
 
         private async Task LoadAsync(bool Initialize)
         {
@@ -166,11 +194,10 @@ namespace BlazorGrid.Components
 
             LoadingError = null;
             IsLoadingMore = true;
-            StateHasChanged();
 
             try
             {
-                var result = await Provider.GetAsync<TRow>(
+                var providerTask = Provider.GetAsync<TRow>(
                     SourceUrl,
                     Rows?.Count ?? 0,
                     PageSize,
@@ -179,6 +206,18 @@ namespace BlazorGrid.Components
                     QueryDebounced,
                     Filter
                 );
+
+                var delay = Task.Delay(100);
+
+                await Task.WhenAny(providerTask, delay);
+
+                if ((delay.IsCompleted && !providerTask.IsCompleted) || Initialize)
+                {
+                    IgnoreRender = false;
+                    StateHasChanged();
+                }
+
+                var result = await providerTask;
 
                 if (result != null)
                 {
@@ -193,14 +232,23 @@ namespace BlazorGrid.Components
                         Rows.AddRange(result.Data);
                     }
                 }
+                else
+                {
+                    Rows = null;
+                }
             }
-            catch (Exception x)
+            catch (InvalidOperationException)
+            {
+                throw;
+            }
+            catch (HttpRequestException x)
             {
                 LoadingError = x;
             }
             finally
             {
                 IsLoadingMore = false;
+                IgnoreRender = false;
                 StateHasChanged();
             }
         }
@@ -223,7 +271,7 @@ namespace BlazorGrid.Components
                 OrderByDescending = false;
             }
 
-            return LoadAsync(true);
+            return InvokeAsync(() => LoadAsync(true));
         }
 
         public string GetPropertyName<T>(Expression<Func<T>> property)
@@ -231,16 +279,9 @@ namespace BlazorGrid.Components
             return ExpressionHelper.GetPropertyName<TRow, T>(property);
         }
 
-        private string GridColumns
-        {
-            get
-            {
-                var sizes = ColumnsList
-                    .Select(col => col.FitToContent ? "max-content" : "auto");
-
-                return string.Join(' ', sizes);
-            }
-        }
+        private string GridColumns => ColumnsList
+            .Select(col => col.FitToContent ? "max-content" : "auto")
+            .Aggregate((a, b) => a + " " + b);
 
         public Task LoadMoreAsync()
         {
@@ -276,7 +317,6 @@ namespace BlazorGrid.Components
         public void Add(IGridCol col)
         {
             ColumnsList.Add(col);
-            StateHasChanged();
         }
 
         public bool IsFilteredBy(IGridCol column)
@@ -311,9 +351,25 @@ namespace BlazorGrid.Components
 
         public override Task SetParametersAsync(ParameterView parameters)
         {
+            IgnoreRender = true;
+
             var p = parameters.ToDictionary();
 
-            if (p.ContainsKey(nameof(ChildContent)))
+            foreach (var parameter in ObservableParameterNames)
+            {
+                if (!p.ContainsKey(parameter))
+                {
+                    continue;
+                }
+
+                if (!Equals(typeInfo.GetProperty(parameter), p[parameter]))
+                {
+                    IgnoreRender = false;
+                    break;
+                }
+            }
+
+            if (p.ContainsKey(nameof(ChildContent)) && !Equals(ChildContent, p[nameof(ChildContent)]))
             {
                 foreach (var c in ColumnsList)
                 {
@@ -321,9 +377,17 @@ namespace BlazorGrid.Components
                 }
 
                 ColumnsList.Clear();
+
+                IgnoreRender = false;
+                AreColumnsAdded = false;
             }
 
             return base.SetParametersAsync(parameters);
+        }
+
+        protected override bool ShouldRender()
+        {
+            return !IgnoreRender;
         }
 
         public void Dispose()

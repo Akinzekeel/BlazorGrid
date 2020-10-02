@@ -2,7 +2,7 @@
 <CascadingValue Value="this" IsFixed="true">
     @ChildContent(GetEmptyRow())
 </CascadingValue>
-@if (ColumnsList.Any())
+@if (AreColumnsAdded && ColumnsList.Any())
 {
     <div @attributes="FinalAttributes">
         <div class="grid-scrollview" style="grid-template-columns: @GridColumns">
