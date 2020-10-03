@@ -271,6 +271,8 @@ namespace BlazorGrid.Components
                 OrderByDescending = false;
             }
 
+            IgnoreRender = false;
+
             return InvokeAsync(() => LoadAsync(true));
         }
 

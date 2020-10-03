@@ -384,5 +384,54 @@ namespace BlazorGrid.Tests
             loadMoreBtn = grid.Find("." + gridStyle.Styles.FooterButtonClass.Replace(' ', '.'));
             Assert.IsFalse(loadMoreBtn.HasAttribute("disabled"));
         }
+
+        [TestMethod]
+        public void Sorting_Shows_Loading_State()
+        {
+            var provider = Services.GetRequiredService<Mock<IGridProvider>>();
+
+            var grid = RenderComponent<BlazorGrid<MyDto>>(
+                Template<MyDto>("ChildContent", context => (RenderTreeBuilder b) =>
+                {
+                    Expression<Func<string>> colFor = () => context.Name;
+                    b.OpenComponent<GridCol<string>>(0);
+                    b.AddAttribute(1, "For", colFor);
+                    b.CloseComponent();
+                })
+            );
+
+            var promise = new TaskCompletionSource<BlazorGridResult<MyDto>>();
+
+            provider.Reset();
+            provider.Setup(x => x.GetAsync<MyDto>(
+                It.IsAny<string>(),
+                It.IsAny<int>(),
+                It.IsAny<int>(),
+                It.IsAny<string>(),
+                It.IsAny<bool>(),
+                It.IsAny<string>(),
+                It.IsAny<FilterDescriptor>()
+            )).Returns(promise.Task);
+
+            // Trigger sorting
+            var th = grid.Find(".grid-row.grid-header > .sortable");
+            th.Click();
+
+            var gridStyle = Services.GetRequiredService<IBlazorGridConfig>();
+            var spinner = grid.Find("." + gridStyle.Styles.LoadingSpinnerOuterClass.Replace(' ', '.'));
+
+            Assert.IsNotNull(spinner);
+
+            promise.SetResult(new BlazorGridResult<MyDto>
+            {
+                TotalCount = 1,
+                Data = new List<MyDto> { new MyDto() }
+            });
+
+            Task.Delay(100).Wait();
+
+            var spinners = grid.FindAll("." + gridStyle.Styles.LoadingSpinnerOuterClass.Replace(' ', '.'));
+            Assert.AreEqual(0, spinners.Count);
+        }
     }
 }
