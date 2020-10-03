@@ -290,6 +290,8 @@ namespace BlazorGrid.Components
                 return Task.CompletedTask;
             }
 
+            IgnoreRender = false;
+
             return InvokeAsync(() => LoadAsync(false));
         }
 

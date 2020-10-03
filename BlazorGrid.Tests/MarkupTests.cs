@@ -1,4 +1,5 @@
 using AngleSharp.Css.Dom;
+using AngleSharp.Dom;
 using BlazorGrid.Abstractions;
 using BlazorGrid.Abstractions.Filters;
 using BlazorGrid.Components;
@@ -16,6 +17,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace BlazorGrid.Tests
 {
@@ -48,6 +50,7 @@ namespace BlazorGrid.Tests
                 Data = new List<MyDto> { row }
             }).Verifiable();
 
+            Services.AddSingleton(provider);
             Services.AddSingleton(provider.Object);
             Services.AddSingleton<IBlazorGridConfig>(new DefaultConfig { Styles = new SpectreStyles() });
             Services.AddSingleton<NavigationManager>(new MockNav());
@@ -311,6 +314,75 @@ namespace BlazorGrid.Tests
             );
 
             grid.MarkupMatches("");
+        }
+
+        [TestMethod]
+        public void Load_More_Btn_Changes_State()
+        {
+            // Modify the provider
+            var fakeData = new BlazorGridResult<MyDto>
+            {
+                TotalCount = 100,
+                Data = Enumerable.Repeat(new MyDto(), BlazorGrid<MyDto>.DefaultPageSize).ToList()
+            };
+
+            var provider = Services.GetRequiredService<Mock<IGridProvider>>();
+            provider.Reset();
+
+            provider.Setup(x => x.GetAsync<MyDto>(
+                It.IsAny<string>(),
+                It.IsAny<int>(),
+                It.IsAny<int>(),
+                It.IsAny<string>(),
+                It.IsAny<bool>(),
+                It.IsAny<string>(),
+                It.IsAny<FilterDescriptor>()
+            )).ReturnsAsync(fakeData);
+
+            var grid = RenderComponent<BlazorGrid<MyDto>>(
+                Template<MyDto>("ChildContent", context => (RenderTreeBuilder b) =>
+                {
+                    Expression<Func<string>> colFor = () => context.Name;
+                    b.OpenComponent<GridCol<string>>(0);
+                    b.AddAttribute(1, "For", colFor);
+                    b.CloseComponent();
+                })
+            );
+
+            var promise = new TaskCompletionSource<BlazorGridResult<MyDto>>();
+
+            provider.Reset();
+            provider.Setup(x => x.GetAsync<MyDto>(
+                It.IsAny<string>(),
+                It.IsAny<int>(),
+                It.IsAny<int>(),
+                It.IsAny<string>(),
+                It.IsAny<bool>(),
+                It.IsAny<string>(),
+                It.IsAny<FilterDescriptor>()
+            )).Returns(promise.Task);
+
+            var renderCount = grid.Instance.RenderCount;
+            var gridStyle = Services.GetRequiredService<IBlazorGridConfig>();
+            var loadMoreBtn = grid.Find("." + gridStyle.Styles.FooterButtonClass.Replace(' ', '.'));
+            Assert.IsFalse(loadMoreBtn.HasAttribute("disabled"));
+
+            loadMoreBtn.Click();
+
+            var newRenderCount = grid.Instance.RenderCount;
+            Assert.AreNotEqual(renderCount, newRenderCount);
+
+            loadMoreBtn = grid.Find("." + gridStyle.Styles.FooterButtonLoadingClass.Replace(' ', '.'));
+            Assert.IsTrue(loadMoreBtn.HasAttribute("disabled"));
+
+            // Resolve the promise
+            promise.SetResult(fakeData);
+
+            // Await render
+            Task.Delay(100).Wait();
+
+            loadMoreBtn = grid.Find("." + gridStyle.Styles.FooterButtonClass.Replace(' ', '.'));
+            Assert.IsFalse(loadMoreBtn.HasAttribute("disabled"));
         }
     }
 }

@@ -83,7 +83,8 @@
                     {
                         cls += " " + Config.Styles.RowClickableClass;
                     }
-                    <div class="@cls" @onclick="_ => OnRowClicked(index)">
+                    <div class="@cls"
+                         @onclick="_ => OnRowClicked(index)">
                         @ChildContent(Rows.ElementAt(index))
                     </div>
                 }
