@@ -17,9 +17,7 @@ namespace BlazorGrid.Components
 {
     public partial class BlazorGrid<TRow> : IDisposable, IBlazorGrid where TRow : class
     {
-#if DEBUG
         internal int RenderCount;
-#endif
         public const int DefaultPageSize = 25;
         private readonly Type typeInfo = typeof(BlazorGrid<TRow>);
         private static readonly string[] ObservableParameterNames = new string[]
@@ -176,9 +174,7 @@ namespace BlazorGrid.Components
                 StateHasChanged();
             }
 
-#if DEBUG
             RenderCount++;
-#endif
         }
 
         private void OnFilterCollectionChanged(object sender, NotifyCollectionChangedEventArgs e) => Reload();
