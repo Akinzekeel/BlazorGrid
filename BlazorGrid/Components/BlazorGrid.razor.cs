@@ -42,8 +42,10 @@ namespace BlazorGrid.Components
         [Parameter] public TRow EmptyRow { get; set; }
 
         private bool AreColumnsProcessed;
-        private bool IgnoreRender;
-        private bool IsLoadingMore { get; set; }
+        private bool IgnoreSetParameters;
+        internal bool IgnoreRender;
+        private bool IsLoadingMore;
+
         private string _Query;
 
         [Parameter]
@@ -318,6 +320,7 @@ namespace BlazorGrid.Components
             }
             else if (OnClick.HasDelegate)
             {
+                IgnoreSetParameters = true;
                 await OnClick.InvokeAsync(r);
             }
 
@@ -367,6 +370,12 @@ namespace BlazorGrid.Components
 
         public override Task SetParametersAsync(ParameterView parameters)
         {
+            if (IgnoreSetParameters)
+            {
+                IgnoreSetParameters = false;
+                return Task.CompletedTask;
+            }
+
             IgnoreRender = true;
             var p = parameters.ToDictionary();
 

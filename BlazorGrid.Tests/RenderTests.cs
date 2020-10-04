@@ -249,6 +249,8 @@ namespace BlazorGrid.Tests
             var row = grid.Find(".grid-header + .grid-row");
             row.Click();
 
+            Task.Delay(100).Wait();
+
             Assert.AreEqual(2, grid.Instance.RenderCount);
         }
     }
