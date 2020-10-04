@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Components;
+using Microsoft.VisualStudio.TestPlatform.Utilities;
+using System;
 
 namespace BlazorGrid.Tests.Mock
 {
@@ -11,6 +13,7 @@ namespace BlazorGrid.Tests.Mock
 
         protected override void NavigateToCore(string uri, bool forceLoad)
         {
+            NotifyLocationChanged(false);
         }
     }
 }

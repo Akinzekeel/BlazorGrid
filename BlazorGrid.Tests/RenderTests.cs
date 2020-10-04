@@ -7,6 +7,7 @@ using BlazorGrid.Tests.Mock;
 using Bunit;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
+using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -32,7 +33,9 @@ namespace BlazorGrid.Tests
         [TestInitialize]
         public void Initialize()
         {
-            Services.AddSingleton<NavigationManager>(new MockNav());
+            var mockNav = new MockNav();
+            Services.AddSingleton(mockNav);
+            Services.AddSingleton<NavigationManager>(mockNav);
             Services.AddSingleton<IBlazorGridConfig>(new DefaultConfig());
         }
 
@@ -239,6 +242,53 @@ namespace BlazorGrid.Tests
                     b.CloseComponent();
                 })
             );
+
+            // There should have been one initial render 
+            // to process the columns and then a second 
+            // one to actually render the grid itself
+            Assert.AreEqual(2, grid.Instance.RenderCount);
+
+            // Try clicking on a row
+            var row = grid.Find(".grid-header + .grid-row");
+            row.Click();
+
+            Task.Delay(100).Wait();
+
+            Assert.AreEqual(2, grid.Instance.RenderCount);
+        }
+
+        [TestMethod]
+        public void Href_Does_Not_Trigger_Rerender()
+        {
+            var promise = SetupMockProvider();
+
+            promise.SetResult(new BlazorGridResult<MyDto>
+            {
+                TotalCount = 1,
+                Data = new List<MyDto> {
+                    new MyDto { Name = "Unit test" }
+                }
+            });
+
+            Func<MyDto, string> href = (MyDto _) => "/go-to/here";
+
+            var grid = RenderComponent<BlazorGrid<MyDto>>(
+                Parameter(nameof(BlazorGrid<MyDto>.Href), href),
+                Template<MyDto>(nameof(ChildContent), (context) => (RenderTreeBuilder b) =>
+                {
+                    Expression<Func<string>> colFor = () => context.Name;
+
+                    b.OpenComponent<GridCol<string>>(0);
+                    b.AddAttribute(1, "For", colFor);
+                    b.CloseComponent();
+                })
+            );
+
+            var nav = Services.GetRequiredService<MockNav>();
+            nav.LocationChanged += (object sender, LocationChangedEventArgs args)
+                => grid.SetParametersAndRender(
+                    Parameter(nameof(BlazorGrid<string>.Query), grid.Instance.Query)
+                );
 
             // There should have been one initial render 
             // to process the columns and then a second 

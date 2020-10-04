@@ -312,6 +312,7 @@ namespace BlazorGrid.Components
 
             if (onClickUrl != null)
             {
+                IgnoreSetParameters = true;
                 Nav.NavigateTo(onClickUrl);
             }
             else if (OnClick.HasDelegate)
