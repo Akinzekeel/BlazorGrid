@@ -303,5 +303,48 @@ namespace BlazorGrid.Tests
 
             Assert.AreEqual(2, grid.Instance.RenderCount);
         }
+
+        [TestMethod]
+        public void RowClicked_Delegate_Does_Not_Trigger_Rerender()
+        {
+            var promise = SetupMockProvider();
+
+            promise.SetResult(new BlazorGridResult<MyDto>
+            {
+                TotalCount = 1,
+                Data = new List<MyDto> {
+                    new MyDto { Name = "Unit test" }
+                }
+            });
+
+            var clickedRowIndex = -1;
+
+            var grid = RenderComponent<BlazorGrid<MyDto>>(
+                Template<MyDto>(nameof(ChildContent), (context) => (RenderTreeBuilder b) =>
+                {
+                    Expression<Func<string>> colFor = () => context.Name;
+
+                    b.OpenComponent<GridCol<string>>(0);
+                    b.AddAttribute(1, "For", colFor);
+                    b.CloseComponent();
+                })
+            );
+
+            grid.Instance.OnAfterRowClicked += (object sender, int index) => clickedRowIndex = index;
+
+            // There should have been one initial render 
+            // to process the columns and then a second 
+            // one to actually render the grid itself
+            Assert.AreEqual(2, grid.Instance.RenderCount);
+
+            // Try clicking on a row
+            var row = grid.Find(".grid-header + .grid-row");
+            row.Click();
+
+            Task.Delay(100).Wait();
+
+            Assert.AreEqual(0, clickedRowIndex);
+            Assert.AreEqual(2, grid.Instance.RenderCount);
+        }
     }
 }

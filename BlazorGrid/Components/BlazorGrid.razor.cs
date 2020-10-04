@@ -17,7 +17,12 @@ namespace BlazorGrid.Components
 {
     public partial class BlazorGrid<TRow> : IDisposable, IBlazorGrid where TRow : class
     {
-        internal int RenderCount;
+        internal int RenderCount { get; private set; }
+        internal bool IgnoreRender { get; private set; }
+
+        private bool AreColumnsProcessed;
+        private bool IgnoreSetParameters;
+        private bool IsLoadingMore;
         public const int DefaultPageSize = 25;
         private readonly Type typeInfo = typeof(BlazorGrid<TRow>);
         private static readonly string[] ObservableParameterNames = new string[]
@@ -38,11 +43,6 @@ namespace BlazorGrid.Components
         [Parameter] public RenderFragment<TRow> ChildContent { get; set; }
         [Parameter] public int PageSize { get; set; } = DefaultPageSize;
         [Parameter] public TRow EmptyRow { get; set; }
-
-        private bool AreColumnsProcessed;
-        private bool IgnoreSetParameters;
-        internal bool IgnoreRender;
-        private bool IsLoadingMore;
 
         private string _Query;
 
@@ -321,7 +321,11 @@ namespace BlazorGrid.Components
                 await OnClick.InvokeAsync(r);
             }
 
-            OnAfterRowClicked?.Invoke(this, index);
+            if (OnAfterRowClicked != null)
+            {
+                IgnoreSetParameters = true;
+                OnAfterRowClicked.Invoke(this, index);
+            }
         }
 
         public bool Register(IGridCol col)
