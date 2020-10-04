@@ -196,10 +196,12 @@ namespace BlazorGrid.Components
 
             LoadingError = null;
             IsLoadingMore = true;
+            IgnoreRender = false;
+            StateHasChanged();
 
             try
             {
-                var providerTask = Provider.GetAsync<TRow>(
+                var result = await Provider.GetAsync<TRow>(
                     SourceUrl,
                     Rows?.Count ?? 0,
                     PageSize,
@@ -208,18 +210,6 @@ namespace BlazorGrid.Components
                     QueryDebounced,
                     Filter
                 );
-
-                var delay = Task.Delay(100);
-
-                await Task.WhenAny(providerTask, delay);
-
-                if ((delay.IsCompleted && !providerTask.IsCompleted) || Initialize)
-                {
-                    IgnoreRender = false;
-                    StateHasChanged();
-                }
-
-                var result = await providerTask;
 
                 if (result != null)
                 {

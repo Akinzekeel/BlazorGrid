@@ -80,12 +80,6 @@ namespace BlazorGrid.Tests
             // one to actually render the grid itself
             Assert.AreEqual(2, grid.Instance.RenderCount);
 
-            Task.Delay(150).Wait();
-
-            // If loading takes more than 100ms, the grid
-            // should render a loading state
-            Assert.AreEqual(3, grid.Instance.RenderCount);
-
             promise.SetResult(new BlazorGridResult<MyDto>
             {
                 TotalCount = 1,
@@ -98,7 +92,7 @@ namespace BlazorGrid.Tests
             // the result must be rendered. This may take a
             // moment
             Task.Delay(150).Wait();
-            Assert.AreEqual(4, grid.Instance.RenderCount);
+            Assert.AreEqual(3, grid.Instance.RenderCount);
         }
 
         [TestMethod]
