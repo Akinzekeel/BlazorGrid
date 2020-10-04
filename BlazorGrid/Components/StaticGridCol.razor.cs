@@ -18,7 +18,7 @@ namespace BlazorGrid.Components
         Expression IGridCol.For => null;
         string IGridCol.PropertyName => null;
 
-        private bool IsRegistered;
+        public bool IsRegistered { get; private set; }
 
         protected override bool ShouldRender()
         {
@@ -81,8 +81,7 @@ namespace BlazorGrid.Components
         {
             if (!IsRegistered && Parent != null)
             {
-                IsRegistered = true;
-                Parent.Add(this);
+                IsRegistered = Parent.Register(this);
             }
         }
 

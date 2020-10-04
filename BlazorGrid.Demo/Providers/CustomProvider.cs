@@ -52,13 +52,13 @@ namespace BlazorGrid.Demo.Providers
                 totalCount = data.Count();
             }
 
-            if (Filter?.Filters.Any() == true)
-            {
-                var f = Filters.FilterHelper.Build<Employee>(Filter);
-                data = (data as IQueryable<Employee>).Where(f).Cast<T>();
+            //if (Filter?.Filters.Any() == true)
+            //{
+            //    var f = Filters.FilterHelper.Build<Employee>(Filter);
+            //    data = (data as IQueryable<Employee>).Where(f).Cast<T>();
 
-                totalCount = data.Count();
-            }
+            //    totalCount = data.Count();
+            //}
 
             var finalResult = new BlazorGridResult<T>
             {

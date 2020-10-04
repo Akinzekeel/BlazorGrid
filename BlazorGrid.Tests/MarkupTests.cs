@@ -56,6 +56,30 @@ namespace BlazorGrid.Tests
             Services.AddSingleton<NavigationManager>(new MockNav());
         }
 
+        private void VerifyColumnCount(IRenderedComponent<BlazorGrid<MyDto>> grid, int expectedColumnCount)
+        {
+            Assert.AreEqual(expectedColumnCount, grid.Instance.Columns.Count());
+
+            // Verify number of column headers
+            var header = grid.Find(".grid-row.grid-header");
+            Assert.AreEqual(expectedColumnCount, header.Children.Count());
+
+            // Verify number of cells per row
+            var row = grid.Find(".grid-header + .grid-row");
+            Assert.AreEqual(expectedColumnCount, row.Children.Count());
+
+            // Verify colspan of the footer
+            var colspan = grid.Find(".grid-header + .grid-row + div");
+            var columnStyle = colspan.GetStyle().First(x => x.Name == "grid-column-start");
+            Assert.AreEqual("span " + expectedColumnCount, columnStyle.Value);
+
+            // Verify the number of column widths
+            var scroller = grid.Find(".grid-scrollview");
+            var scrollerStyle = scroller.GetStyle().First(x => x.Name == "grid-template-columns");
+            var colSizes = scrollerStyle.Value.Trim().Split(' ');
+            Assert.AreEqual(expectedColumnCount, colSizes.Count());
+        }
+
         [TestMethod]
         public void Has_Outer_Classes()
         {
@@ -216,6 +240,9 @@ namespace BlazorGrid.Tests
                 })
             );
 
+            // Two renders should have happened at this point
+            Assert.AreEqual(2, grid.Instance.RenderCount);
+
             // Verify that two columns are rendered
             var rowElement = grid.FindAll(".grid-row").First();
             rowElement.MarkupMatches("<header class=\"grid-row grid-header\">" +
@@ -224,15 +251,7 @@ namespace BlazorGrid.Tests
                 "</header>"
             );
 
-            // Verify colspan
-            var colspan = grid.Find(".grid-header + .grid-row + div");
-            var columnStyle = colspan.GetStyle().First(x => x.Name == "grid-column-start");
-            Assert.AreEqual("span 2", columnStyle.Value);
-
-            // Verify column sizes
-            var scroller = grid.Find(".grid-scrollview");
-            var scrollerStyle = scroller.GetStyle().First(x => x.Name == "grid-template-columns");
-            Assert.AreEqual("auto auto", scrollerStyle.Value);
+            VerifyColumnCount(grid, 2);
 
             // Change the ChildContent to only contain one column
             grid.SetParametersAndRender(
@@ -245,6 +264,9 @@ namespace BlazorGrid.Tests
                 })
             );
 
+            // Another render should have happened
+            Assert.AreEqual(4, grid.Instance.RenderCount);
+
             // Verify that only one column is rendered
             rowElement = grid.FindAll(".grid-row").First();
             rowElement.MarkupMatches("<header class=\"grid-row grid-header\">" +
@@ -252,15 +274,36 @@ namespace BlazorGrid.Tests
                 "</header>"
             );
 
-            // Verify colspan
-            colspan = grid.Find(".grid-header + .grid-row + div");
-            columnStyle = colspan.GetStyle().First(x => x.Name == "grid-column-start");
-            Assert.AreEqual("span 1", columnStyle.Value);
+            VerifyColumnCount(grid, 1);
 
-            // Verify column sizes
-            scroller = grid.Find(".grid-scrollview");
-            scrollerStyle = scroller.GetStyle().First(x => x.Name == "grid-template-columns");
-            Assert.AreEqual("auto", scrollerStyle.Value);
+            // Change it back to two columns
+            grid.SetParametersAndRender(
+                Template<MyDto>(nameof(ChildContent), (context) => (RenderTreeBuilder builder) =>
+                {
+                    builder.OpenComponent<GridCol<string>>(0);
+                    builder.AddAttribute(1, nameof(GridCol<string>.For), colFor);
+                    builder.AddAttribute(2, "Caption", "Name");
+                    builder.CloseComponent();
+
+                    builder.OpenComponent<GridCol<string>>(3);
+                    builder.AddAttribute(4, nameof(GridCol<string>.For), colFor);
+                    builder.AddAttribute(5, "Caption", "Also name");
+                    builder.CloseComponent();
+                })
+            );
+
+            // Another render should have happened
+            Assert.AreEqual(6, grid.Instance.RenderCount);
+
+            // Verify that two columns are rendered
+            rowElement = grid.FindAll(".grid-row").First();
+            rowElement.MarkupMatches("<header class=\"grid-row grid-header\">" +
+                "<div class=\"sortable\">Name<span class=\"blazor-grid-sort-icon\"></span></div>" +
+                "<div class=\"sortable\">Also name<span class=\"blazor-grid-sort-icon\"></span></div>" +
+                "</header>"
+            );
+
+            VerifyColumnCount(grid, 2);
         }
 
         [TestMethod]

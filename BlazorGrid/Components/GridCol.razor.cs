@@ -55,7 +55,7 @@ namespace BlazorGrid.Components
         [Parameter(CaptureUnmatchedValues = true)] public IDictionary<string, object> Attributes { get; set; }
 
         Expression IGridCol.For => For;
-        private bool IsRegistered;
+        public bool IsRegistered { get; private set; }
 
         private T GetAutoValue()
         {
@@ -131,8 +131,7 @@ namespace BlazorGrid.Components
         {
             if (!IsRegistered && Parent != null)
             {
-                IsRegistered = true;
-                Parent.Add(this);
+                IsRegistered = Parent.Register(this);
             }
         }
 

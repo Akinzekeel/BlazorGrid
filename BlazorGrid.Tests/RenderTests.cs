@@ -139,13 +139,117 @@ namespace BlazorGrid.Tests
         [TestMethod]
         public void Query_Triggers_Rerender()
         {
+            var promise = SetupMockProvider();
 
+            promise.SetResult(new BlazorGridResult<MyDto>
+            {
+                TotalCount = 1,
+                Data = new List<MyDto> {
+                    new MyDto { Name = "Unit test" }
+                }
+            });
+
+            var grid = RenderComponent<BlazorGrid<MyDto>>(
+                Template<MyDto>(nameof(ChildContent), (context) => (RenderTreeBuilder b) =>
+                {
+                    Expression<Func<string>> colFor = () => context.Name;
+
+                    b.OpenComponent<GridCol<string>>(0);
+                    b.AddAttribute(1, "For", colFor);
+                    b.CloseComponent();
+                })
+            );
+
+            // There should have been one initial render 
+            // to process the columns and then a second 
+            // one to actually render the grid itself
+            Assert.AreEqual(2, grid.Instance.RenderCount);
+
+            // Now let's try changing the sorting
+            var col = grid.FindComponent<GridCol<string>>();
+            grid.SetParametersAndRender(
+                Parameter(nameof(BlazorGrid<MyDto>.Query), "Hello world")
+            );
+
+            Assert.AreEqual(3, grid.Instance.RenderCount);
         }
 
         [TestMethod]
         public void ChildContent_Triggers_Rerender()
         {
+            var promise = SetupMockProvider();
 
+            promise.SetResult(new BlazorGridResult<MyDto>
+            {
+                TotalCount = 1,
+                Data = new List<MyDto> {
+                    new MyDto { Name = "Unit test" }
+                }
+            });
+
+            var grid = RenderComponent<BlazorGrid<MyDto>>(
+                Template<MyDto>(nameof(ChildContent), (context) => (RenderTreeBuilder b) =>
+                {
+                    Expression<Func<string>> colFor = () => context.Name;
+
+                    b.OpenComponent<GridCol<string>>(0);
+                    b.AddAttribute(1, "For", colFor);
+                    b.CloseComponent();
+                })
+            );
+
+            // There should have been one initial render 
+            // to process the columns and then a second 
+            // one to actually render the grid itself
+            Assert.AreEqual(2, grid.Instance.RenderCount);
+
+            // Now let's try changing the sorting
+            grid.SetParametersAndRender(
+                Template<MyDto>(nameof(ChildContent), (context) => (RenderTreeBuilder b) =>
+                {
+
+                })
+            );
+
+            Assert.AreEqual(3, grid.Instance.RenderCount);
+        }
+
+        [TestMethod]
+        public void OnClick_Does_Not_Trigger_Rerender()
+        {
+            var promise = SetupMockProvider();
+
+            promise.SetResult(new BlazorGridResult<MyDto>
+            {
+                TotalCount = 1,
+                Data = new List<MyDto> {
+                    new MyDto { Name = "Unit test" }
+                }
+            });
+
+            var clickCount = 0;
+            var grid = RenderComponent<BlazorGrid<MyDto>>(
+                EventCallback<MyDto>(nameof(BlazorGrid<MyDto>.OnClick), _ => clickCount++),
+                Template<MyDto>(nameof(ChildContent), (context) => (RenderTreeBuilder b) =>
+                {
+                    Expression<Func<string>> colFor = () => context.Name;
+
+                    b.OpenComponent<GridCol<string>>(0);
+                    b.AddAttribute(1, "For", colFor);
+                    b.CloseComponent();
+                })
+            );
+
+            // There should have been one initial render 
+            // to process the columns and then a second 
+            // one to actually render the grid itself
+            Assert.AreEqual(2, grid.Instance.RenderCount);
+
+            // Try clicking on a row
+            var row = grid.Find(".grid-header + .grid-row");
+            row.Click();
+
+            Assert.AreEqual(2, grid.Instance.RenderCount);
         }
     }
 }

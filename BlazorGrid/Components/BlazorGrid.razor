@@ -2,12 +2,12 @@
 <CascadingValue Value="this" IsFixed="true">
     @ChildContent(GetEmptyRow())
 </CascadingValue>
-@if (AreColumnsAdded && ColumnsList.Any())
+@if (AreColumnsProcessed && RegisteredColumns.Any())
 {
     <div @attributes="FinalAttributes">
-        <div class="grid-scrollview" style="grid-template-columns: @GridColumns">
+        <div class="grid-scrollview" style="grid-template-columns: @GridTemplateColumns()">
             <header class="grid-row grid-header">
-                @foreach (var col in ColumnsList)
+                @foreach (var col in RegisteredColumns)
                 {
                     <div @onclick="() => TryApplySorting(col)" class="@col.CssClass">
                         @if (!col.AlignRight)
@@ -31,7 +31,7 @@
             </header>
             @if (LoadingError != null)
             {
-                <div style="grid-column: span @ColumnsList.Count()">
+                <div style="grid-column: span @RegisteredColumns.Count()">
                     <div class="@Config.Styles.PlaceholderWrapperClass">
                         <div class="@Config.Styles.ErrorHeadingClass">
                             <h2>@Resources.LoadingError_Title</h2>
@@ -47,7 +47,7 @@
             }
             else if (Rows == null)
             {
-                <div style="grid-column: span @ColumnsList.Count()">
+                <div style="grid-column: span @RegisteredColumns.Count()">
                     <div class="@Config.Styles.PlaceholderWrapperClass">
                         <div class="@Config.Styles.LoadingSpinnerOuterClass">
                             <div class="@Config.Styles.LoadingSpinnerInnerClass"></div>
@@ -58,7 +58,7 @@
             }
             else if (Rows.Count == 0)
             {
-                <div style="grid-column: span @ColumnsList.Count()">
+                <div style="grid-column: span @RegisteredColumns.Count()">
                     <div class="@Config.Styles.PlaceholderWrapperClass">
                         <h5 class="@Config.Styles.NoDataHeadingClass">@Resources.Empty_Title</h5>
                         @if (string.IsNullOrEmpty(QueryDebounced))
@@ -88,7 +88,7 @@
                         @ChildContent(Rows.ElementAt(index))
                     </div>
                 }
-                <div style="grid-column: span @ColumnsList.Count()">
+                <div style="grid-column: span @RegisteredColumns.Count()">
                     <div class="@Config.Styles.FooterWrapperClass">
                         <div class="@Config.Styles.FooterTextClass">@string.Format(Resources.Footer_RowCount, Rows.Count, TotalCount)</div>
                         @if (Rows.Count < TotalCount)

@@ -8,7 +8,7 @@ namespace BlazorGrid.Interfaces
     {
         string OrderByPropertyName { get; }
         bool OrderByDescending { get; }
-        void Add(IGridCol col);
+        bool Register(IGridCol col);
         IEnumerable<IGridCol> Columns { get; }
         string GetPropertyName<T>(Expression<Func<T>> Property);
         bool IsSortedBy(IGridCol column);

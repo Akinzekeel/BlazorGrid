@@ -41,7 +41,7 @@ namespace BlazorGrid.Components
         [Parameter] public int PageSize { get; set; } = DefaultPageSize;
         [Parameter] public TRow EmptyRow { get; set; }
 
-        private bool AreColumnsAdded;
+        private bool AreColumnsProcessed;
         private bool IgnoreRender;
         private bool IsLoadingMore { get; set; }
         private string _Query;
@@ -85,8 +85,9 @@ namespace BlazorGrid.Components
         public string OrderByPropertyName { get; private set; }
         public bool OrderByDescending { get; private set; }
         private int TotalCount { get; set; }
-        private readonly IList<IGridCol> ColumnsList = new List<IGridCol>();
-        public IEnumerable<IGridCol> Columns => ColumnsList;
+        private IList<IGridCol> RegisteredColumns = new List<IGridCol>();
+        private IList<IGridCol> ColumnAddBuffer = new List<IGridCol>();
+        public IEnumerable<IGridCol> Columns => RegisteredColumns;
         private Exception LoadingError { get; set; }
 
         public event EventHandler<int> OnAfterRowClicked;
@@ -159,14 +160,17 @@ namespace BlazorGrid.Components
                 Filter.Filters.CollectionChanged += OnFilterCollectionChanged;
             }
 
-            if (AreColumnsAdded)
+            if (AreColumnsProcessed)
             {
                 IgnoreRender = true;
             }
-            else
+            else if (ColumnAddBuffer.Any())
             {
                 // Now that the columns are processed, trigger another render
-                AreColumnsAdded = true;
+                RegisteredColumns = ColumnAddBuffer;
+                ColumnAddBuffer = new List<IGridCol>();
+                AreColumnsProcessed = true;
+                IgnoreRender = false;
                 StateHasChanged();
             }
 
@@ -281,9 +285,11 @@ namespace BlazorGrid.Components
             return ExpressionHelper.GetPropertyName<TRow, T>(property);
         }
 
-        private string GridColumns => ColumnsList
-            .Select(col => col.FitToContent ? "max-content" : "auto")
-            .Aggregate((a, b) => a + " " + b);
+        private string GridTemplateColumns()
+        {
+            var widths = RegisteredColumns.Select(col => col.FitToContent ? "max-content" : "auto");
+            return string.Join(' ', widths);
+        }
 
         public Task LoadMoreAsync()
         {
@@ -318,9 +324,15 @@ namespace BlazorGrid.Components
             OnAfterRowClicked?.Invoke(this, index);
         }
 
-        public void Add(IGridCol col)
+        public bool Register(IGridCol col)
         {
-            ColumnsList.Add(col);
+            if (!col.IsRegistered)
+            {
+                ColumnAddBuffer.Add(col);
+                return true;
+            }
+
+            return false;
         }
 
         public bool IsFilteredBy(IGridCol column)
@@ -356,34 +368,40 @@ namespace BlazorGrid.Components
         public override Task SetParametersAsync(ParameterView parameters)
         {
             IgnoreRender = true;
-
             var p = parameters.ToDictionary();
 
-            foreach (var parameter in ObservableParameterNames)
+            if (
+                RegisteredColumns.Any()
+                && p.ContainsKey(nameof(ChildContent))
+            )
             {
-                if (!p.ContainsKey(parameter))
-                {
-                    continue;
-                }
-
-                if (!Equals(typeInfo.GetProperty(parameter), p[parameter]))
-                {
-                    IgnoreRender = false;
-                    break;
-                }
-            }
-
-            if (p.ContainsKey(nameof(ChildContent)) && !Equals(ChildContent, p[nameof(ChildContent)]))
-            {
-                foreach (var c in ColumnsList)
+                foreach (var c in RegisteredColumns)
                 {
                     c.Unlink();
                 }
 
-                ColumnsList.Clear();
+                RegisteredColumns.Clear();
+                ColumnAddBuffer.Clear();
 
                 IgnoreRender = false;
-                AreColumnsAdded = false;
+                AreColumnsProcessed = false;
+            }
+
+            if (IgnoreRender)
+            {
+                foreach (var parameter in ObservableParameterNames)
+                {
+                    if (!p.ContainsKey(parameter))
+                    {
+                        continue;
+                    }
+
+                    if (!Equals(typeInfo.GetProperty(parameter), p[parameter]))
+                    {
+                        IgnoreRender = false;
+                        break;
+                    }
+                }
             }
 
             return base.SetParametersAsync(parameters);

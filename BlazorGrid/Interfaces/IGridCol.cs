@@ -11,6 +11,7 @@ namespace BlazorGrid.Interfaces
 
     public interface IGridCol
     {
+        bool IsRegistered { get; }
         string Caption { get; }
         RenderFragment ChildContent { get; }
         string CssClass { get; }

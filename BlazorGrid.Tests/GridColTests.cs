@@ -43,7 +43,7 @@ namespace BlazorGrid.Tests
                 Parameter("Caption", "Name")
             );
 
-            fakeGrid.Verify(x => x.Add(It.Is<IGridCol>(col => ReferenceEquals(col, unit.Instance))), Times.Once());
+            fakeGrid.Verify(x => x.Register(It.Is<IGridCol>(col => ReferenceEquals(col, unit.Instance))), Times.Once());
         }
 
         [TestMethod]
