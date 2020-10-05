@@ -2,12 +2,18 @@
 @layout ExampleLayout
 <h1>Search</h1>
 
-<p>The grid component has a <code>Query</code> property which can be set to any value. The property has a builtin 300 ms debounce, so even if you bind it to a text input with the <code>oninput</code> event, it will not flood the provider with unnecessary requests.</p>
-<p>The value of the <code>Query</code> property is then included in the call to the provider and can be sent to the server or used for your own custom search &amp; filtering purposes.</p>
+<p>The grid component has a <code>QueryUserInput</code> parameter which can be set to any value. The property has a builtin 350 ms debounce, so even if you bind it to a text input with the <code>oninput</code> event, it will not flood the provider with unnecessary requests.</p>
+<p>After the debounce, the value will be applied to the <code>Query</code> parameter which will trigger a provider call including the value of the search query. If you do not wish to use the debounce or if you prefer to have your own debounce logic, you can also use the <code>Query</code> parameter directly.</p>
+
+<Caution>Keep in mind that it is the responsibility of the provider / your server-side code to use the search query and return a filtered result set.</Caution>
 
 <div class="my-3">
     <h6>Type something into the text box to try the filter</h6>
-    <input type="text" class="form-control form-control-lg" placeholder="Filter" @bind-value="FilterInput" @bind-value:event="oninput" />
+    <input type="search"
+           class="form-control form-control-lg"
+           placeholder="Filter"
+           @bind-value="FilterInput"
+           @bind-value:event="oninput" />
 </div>
 
 <Tabs>
@@ -29,7 +35,7 @@
         <pre class="pre-scrollable"><code>&lt;input type=&quot;text&quot; class=&quot;form-input input-lg&quot; placeholder=&quot;Filter&quot;
         @@bind-value=&quot;FilterInput&quot; @@bind-value:event=&quot;oninput&quot; /&gt;
 
-&lt;BlazorGrid Query="@@FilterInput" TRow=&quot;Employee&quot; SourceUrl=&quot;data/employees.json&quot;&gt;
+&lt;BlazorGrid QueryUserInput="@@FilterInput" TRow=&quot;Employee&quot; SourceUrl=&quot;data/employees.json&quot;&gt;
     &lt;StaticGridCol FitToContent=&quot;true&quot;&gt;
         &lt;img src=&quot;@@context.Avatar&quot; style=&quot;width: 20px; height: 20px;&quot; /&gt;
     &lt;/StaticGridCol&gt;

@@ -23,8 +23,10 @@ namespace BlazorGrid.Components
         private bool AreColumnsProcessed;
         private bool IgnoreSetParameters;
         private bool IsLoadingMore;
-        public const int DefaultPageSize = 25;
         private readonly Type typeInfo = typeof(BlazorGrid<TRow>);
+
+        public const int DefaultPageSize = 25;
+        public const int SearchQueryInputDebounceMs = 400;
 
         // Setting these parameters will cause a grid re-render
         private static readonly string[] RerenderParameterNames = new string[]
@@ -102,7 +104,7 @@ namespace BlazorGrid.Components
         }
 
         private string QueryDebounceValue;
-        private void SetQueryDebounced(string userInput)
+        private async void SetQueryDebounced(string userInput)
         {
             if (Query == userInput)
             {
@@ -111,18 +113,15 @@ namespace BlazorGrid.Components
 
             QueryDebounceValue = userInput;
 
-            InvokeAsync(async () =>
-            {
-                await Task.Delay(400);
+            await Task.Delay(SearchQueryInputDebounceMs);
 
-                if (QueryDebounceValue == userInput)
+            if (QueryDebounceValue == userInput)
+            {
+                await SetParametersAsync(ParameterView.FromDictionary(new Dictionary<string, object>
                 {
-                    await SetParametersAsync(ParameterView.FromDictionary(new Dictionary<string, object>
-                    {
-                        { nameof(Query), userInput }
-                    }));
-                }
-            });
+                    { nameof(Query), userInput }
+                }));
+            }
         }
 
         public string CssClass
