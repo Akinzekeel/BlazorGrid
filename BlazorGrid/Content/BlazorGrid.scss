@@ -84,10 +84,8 @@
             }
 
             &:hover {
-                > * {
-                    + * {
-                        border-left: $bzg-header-cell-hover-left-border-width solid $bzg-cell-border-color;
-                    }
+                > *:not(:first-child) {
+                    border-left: $bzg-header-cell-hover-left-border-width solid $bzg-header-cell-hover-bg;
                 }
             }
         }
