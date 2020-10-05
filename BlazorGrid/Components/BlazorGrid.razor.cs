@@ -17,7 +17,7 @@ namespace BlazorGrid.Components
 {
     public partial class BlazorGrid<TRow> : IDisposable, IBlazorGrid where TRow : class
     {
-        internal int RenderCount { get; private set; }
+        public int RenderCount { get; private set; }
         internal bool IgnoreRender { get; private set; }
 
         private bool AreColumnsProcessed;
@@ -42,12 +42,6 @@ namespace BlazorGrid.Components
         {
             nameof(SourceUrl),
             nameof(Query)
-        };
-
-        // These parameters will be set without causing a render
-        private static readonly string[] PassThroughParameterNames = new string[]
-        {
-            nameof(QueryUserInput)
         };
 
         [Inject] public IGridProvider Provider { get; set; }
@@ -117,10 +111,10 @@ namespace BlazorGrid.Components
 
             if (QueryDebounceValue == userInput)
             {
-                await SetParametersAsync(ParameterView.FromDictionary(new Dictionary<string, object>
-                {
-                    { nameof(Query), userInput }
-                }));
+                var parameters = NextSetParametersAsyncMerge;
+                parameters[nameof(Query)] = userInput;
+
+                await SetParametersAsync(ParameterView.FromDictionary(parameters));
             }
         }
 
@@ -367,6 +361,7 @@ namespace BlazorGrid.Components
             return EmptyRow ?? Activator.CreateInstance<TRow>();
         }
 
+        private Dictionary<string, object> NextSetParametersAsyncMerge;
         public override async Task SetParametersAsync(ParameterView parameters)
         {
             if (IgnoreSetParameters)
@@ -375,21 +370,29 @@ namespace BlazorGrid.Components
                 return;
             }
 
-            var p = parameters.ToDictionary();
-
             IgnoreRender = true;
 
-            if (p.Keys.Intersect(PassThroughParameterNames).Count() == p.Count)
+            var mustReload = false;
+            var p = parameters.ToDictionary().ToDictionary(x => x.Key, x => x.Value);
+
+            if (p.ContainsKey(nameof(QueryUserInput)) && (string)p[nameof(QueryUserInput)] != QueryUserInput)
             {
-                await base.SetParametersAsync(parameters);
+                // This will cause a debounce after which SetParametersAsync is called again
+                QueryUserInput = (string)p[nameof(QueryUserInput)];
+                p.Remove(nameof(QueryUserInput));
+                NextSetParametersAsyncMerge = p;
+
+                // Cancel further processing
                 return;
             }
 
-            if (p.Keys.Intersect(ReloadTriggerParameterNames).Count() == p.Count)
+            if (
+                p.Keys.Intersect(ReloadTriggerParameterNames)
+                    .Any(x => (string)typeInfo.GetProperty(x).GetValue(this) != (string)p[x])
+            )
             {
                 await base.SetParametersAsync(parameters);
-                await InvokeAsync(() => LoadAsync(true));
-                return;
+                mustReload = true;
             }
 
             if (
@@ -407,6 +410,13 @@ namespace BlazorGrid.Components
 
                 IgnoreRender = false;
                 AreColumnsProcessed = false;
+            }
+
+            if (mustReload)
+            {
+                await base.SetParametersAsync(parameters);
+                await InvokeAsync(() => LoadAsync(true));
+                return;
             }
 
             if (IgnoreRender)
