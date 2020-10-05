@@ -64,7 +64,7 @@ namespace BlazorGrid.Tests.Demo
 
             Assert.AreEqual(1, provider.Invocations.Count);
 
-            Task.Delay(BlazorGrid<Employee>.SearchQueryInputDebounceMs).Wait();
+            Task.Delay(BlazorGrid<Employee>.SearchQueryInputDebounceMs + 100).Wait();
 
             Assert.AreEqual(2, provider.Invocations.Count);
         }
