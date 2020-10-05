@@ -61,7 +61,7 @@
                 <div style="grid-column: span @RegisteredColumns.Count()">
                     <div class="@Config.Styles.PlaceholderWrapperClass">
                         <h5 class="@Config.Styles.NoDataHeadingClass">@Resources.Empty_Title</h5>
-                        @if (string.IsNullOrEmpty(QueryDebounced))
+                        @if (string.IsNullOrEmpty(Query))
                         {
                             <p class="@Config.Styles.NoDataTextClass">@Resources.Empty_Text</p>
                         }

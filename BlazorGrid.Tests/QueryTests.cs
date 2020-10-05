@@ -61,7 +61,7 @@ namespace BlazorGrid.Tests
 
             // Set a filter query
             grid.SetParametersAndRender(
-                Parameter("Query", "unit-test")
+                Parameter(nameof(BlazorGrid<Model>.QueryUserInput), "unit-test")
             );
 
             // The Query property has a debounce, so no

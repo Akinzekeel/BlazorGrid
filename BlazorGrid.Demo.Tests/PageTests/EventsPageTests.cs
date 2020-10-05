@@ -59,14 +59,14 @@ namespace BlazorGrid.Tests.Demo
             var page = RenderPage();
             var grid = page.FindComponent<BlazorGrid<Employee>>();
 
-            Assert.AreEqual(3, grid.Instance.RenderCount);
+            Assert.AreEqual(2, grid.Instance.RenderCount);
 
             var row = grid.Find(".grid-header + .grid-row");
             row.Click();
 
             Task.Delay(100).Wait();
 
-            Assert.AreEqual(3, grid.Instance.RenderCount);
+            Assert.AreEqual(2, grid.Instance.RenderCount);
         }
     }
 }

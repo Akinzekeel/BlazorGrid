@@ -165,10 +165,16 @@ namespace BlazorGrid.Tests
             // Now let's try changing the sorting
             var col = grid.FindComponent<GridCol<string>>();
             grid.SetParametersAndRender(
-                Parameter(nameof(BlazorGrid<MyDto>.Query), "Hello world")
+                Parameter(nameof(BlazorGrid<MyDto>.QueryUserInput), "Hello world")
             );
 
-            Assert.AreEqual(3, grid.Instance.RenderCount);
+            // Since this property uses a debounce, there shouldn't be any render yet
+            Assert.AreEqual(2, grid.Instance.RenderCount);
+
+            // Wait for it...
+            Task.Delay(500).Wait();
+
+            Assert.AreNotEqual(2, grid.Instance.RenderCount);
         }
 
         [TestMethod]
@@ -281,7 +287,7 @@ namespace BlazorGrid.Tests
             var nav = Services.GetRequiredService<MockNav>();
             nav.LocationChanged += (object sender, LocationChangedEventArgs args)
                 => grid.SetParametersAndRender(
-                    Parameter(nameof(BlazorGrid<string>.Query), grid.Instance.Query)
+                    Parameter(nameof(BlazorGrid<string>.QueryUserInput), grid.Instance.QueryUserInput)
                 );
 
             // There should have been one initial render 

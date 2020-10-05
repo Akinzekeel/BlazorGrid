@@ -25,14 +25,27 @@ namespace BlazorGrid.Components
         private bool IsLoadingMore;
         public const int DefaultPageSize = 25;
         private readonly Type typeInfo = typeof(BlazorGrid<TRow>);
-        private static readonly string[] ObservableParameterNames = new string[]
+
+        // Setting these parameters will cause a grid re-render
+        private static readonly string[] RerenderParameterNames = new string[]
         {
-            nameof(SourceUrl),
-            nameof(Query),
             nameof(OnClick),
             nameof(Href),
             nameof(Attributes),
             nameof(Rows)
+        };
+
+        // Setting these parameters will not immediately cause a re-render, but a reload
+        private static readonly string[] ReloadTriggerParameterNames = new string[]
+        {
+            nameof(SourceUrl),
+            nameof(Query)
+        };
+
+        // These parameters will be set without causing a render
+        private static readonly string[] PassThroughParameterNames = new string[]
+        {
+            nameof(QueryUserInput)
         };
 
         [Inject] public IGridProvider Provider { get; set; }
@@ -43,35 +56,8 @@ namespace BlazorGrid.Components
         [Parameter] public RenderFragment<TRow> ChildContent { get; set; }
         [Parameter] public int PageSize { get; set; } = DefaultPageSize;
         [Parameter] public TRow EmptyRow { get; set; }
-
-        private string _Query;
-
-        [Parameter]
-        public string Query
-        {
-            get => _Query;
-            set
-            {
-                if (_Query == value)
-                {
-                    return;
-                }
-
-                _Query = value;
-
-                InvokeAsync(async () =>
-                {
-                    await Task.Delay(300);
-
-                    if (_Query == value)
-                    {
-                        QueryDebounced = value;
-                        await LoadAsync(true);
-                    }
-                });
-            }
-        }
-
+        [Parameter] public string Query { get; set; }
+        [Parameter] public string QueryUserInput { get => QueryDebounceValue; set => SetQueryDebounced(value); }
         [Parameter] public EventCallback<TRow> OnClick { get; set; }
         [Parameter] public Func<TRow, string> Href { get; set; }
         [Parameter] public Expression<Func<TRow, object>> DefaultOrderBy { get; set; }
@@ -81,7 +67,6 @@ namespace BlazorGrid.Components
 
         public FilterDescriptor Filter { get; private set; } = new FilterDescriptor();
 
-        private string QueryDebounced { get; set; }
         public string OrderByPropertyName { get; private set; }
         public bool OrderByDescending { get; private set; }
         private int TotalCount { get; set; }
@@ -114,6 +99,30 @@ namespace BlazorGrid.Components
 
                 return attr;
             }
+        }
+
+        private string QueryDebounceValue;
+        private void SetQueryDebounced(string userInput)
+        {
+            if (Query == userInput)
+            {
+                return;
+            }
+
+            QueryDebounceValue = userInput;
+
+            InvokeAsync(async () =>
+            {
+                await Task.Delay(400);
+
+                if (QueryDebounceValue == userInput)
+                {
+                    await SetParametersAsync(ParameterView.FromDictionary(new Dictionary<string, object>
+                    {
+                        { nameof(Query), userInput }
+                    }));
+                }
+            });
         }
 
         public string CssClass
@@ -207,7 +216,7 @@ namespace BlazorGrid.Components
                     PageSize,
                     OrderByPropertyName,
                     OrderByDescending,
-                    QueryDebounced,
+                    Query,
                     Filter
                 );
 
@@ -359,16 +368,30 @@ namespace BlazorGrid.Components
             return EmptyRow ?? Activator.CreateInstance<TRow>();
         }
 
-        public override Task SetParametersAsync(ParameterView parameters)
+        public override async Task SetParametersAsync(ParameterView parameters)
         {
             if (IgnoreSetParameters)
             {
                 IgnoreSetParameters = false;
-                return Task.CompletedTask;
+                return;
             }
 
-            IgnoreRender = true;
             var p = parameters.ToDictionary();
+
+            IgnoreRender = true;
+
+            if (p.Keys.Intersect(PassThroughParameterNames).Count() == p.Count)
+            {
+                await base.SetParametersAsync(parameters);
+                return;
+            }
+
+            if (p.Keys.Intersect(ReloadTriggerParameterNames).Count() == p.Count)
+            {
+                await base.SetParametersAsync(parameters);
+                await InvokeAsync(() => LoadAsync(true));
+                return;
+            }
 
             if (
                 RegisteredColumns.Any()
@@ -389,7 +412,7 @@ namespace BlazorGrid.Components
 
             if (IgnoreRender)
             {
-                foreach (var parameter in ObservableParameterNames)
+                foreach (var parameter in RerenderParameterNames)
                 {
                     if (!p.ContainsKey(parameter))
                     {
@@ -404,7 +427,7 @@ namespace BlazorGrid.Components
                 }
             }
 
-            return base.SetParametersAsync(parameters);
+            await base.SetParametersAsync(parameters);
         }
 
         protected override bool ShouldRender()
