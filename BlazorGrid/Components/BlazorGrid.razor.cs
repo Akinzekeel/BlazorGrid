@@ -23,6 +23,7 @@ namespace BlazorGrid.Components
         private bool AreColumnsProcessed;
         private bool IgnoreSetParameters;
         private bool IsLoadingMore;
+        private bool IsInitialRenderDone;
         private readonly Type typeInfo = typeof(BlazorGrid<TRow>);
 
         public const int DefaultPageSize = 25;
@@ -160,6 +161,8 @@ namespace BlazorGrid.Components
                 // Subscribe to Filter object changes
                 Filter.PropertyChanged += OnFilterChanged;
                 Filter.Filters.CollectionChanged += OnFilterCollectionChanged;
+
+                IsInitialRenderDone = true;
             }
 
             if (AreColumnsProcessed)
@@ -228,7 +231,7 @@ namespace BlazorGrid.Components
                 }
                 else
                 {
-                    Rows = null;
+                    Rows = new List<TRow>();
                 }
             }
             catch (InvalidOperationException)
@@ -387,7 +390,8 @@ namespace BlazorGrid.Components
             }
 
             if (
-                p.Keys.Intersect(ReloadTriggerParameterNames)
+                IsInitialRenderDone
+                && p.Keys.Intersect(ReloadTriggerParameterNames)
                     .Any(x => (string)typeInfo.GetProperty(x).GetValue(this) != (string)p[x])
             )
             {
@@ -396,7 +400,8 @@ namespace BlazorGrid.Components
             }
 
             if (
-                RegisteredColumns.Any()
+                IsInitialRenderDone
+                && RegisteredColumns.Any()
                 && p.ContainsKey(nameof(ChildContent))
             )
             {
