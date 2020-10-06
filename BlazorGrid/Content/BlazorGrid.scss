@@ -1,7 +1,3 @@
-/**
-    Part of Akinzekeel.BlazorGrid
-    Last updated for version 0.7.6-beta
-**/
 .blazor-grid {
     height: 100%;
     overflow-y: auto;
@@ -41,20 +37,29 @@
                     border-left-color: transparent !important;
                 }
 
-                .blazor-grid-sort-icon {
+                .blazor-grid-sort-icon::after {
                     opacity: 0.2;
-                    padding: 0;
                     transform: rotate(90deg);
                     display: inline-block;
                     content: $bzg-header-sort-icon-content;
                     font-size: $bzg-header-sort-icon-font-size;
+                    vertical-align: middle;
+                    line-height: 0;
+                    min-height: .5rem;
                 }
 
                 &.sorted {
-                    .blazor-grid-sort-icon {
+                    .blazor-grid-sort-icon::after {
                         opacity: 1 !important;
                         color: $bzg-header-sort-icon-active-color;
-                        content: '‹';
+                    }
+
+                    .blazor-grid-sort-icon.sorted-asc::after {
+                        content: $bzg-header-sort-icon-asc-content;
+                    }
+
+                    .blazor-grid-sort-icon.sorted-desc::after {
+                        content: $bzg-header-sort-icon-desc-content;
                     }
                 }
 
@@ -66,7 +71,7 @@
                         color: $bzg-header-cell-hover-color !important;
                         background: $bzg-header-cell-hover-bg;
 
-                        .blazor-grid-sort-icon {
+                        .blazor-grid-sort-icon::after {
                             opacity: 0.5;
                         }
                     }
