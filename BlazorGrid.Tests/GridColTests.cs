@@ -16,11 +16,12 @@ using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
+using static Bunit.ComponentParameterFactory;
 
 namespace BlazorGrid.Tests
 {
     [TestClass]
-    public class GridColTests : ComponentTestFixture
+    public class GridColTests : Bunit.TestContext
     {
         class MyDto
         {

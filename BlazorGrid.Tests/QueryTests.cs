@@ -6,6 +6,7 @@ using BlazorGrid.Config.Styles;
 using BlazorGrid.Interfaces;
 using BlazorGrid.Tests.Mock;
 using Bunit;
+using static Bunit.ComponentParameterFactory;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -15,7 +16,7 @@ using System.Threading.Tasks;
 namespace BlazorGrid.Tests
 {
     [TestClass]
-    public class QueryTests : ComponentTestFixture
+    public class QueryTests : Bunit.TestContext
     {
         class Model
         {

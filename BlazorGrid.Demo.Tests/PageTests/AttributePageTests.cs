@@ -13,7 +13,7 @@ using Moq;
 namespace BlazorGrid.Tests.Demo
 {
     [TestClass]
-    public class AttributePageTests : ComponentTestFixture
+    public class AttributePageTests : Bunit.TestContext
     {
         [TestMethod]
         public void Can_Render_Page()

@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using static Bunit.ComponentParameterFactory;
 
 namespace BlazorGrid.Tests
 {
@@ -23,7 +24,7 @@ namespace BlazorGrid.Tests
     /// efficiency of the grid.
     /// </summary>
     [TestClass]
-    public class RenderTests : ComponentTestFixture
+    public class RenderTests : Bunit.TestContext
     {
         class MyDto
         {

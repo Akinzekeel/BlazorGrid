@@ -20,7 +20,7 @@ using System.Threading.Tasks;
 namespace BlazorGrid.Tests.Demo
 {
     [TestClass]
-    public class SearchPageTests : ComponentTestFixture
+    public class SearchPageTests : Bunit.TestContext
     {
         public IRenderedComponent<Search> RenderPage()
         {

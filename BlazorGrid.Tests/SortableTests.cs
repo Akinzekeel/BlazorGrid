@@ -12,11 +12,12 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
 using System.Linq.Expressions;
+using static Bunit.ComponentParameterFactory;
 
 namespace BlazorGrid.Tests
 {
     [TestClass]
-    public class SortableTests : ComponentTestFixture
+    public class SortableTests : Bunit.TestContext
     {
         class MyDto
         {

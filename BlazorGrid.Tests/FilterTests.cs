@@ -14,11 +14,12 @@ using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using static Bunit.ComponentParameterFactory;
 
 namespace BlazorGrid.Tests
 {
     [TestClass]
-    public class FilterTests : ComponentTestFixture
+    public class FilterTests : Bunit.TestContext
     {
         class MyDto
         {

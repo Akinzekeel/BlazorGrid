@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 namespace BlazorGrid.Tests.Demo
 {
     [TestClass]
-    public class EventsPageTests : ComponentTestFixture
+    public class EventsPageTests : Bunit.TestContext
     {
         private IRenderedComponent<Events> RenderPage()
         {

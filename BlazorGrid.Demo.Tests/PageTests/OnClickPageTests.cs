@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 namespace BlazorGrid.Tests.Demo
 {
     [TestClass]
-    public class OnClickPageTests : ComponentTestFixture
+    public class OnClickPageTests : Bunit.TestContext
     {
         private IRenderedComponent<OnClick> RenderPage()
         {
