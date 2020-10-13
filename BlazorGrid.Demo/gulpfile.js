@@ -39,7 +39,7 @@ function copyContent(done) {
         .pipe(gulp.dest("./wwwroot/dist"));
 
     gulp.src("./Styles/font-awesome/fonts/**/*")
-        .pipe(gulp.dest("./wwwroot/dist/fonts"));
+        .pipe(gulp.dest("./wwwroot/dist/font-awesome/fonts"));
 
     done();
 }
