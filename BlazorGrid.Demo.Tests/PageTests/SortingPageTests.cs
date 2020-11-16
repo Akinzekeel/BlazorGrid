@@ -8,17 +8,24 @@ using BlazorGrid.Demo.Pages.Examples;
 using BlazorGrid.Demo.Tests.Mock;
 using BlazorGrid.Interfaces;
 using Bunit;
+using Bunit.TestDoubles.JSInterop;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System.Linq;
+using System.Threading;
 
 namespace BlazorGrid.Tests.Demo
 {
     [TestClass]
     public class SortingPageTests : Bunit.TestContext
     {
+        [TestInitialize]
+        public void Initialize()
+        {
+            Services.AddMockJSRuntime();
+        }
+
         public IRenderedComponent<Sorting> RenderPage()
         {
             var provider = new Mock<IGridProvider>();
@@ -46,7 +53,8 @@ namespace BlazorGrid.Tests.Demo
                 It.Is<string>(s => !string.IsNullOrEmpty(s)),
                 false,
                 null,
-                It.IsAny<FilterDescriptor>()
+                It.IsAny<FilterDescriptor>(),
+                It.IsAny<CancellationToken>()
             ));
 
             provider.VerifyNoOtherCalls();

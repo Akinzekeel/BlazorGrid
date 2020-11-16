@@ -12,6 +12,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System.Threading.Tasks;
+using System.Threading;
+using Bunit.TestDoubles;
 
 namespace BlazorGrid.Tests
 {
@@ -32,6 +34,7 @@ namespace BlazorGrid.Tests
             Services.AddTransient(_ => mockProvider.Object);
             Services.AddSingleton<IBlazorGridConfig>(_ => new DefaultConfig { Styles = new SpectreStyles() });
             Services.AddTransient<NavigationManager>(_ => new MockNav());
+            Services.AddMockJSRuntime();
         }
 
         [TestMethod]
@@ -54,7 +57,8 @@ namespace BlazorGrid.Tests
                 null,
                 false,
                 null,
-                It.IsAny<FilterDescriptor>()
+                It.IsAny<FilterDescriptor>(),
+                It.IsAny<CancellationToken>()
             ), Times.Once());
 
             // No other requests must have happened at this point
@@ -80,7 +84,8 @@ namespace BlazorGrid.Tests
                 null,
                 false,
                 "unit-test",
-                It.IsAny<FilterDescriptor>()
+                It.IsAny<FilterDescriptor>(),
+                It.IsAny<CancellationToken>()
             ), Times.Once());
 
             // Those must be the only 2 requests

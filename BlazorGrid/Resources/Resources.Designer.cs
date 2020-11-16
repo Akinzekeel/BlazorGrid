@@ -88,16 +88,16 @@ namespace BlazorGrid {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Load more ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Showing {0} out of {1} rows ähnelt.
         /// </summary>
-        public static string Footer_LoadMoreBtnLabel {
+        public static string Footer_FilteredRowCount {
             get {
-                return ResourceManager.GetString("Footer_LoadMoreBtnLabel", resourceCulture);
+                return ResourceManager.GetString("Footer_FilteredRowCount", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Showing {0} out of {1} rows ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die {0} rows total ähnelt.
         /// </summary>
         public static string Footer_RowCount {
             get {

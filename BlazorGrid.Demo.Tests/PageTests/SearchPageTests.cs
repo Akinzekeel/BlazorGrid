@@ -8,6 +8,7 @@ using BlazorGrid.Demo.Pages.Examples;
 using BlazorGrid.Demo.Tests.Mock;
 using BlazorGrid.Interfaces;
 using Bunit;
+using Bunit.TestDoubles.JSInterop;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -15,6 +16,7 @@ using Moq;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace BlazorGrid.Tests.Demo
@@ -22,6 +24,12 @@ namespace BlazorGrid.Tests.Demo
     [TestClass]
     public class SearchPageTests : Bunit.TestContext
     {
+        [TestInitialize]
+        public void Initialize()
+        {
+            Services.AddMockJSRuntime();
+        }
+
         public IRenderedComponent<Search> RenderPage()
         {
             var provider = new Mock<IGridProvider>();
@@ -32,7 +40,8 @@ namespace BlazorGrid.Tests.Demo
                 It.IsAny<string>(),
                 It.IsAny<bool>(),
                 It.IsAny<string>(),
-                It.IsAny<FilterDescriptor>()
+                It.IsAny<FilterDescriptor>(),
+                It.IsAny<CancellationToken>()
             )).ReturnsAsync(new BlazorGridResult<Employee>
             {
                 TotalCount = 50,

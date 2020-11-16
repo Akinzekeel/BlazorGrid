@@ -126,11 +126,11 @@
   <data name="Empty_Title" xml:space="preserve">
     <value>No data</value>
   </data>
-  <data name="Footer_LoadMoreBtnLabel" xml:space="preserve">
-    <value>Load more</value>
+  <data name="Footer_FilteredRowCount" xml:space="preserve">
+    <value>Showing {0} out of {1} rows</value>
   </data>
   <data name="Footer_RowCount" xml:space="preserve">
-    <value>Showing {0} out of {1} rows</value>
+    <value>{0} rows total</value>
   </data>
   <data name="LoadingError_Text" xml:space="preserve">
     <value>Failed to load data</value>

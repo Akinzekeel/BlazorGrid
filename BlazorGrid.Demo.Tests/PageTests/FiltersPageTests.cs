@@ -1,18 +1,10 @@
-﻿using BlazorGrid.Abstractions;
-using BlazorGrid.Config;
-using BlazorGrid.Config.Styles;
-using BlazorGrid.Demo.Tests.Mock;
-using BlazorGrid.Interfaces;
-using Bunit;
-using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Bunit;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 
 namespace BlazorGrid.Tests.Demo
 {
     [TestClass]
-    public class FiltersPageTests : ComponentTestFixture
+    public class FiltersPageTests : Bunit.TestContext
     {
         //[TestMethod]
         //[Ignore]

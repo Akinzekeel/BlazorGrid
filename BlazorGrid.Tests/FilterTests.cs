@@ -6,6 +6,7 @@ using BlazorGrid.Config.Styles;
 using BlazorGrid.Interfaces;
 using BlazorGrid.Tests.Mock;
 using Bunit;
+using Bunit.TestDoubles;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -13,6 +14,7 @@ using Moq;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
 using static Bunit.ComponentParameterFactory;
 
@@ -31,6 +33,7 @@ namespace BlazorGrid.Tests
         {
             Services.AddSingleton<IBlazorGridConfig>(_ => new DefaultConfig() { Styles = new SpectreStyles() });
             Services.AddTransient<NavigationManager>(_ => new MockNav());
+            Services.AddMockJSRuntime();
         }
 
         private TaskCompletionSource<BlazorGridResult<MyDto>> SetupMockProvider()
@@ -45,7 +48,8 @@ namespace BlazorGrid.Tests
                 It.IsAny<string>(),
                 It.IsAny<bool>(),
                 It.IsAny<string>(),
-                It.IsAny<FilterDescriptor>()
+                It.IsAny<FilterDescriptor>(),
+                It.IsAny<CancellationToken>()
             )).Returns(promise.Task);
 
             Services.AddSingleton(provider.Object);
@@ -80,7 +84,8 @@ namespace BlazorGrid.Tests
                 null,
                 false,
                 null,
-                It.IsAny<FilterDescriptor>()
+                It.IsAny<FilterDescriptor>(),
+                It.IsAny<CancellationToken>()
             ), Times.Once());
 
             // No other requests must have happened at this point
@@ -95,7 +100,8 @@ namespace BlazorGrid.Tests
                 null,
                 false,
                 null,
-                It.Is<FilterDescriptor>(f => f.Connector == ConnectorType.Any)
+                It.Is<FilterDescriptor>(f => f.Connector == ConnectorType.Any),
+                It.IsAny<CancellationToken>()
             ), Times.Once());
 
             // Those must be the only 2 requests
@@ -128,7 +134,8 @@ namespace BlazorGrid.Tests
                 null,
                 false,
                 null,
-                It.IsAny<FilterDescriptor>()
+                It.IsAny<FilterDescriptor>(),
+                It.IsAny<CancellationToken>()
             ), Times.Once(), "The provider was not called once before setting the filter");
 
             // No other requests must have happened at this point
@@ -149,7 +156,8 @@ namespace BlazorGrid.Tests
                 null,
                 false,
                 null,
-                It.Is<FilterDescriptor>(f => f.Filters.Any(p => p.Value == "Bar"))
+                It.Is<FilterDescriptor>(f => f.Filters.Any(p => p.Value == "Bar")),
+                It.IsAny<CancellationToken>()
             ), Times.Once(), "The provider was not called once after setting the filter");
 
             // Those must be the only 2 requests

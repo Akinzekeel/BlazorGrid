@@ -6,12 +6,14 @@ using BlazorGrid.Config.Styles;
 using BlazorGrid.Interfaces;
 using BlazorGrid.Tests.Mock;
 using Bunit;
+using Bunit.TestDoubles;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
 using System.Linq.Expressions;
+using System.Threading;
 using static Bunit.ComponentParameterFactory;
 
 namespace BlazorGrid.Tests
@@ -33,6 +35,7 @@ namespace BlazorGrid.Tests
             Services.AddTransient(_ => mockProvider.Object);
             Services.AddSingleton<IBlazorGridConfig>(_ => new DefaultConfig { Styles = new SpectreStyles() });
             Services.AddTransient<NavigationManager>(_ => new MockNav());
+            Services.AddMockJSRuntime();
         }
 
         [TestMethod]
@@ -54,7 +57,8 @@ namespace BlazorGrid.Tests
                 null,
                 false,
                 It.IsAny<string>(),
-                It.IsAny<FilterDescriptor>()
+                It.IsAny<FilterDescriptor>(),
+                It.IsAny<CancellationToken>()
             ), Times.Once());
 
             var th = grid.Find(".grid-header > *");
@@ -67,7 +71,8 @@ namespace BlazorGrid.Tests
                 nameof(MyDto.Name),
                 false,
                 It.IsAny<string>(),
-                It.IsAny<FilterDescriptor>()
+                It.IsAny<FilterDescriptor>(),
+                It.IsAny<CancellationToken>()
             ), Times.Once());
 
             mockProvider.VerifyNoOtherCalls();
@@ -96,7 +101,8 @@ namespace BlazorGrid.Tests
                 "Name",
                 desc,
                 It.IsAny<string>(),
-                It.IsAny<FilterDescriptor>()
+                It.IsAny<FilterDescriptor>(),
+                It.IsAny<CancellationToken>()
             ), Times.Once());
 
             var th = grid.Find(".grid-header > *");

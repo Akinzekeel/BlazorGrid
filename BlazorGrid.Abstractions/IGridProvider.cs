@@ -1,10 +1,20 @@
 using BlazorGrid.Abstractions.Filters;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace BlazorGrid.Abstractions
 {
     public interface IGridProvider
     {
-        Task<BlazorGridResult<T>> GetAsync<T>(string BaseUrl, int Offset, int Length, string OrderBy, bool OrderByDescending, string SearchQuery, FilterDescriptor Filter);
+        Task<BlazorGridResult<T>> GetAsync<T>(
+            string baseUrl,
+            int offset,
+            int length,
+            string orderBy,
+            bool orderByDescending,
+            string searchQuery,
+            FilterDescriptor filter,
+            CancellationToken cancellationToken
+        );
     }
 }

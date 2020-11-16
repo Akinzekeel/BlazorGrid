@@ -8,6 +8,7 @@ using BlazorGrid.Config.Styles;
 using BlazorGrid.Interfaces;
 using BlazorGrid.Tests.Mock;
 using Bunit;
+using Bunit.TestDoubles;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
 using static Bunit.ComponentParameterFactory;
 
@@ -44,7 +46,8 @@ namespace BlazorGrid.Tests
                 It.IsAny<string>(),
                 It.IsAny<bool>(),
                 It.IsAny<string>(),
-                It.IsAny<FilterDescriptor>()
+                It.IsAny<FilterDescriptor>(),
+                It.IsAny<CancellationToken>()
             )).ReturnsAsync(new BlazorGridResult<MyDto>
             {
                 TotalCount = 1,
@@ -55,9 +58,11 @@ namespace BlazorGrid.Tests
             Services.AddSingleton(provider.Object);
             Services.AddSingleton<IBlazorGridConfig>(new DefaultConfig { Styles = new SpectreStyles() });
             Services.AddSingleton<NavigationManager>(new MockNav());
+
+            Services.AddMockJSRuntime();
         }
 
-        private void VerifyColumnCount(IRenderedComponent<BlazorGrid<MyDto>> grid, int expectedColumnCount)
+        private static void VerifyColumnCount(IRenderedComponent<BlazorGrid<MyDto>> grid, int expectedColumnCount)
         {
             Assert.AreEqual(expectedColumnCount, grid.Instance.Columns.Count());
 
@@ -163,7 +168,6 @@ namespace BlazorGrid.Tests
             var noData = new List<MyDto>();
 
             var grid = RenderComponent<BlazorGrid<MyDto>>(
-                Parameter(nameof(BlazorGrid<MyDto>.Rows), noData),
                 Template<MyDto>(nameof(ChildContent), (dto) => (b) =>
                 {
                     b.OpenComponent(0, typeof(GridCol<string>));
@@ -242,7 +246,7 @@ namespace BlazorGrid.Tests
             );
 
             // Two renders should have happened at this point
-            Assert.AreEqual(2, grid.Instance.RenderCount);
+            Assert.AreEqual(2, grid.RenderCount);
 
             // Verify that two columns are rendered
             var rowElement = grid.FindAll(".grid-row").First();
@@ -266,7 +270,7 @@ namespace BlazorGrid.Tests
             );
 
             // Another render should have happened
-            Assert.AreEqual(4, grid.Instance.RenderCount);
+            Assert.AreEqual(4, grid.RenderCount);
 
             // Verify that only one column is rendered
             rowElement = grid.FindAll(".grid-row").First();
@@ -294,7 +298,7 @@ namespace BlazorGrid.Tests
             );
 
             // Another render should have happened
-            Assert.AreEqual(6, grid.Instance.RenderCount);
+            Assert.AreEqual(6, grid.RenderCount);
 
             // Verify that two columns are rendered
             rowElement = grid.FindAll(".grid-row").First();
@@ -361,75 +365,6 @@ namespace BlazorGrid.Tests
         }
 
         [TestMethod]
-        public void Load_More_Btn_Changes_State()
-        {
-            // Modify the provider
-            var fakeData = new BlazorGridResult<MyDto>
-            {
-                TotalCount = 100,
-                Data = Enumerable.Repeat(new MyDto(), BlazorGrid<MyDto>.DefaultPageSize).ToList()
-            };
-
-            var provider = Services.GetRequiredService<Mock<IGridProvider>>();
-            provider.Reset();
-
-            provider.Setup(x => x.GetAsync<MyDto>(
-                It.IsAny<string>(),
-                It.IsAny<int>(),
-                It.IsAny<int>(),
-                It.IsAny<string>(),
-                It.IsAny<bool>(),
-                It.IsAny<string>(),
-                It.IsAny<FilterDescriptor>()
-            )).ReturnsAsync(fakeData);
-
-            var grid = RenderComponent<BlazorGrid<MyDto>>(
-                Template<MyDto>("ChildContent", context => (RenderTreeBuilder b) =>
-                {
-                    Expression<Func<string>> colFor = () => context.Name;
-                    b.OpenComponent<GridCol<string>>(0);
-                    b.AddAttribute(1, "For", colFor);
-                    b.CloseComponent();
-                })
-            );
-
-            var promise = new TaskCompletionSource<BlazorGridResult<MyDto>>();
-
-            provider.Reset();
-            provider.Setup(x => x.GetAsync<MyDto>(
-                It.IsAny<string>(),
-                It.IsAny<int>(),
-                It.IsAny<int>(),
-                It.IsAny<string>(),
-                It.IsAny<bool>(),
-                It.IsAny<string>(),
-                It.IsAny<FilterDescriptor>()
-            )).Returns(promise.Task);
-
-            var renderCount = grid.Instance.RenderCount;
-            var gridStyle = Services.GetRequiredService<IBlazorGridConfig>();
-            var loadMoreBtn = grid.Find("." + gridStyle.Styles.FooterButtonClass.Replace(' ', '.'));
-            Assert.IsFalse(loadMoreBtn.HasAttribute("disabled"));
-
-            loadMoreBtn.Click();
-
-            var newRenderCount = grid.Instance.RenderCount;
-            Assert.AreNotEqual(renderCount, newRenderCount);
-
-            loadMoreBtn = grid.Find("." + gridStyle.Styles.FooterButtonLoadingClass.Replace(' ', '.'));
-            Assert.IsTrue(loadMoreBtn.HasAttribute("disabled"));
-
-            // Resolve the promise
-            promise.SetResult(fakeData);
-
-            // Await render
-            Task.Delay(100).Wait();
-
-            loadMoreBtn = grid.Find("." + gridStyle.Styles.FooterButtonClass.Replace(' ', '.'));
-            Assert.IsFalse(loadMoreBtn.HasAttribute("disabled"));
-        }
-
-        [TestMethod]
         public void Sorting_Shows_Loading_State()
         {
             var provider = Services.GetRequiredService<Mock<IGridProvider>>();
@@ -454,7 +389,8 @@ namespace BlazorGrid.Tests
                 It.IsAny<string>(),
                 It.IsAny<bool>(),
                 It.IsAny<string>(),
-                It.IsAny<FilterDescriptor>()
+                It.IsAny<FilterDescriptor>(),
+                It.IsAny<CancellationToken>()
             )).Returns(promise.Task);
 
             // Trigger sorting
@@ -462,20 +398,21 @@ namespace BlazorGrid.Tests
             th.Click();
 
             var gridStyle = Services.GetRequiredService<IBlazorGridConfig>();
-            var spinner = grid.Find("." + gridStyle.Styles.LoadingSpinnerOuterClass.Replace(' ', '.'));
+            Assert.Fail();
+            //var spinner = grid.Find("." + gridStyle.Styles.LoadingSpinnerOuterClass.Replace(' ', '.'));
 
-            Assert.IsNotNull(spinner);
+            //Assert.IsNotNull(spinner);
 
-            promise.SetResult(new BlazorGridResult<MyDto>
-            {
-                TotalCount = 1,
-                Data = new List<MyDto> { new MyDto() }
-            });
+            //promise.SetResult(new BlazorGridResult<MyDto>
+            //{
+            //    TotalCount = 1,
+            //    Data = new List<MyDto> { new MyDto() }
+            //});
 
-            Task.Delay(100).Wait();
+            //Task.Delay(100).Wait();
 
-            var spinners = grid.FindAll("." + gridStyle.Styles.LoadingSpinnerOuterClass.Replace(' ', '.'));
-            Assert.AreEqual(0, spinners.Count);
+            //var spinners = grid.FindAll("." + gridStyle.Styles.LoadingSpinnerOuterClass.Replace(' ', '.'));
+            //Assert.AreEqual(0, spinners.Count);
         }
     }
 }

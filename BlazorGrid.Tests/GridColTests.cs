@@ -4,6 +4,7 @@ using BlazorGrid.Components;
 using BlazorGrid.Interfaces;
 using BlazorGrid.Tests.Mock;
 using Bunit;
+using Bunit.TestDoubles;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,6 +24,12 @@ namespace BlazorGrid.Tests
     [TestClass]
     public class GridColTests : Bunit.TestContext
     {
+        [TestInitialize]
+        public void Initialize()
+        {
+            Services.AddMockJSRuntime();
+        }
+
         class MyDto
         {
             public string Name { get; set; }
@@ -59,7 +66,8 @@ namespace BlazorGrid.Tests
                 It.IsAny<string>(),
                 It.IsAny<bool>(),
                 It.IsAny<string>(),
-                It.IsAny<FilterDescriptor>()
+                It.IsAny<FilterDescriptor>(),
+                It.IsAny<CancellationToken>()
             )).ReturnsAsync(new BlazorGridResult<MyDto>
             {
                 TotalCount = 1,

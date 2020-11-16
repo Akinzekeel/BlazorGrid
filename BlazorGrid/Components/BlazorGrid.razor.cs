@@ -1,8 +1,10 @@
 using BlazorGrid.Abstractions;
+using BlazorGrid.Abstractions.Extensions;
 using BlazorGrid.Abstractions.Filters;
 using BlazorGrid.Abstractions.Helpers;
 using BlazorGrid.Interfaces;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web.Virtualization;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -10,19 +12,14 @@ using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace BlazorGrid.Components
 {
     public partial class BlazorGrid<TRow> : IDisposable, IBlazorGrid where TRow : class
     {
-        public int RenderCount { get; private set; }
-        internal bool IgnoreRender { get; private set; }
-
         private bool AreColumnsProcessed;
         private bool IgnoreSetParameters;
-        private bool IsLoadingMore;
         private bool IsInitialRenderDone;
         private readonly Type typeInfo = typeof(BlazorGrid<TRow>);
 
@@ -34,8 +31,7 @@ namespace BlazorGrid.Components
         {
             nameof(OnClick),
             nameof(Href),
-            nameof(Attributes),
-            nameof(Rows)
+            nameof(Attributes)
         };
 
         // Setting these parameters will not immediately cause a re-render, but a reload
@@ -45,10 +41,11 @@ namespace BlazorGrid.Components
             nameof(Query)
         };
 
-        [Inject] public IGridProvider Provider { get; set; }
-        [Inject] public IBlazorGridConfig Config { get; set; }
-        [Inject] public NavigationManager Nav { get; set; }
+        [Inject] private IGridProvider Provider { get; set; }
+        [Inject] private IBlazorGridConfig Config { get; set; }
+        [Inject] private NavigationManager Nav { get; set; }
 
+        [Parameter] public List<TRow> Rows { get; set; }
         [Parameter] public string SourceUrl { get; set; }
         [Parameter] public RenderFragment<TRow> ChildContent { get; set; }
         [Parameter] public int PageSize { get; set; } = DefaultPageSize;
@@ -59,20 +56,66 @@ namespace BlazorGrid.Components
         [Parameter] public Func<TRow, string> Href { get; set; }
         [Parameter] public Expression<Func<TRow, object>> DefaultOrderBy { get; set; }
         [Parameter] public bool DefaultOrderByDescending { get; set; }
-        [Parameter] public List<TRow> Rows { get; set; }
         [Parameter(CaptureUnmatchedValues = true)] public IDictionary<string, object> Attributes { get; set; }
 
+        private int? TotalRowCount;
         public FilterDescriptor Filter { get; private set; } = new FilterDescriptor();
-
         public string OrderByPropertyName { get; private set; }
         public bool OrderByDescending { get; private set; }
-        private int TotalCount { get; set; }
+
         private IList<IGridCol> RegisteredColumns = new List<IGridCol>();
         private IList<IGridCol> ColumnAddBuffer = new List<IGridCol>();
         public IEnumerable<IGridCol> Columns => RegisteredColumns;
         private Exception LoadingError { get; set; }
 
-        public event EventHandler<int> OnAfterRowClicked;
+        private async ValueTask<ItemsProviderResult<TRow>> GetItemsVirtualized(ItemsProviderRequest request)
+        {
+            var len = Math.Max(request.Count, PageSize);
+
+            if (Rows != null)
+            {
+                var rows = Rows.AsQueryable();
+
+                if (OrderByPropertyName != null)
+                {
+                    // Apply client-side sorting
+                    if (OrderByDescending)
+                    {
+                        rows = rows.OrderByDescending(OrderByPropertyName);
+                    }
+                    else
+                    {
+                        rows = rows.OrderBy(OrderByPropertyName);
+                    }
+                }
+
+                rows = rows
+                    .Skip(request.StartIndex)
+                    .Take(len);
+
+                return new ItemsProviderResult<TRow>(rows, Rows.Count);
+            }
+
+            var result = await Provider.GetAsync<TRow>
+            (
+                SourceUrl,
+                request.StartIndex,
+                len,
+                OrderByPropertyName,
+                OrderByDescending,
+                Query,
+                Filter,
+                request.CancellationToken
+            );
+
+            if (request.CancellationToken.IsCancellationRequested)
+            {
+                return await ValueTask.FromCanceled<ItemsProviderResult<TRow>>(request.CancellationToken);
+            }
+
+            TotalRowCount = result.TotalCount;
+            return new ItemsProviderResult<TRow>(result.Data, result.TotalCount);
+        }
 
         private IDictionary<string, object> FinalAttributes
         {
@@ -153,11 +196,6 @@ namespace BlazorGrid.Components
                     OrderByDescending = DefaultOrderByDescending;
                 }
 
-                if (Rows is null)
-                {
-                    InvokeAsync(() => LoadAsync(true));
-                }
-
                 // Subscribe to Filter object changes
                 Filter.PropertyChanged += OnFilterChanged;
                 Filter.Filters.CollectionChanged += OnFilterCollectionChanged;
@@ -167,7 +205,7 @@ namespace BlazorGrid.Components
 
             if (AreColumnsProcessed)
             {
-                IgnoreRender = true;
+                //IgnoreRender = true;
             }
             else if (ColumnAddBuffer.Any())
             {
@@ -175,86 +213,20 @@ namespace BlazorGrid.Components
                 RegisteredColumns = ColumnAddBuffer;
                 ColumnAddBuffer = new List<IGridCol>();
                 AreColumnsProcessed = true;
-                IgnoreRender = false;
+                //IgnoreRender = false;
                 StateHasChanged();
             }
-
-            RenderCount++;
         }
 
         private void OnFilterCollectionChanged(object sender, NotifyCollectionChangedEventArgs e) => Reload();
         private void OnFilterChanged(object sender, PropertyChangedEventArgs e) => Reload();
+        public void Reload() => StateHasChanged();
 
-        public Task Reload() => InvokeAsync(() => LoadAsync(true));
-
-        private async Task LoadAsync(bool Initialize)
-        {
-            if (IsLoadingMore)
-            {
-                return;
-            }
-
-            if (Initialize)
-            {
-                Rows = null;
-            }
-
-            LoadingError = null;
-            IsLoadingMore = true;
-            IgnoreRender = false;
-            StateHasChanged();
-
-            try
-            {
-                var result = await Provider.GetAsync<TRow>(
-                    SourceUrl,
-                    Rows?.Count ?? 0,
-                    PageSize,
-                    OrderByPropertyName,
-                    OrderByDescending,
-                    Query,
-                    Filter
-                );
-
-                if (result != null)
-                {
-                    TotalCount = result.TotalCount;
-
-                    if (Initialize)
-                    {
-                        Rows = result.Data.ToList();
-                    }
-                    else
-                    {
-                        Rows.AddRange(result.Data);
-                    }
-                }
-                else
-                {
-                    Rows = new List<TRow>();
-                }
-            }
-            catch (InvalidOperationException)
-            {
-                throw;
-            }
-            catch (HttpRequestException x)
-            {
-                LoadingError = x;
-            }
-            finally
-            {
-                IsLoadingMore = false;
-                IgnoreRender = false;
-                StateHasChanged();
-            }
-        }
-
-        public Task TryApplySorting(IGridCol column)
+        public void TryApplySorting(IGridCol column)
         {
             if (column.PropertyName == null)
             {
-                return Task.CompletedTask;
+                return;
             }
 
             // Change direction if it's already sorted
@@ -268,9 +240,8 @@ namespace BlazorGrid.Components
                 OrderByDescending = false;
             }
 
-            IgnoreRender = false;
-
-            return InvokeAsync(() => LoadAsync(true));
+            //IgnoreRender = false;
+            Reload();
         }
 
         public string GetPropertyName<T>(Expression<Func<T>> property)
@@ -284,26 +255,9 @@ namespace BlazorGrid.Components
             return string.Join(' ', widths);
         }
 
-        public Task LoadMoreAsync()
+        private async Task OnRowClicked(TRow row)
         {
-            if (IsLoadingMore)
-            {
-                return Task.CompletedTask;
-            }
-
-            IgnoreRender = false;
-
-            return InvokeAsync(() => LoadAsync(false));
-        }
-
-        public int LastClickedRowIndex { get; private set; } = -1;
-
-        private async Task OnRowClicked(int index)
-        {
-            LastClickedRowIndex = index;
-
-            var r = Rows.ElementAt(index);
-            var onClickUrl = Href?.Invoke(r);
+            var onClickUrl = Href?.Invoke(row);
 
             if (onClickUrl != null)
             {
@@ -313,13 +267,7 @@ namespace BlazorGrid.Components
             else if (OnClick.HasDelegate)
             {
                 IgnoreSetParameters = true;
-                await OnClick.InvokeAsync(r);
-            }
-
-            if (OnAfterRowClicked != null)
-            {
-                IgnoreSetParameters = true;
-                OnAfterRowClicked.Invoke(this, index);
+                await OnClick.InvokeAsync(row);
             }
         }
 
@@ -373,7 +321,7 @@ namespace BlazorGrid.Components
                 return;
             }
 
-            IgnoreRender = true;
+            //IgnoreRender = true;
 
             var mustReload = false;
             var p = parameters.ToDictionary().ToDictionary(x => x.Key, x => x.Value);
@@ -413,41 +361,41 @@ namespace BlazorGrid.Components
                 RegisteredColumns.Clear();
                 ColumnAddBuffer.Clear();
 
-                IgnoreRender = false;
+                //IgnoreRender = false;
                 AreColumnsProcessed = false;
             }
 
             if (mustReload)
             {
                 await base.SetParametersAsync(parameters);
-                await InvokeAsync(() => LoadAsync(true));
+                Reload();
                 return;
             }
 
-            if (IgnoreRender)
-            {
-                foreach (var parameter in RerenderParameterNames)
-                {
-                    if (!p.ContainsKey(parameter))
-                    {
-                        continue;
-                    }
+            //if (IgnoreRender)
+            //{
+            //    foreach (var parameter in RerenderParameterNames)
+            //    {
+            //        if (!p.ContainsKey(parameter))
+            //        {
+            //            continue;
+            //        }
 
-                    if (!Equals(typeInfo.GetProperty(parameter), p[parameter]))
-                    {
-                        IgnoreRender = false;
-                        break;
-                    }
-                }
-            }
+            //        if (!Equals(typeInfo.GetProperty(parameter), p[parameter]))
+            //        {
+            //            IgnoreRender = false;
+            //            break;
+            //        }
+            //    }
+            //}
 
             await base.SetParametersAsync(parameters);
         }
 
-        protected override bool ShouldRender()
-        {
-            return !IgnoreRender;
-        }
+        //protected override bool ShouldRender()
+        //{
+        //    return !IgnoreRender;
+        //}
 
         public void Dispose()
         {

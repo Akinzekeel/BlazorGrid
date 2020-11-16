@@ -4,6 +4,7 @@ using System;
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace BlazorGrid.Providers
@@ -17,15 +18,25 @@ namespace BlazorGrid.Providers
             this.http = http;
         }
 
-        public virtual async Task<BlazorGridResult<T>> GetAsync<T>(string BaseUrl, int Offset, int Length, string OrderBy, bool OrderByDescending, string SearchQuery, FilterDescriptor Filter)
+        public virtual async Task<BlazorGridResult<T>> GetAsync<T>(
+            string baseUrl,
+            int offset,
+            int length,
+            string orderBy,
+            bool orderByDescending,
+            string searchQuery,
+            FilterDescriptor filter,
+            CancellationToken cancellationToken
+        )
         {
-            var url = GetRequestUrl(BaseUrl, Offset, Length, OrderBy, OrderByDescending, SearchQuery, Filter);
-            var response = await http.GetAsync(url);
+            var url = GetRequestUrl(baseUrl, offset, length, orderBy, orderByDescending, searchQuery, filter);
+            var response = await http.GetAsync(url, cancellationToken);
             var result = await DeserializeJsonAsync<BlazorGridResult<T>>(response);
+
             return result;
         }
 
-        protected async Task<T> DeserializeJsonAsync<T>(HttpResponseMessage response)
+        protected static async Task<T> DeserializeJsonAsync<T>(HttpResponseMessage response)
         {
             if (!response.IsSuccessStatusCode)
             {
@@ -41,12 +52,6 @@ namespace BlazorGrid.Providers
 
             var content = await response.Content.ReadAsStringAsync();
             return System.Text.Json.JsonSerializer.Deserialize<T>(content);
-        }
-
-        [Obsolete]
-        protected virtual string GetRequestUrl(string BaseUrl, string RowId)
-        {
-            return BaseUrl.TrimEnd('/') + '/' + RowId + "?More=false";
         }
 
         protected virtual string GetRequestUrl(string BaseUrl, int Offset, int Length, string OrderBy, bool OrderByDescending, string SearchQuery, FilterDescriptor Filter)

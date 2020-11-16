@@ -8,10 +8,22 @@
         display: grid;
         background-color: inherit;
         grid-template-columns: repeat(auto);
+
+        > *:not(.grid-row), .grid-row-span-all {
+            grid-column: 1/-1;
+        }
     }
 
     .grid-row {
         display: contents;
+
+        &.grid-row-placeholder .grid-cell-placeholder {
+            display: block;
+            animation: placeholderBackground 1.8s infinite linear forwards;
+            background: linear-gradient(to right, #fafafa 8%, #f4f4f4 38%, #fafafa 54%);
+            background-size: 1000px 640px;
+            user-select: none;
+        }
 
         > * {
             padding: $bzg-cell-padding-x $bzg-cell-padding-y;
@@ -113,5 +125,15 @@
                 }
             }
         }
+    }
+}
+
+@keyframes placeholderBackground {
+    0% {
+        background-position: -468px 0
+    }
+
+    100% {
+        background-position: 468px 0
     }
 }

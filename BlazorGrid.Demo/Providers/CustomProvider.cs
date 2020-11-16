@@ -6,6 +6,7 @@ using BlazorGrid.Providers;
 using System;
 using System.Linq;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace BlazorGrid.Demo.Providers
@@ -19,34 +20,57 @@ namespace BlazorGrid.Demo.Providers
             this.http = http;
         }
 
-        public override async Task<BlazorGridResult<T>> GetAsync<T>(string BaseUrl, int Offset, int Length, string OrderBy, bool OrderByDescending, string SearchQuery, FilterDescriptor Filter)
+        public override async Task<BlazorGridResult<T>> GetAsync<T>(
+            string baseUrl,
+            int offset,
+            int length,
+            string orderBy,
+            bool orderByDescending,
+            string searchQuery,
+            FilterDescriptor filter,
+            CancellationToken cancellationToken
+        )
         {
-            var url = GetRequestUrl(BaseUrl, Offset, Length, OrderBy, OrderByDescending, SearchQuery, Filter);
-            var response = await http.GetAsync(url);
-            var result = await DeserializeJsonAsync<BlazorGridResult<T>>(response);
+            var url = GetRequestUrl(baseUrl, offset, length, orderBy, orderByDescending, searchQuery, filter);
+
+            var httpCancellationToken = new CancellationTokenSource();
+            var httpTask = http.GetAsync(url, httpCancellationToken.Token);
+
+            while (!httpTask.IsCompleted)
+            {
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    httpCancellationToken.Cancel();
+                    return null;
+                }
+
+                await Task.Delay(150);
+            }
+
+            var result = await DeserializeJsonAsync<BlazorGridResult<T>>(httpTask.Result);
             var totalCount = result.TotalCount;
 
             var data = result.Data.AsQueryable();
 
-            if (OrderBy != null)
+            if (orderBy != null)
             {
-                if (OrderByDescending)
+                if (orderByDescending)
                 {
-                    data = data.OrderByDescending(OrderBy);
+                    data = data.OrderByDescending(orderBy);
                 }
                 else
                 {
-                    data = data.OrderBy(OrderBy);
+                    data = data.OrderBy(orderBy);
                 }
             }
 
-            if (!string.IsNullOrEmpty(SearchQuery) && data is IQueryable<Employee> employees)
+            if (!string.IsNullOrEmpty(searchQuery) && data is IQueryable<Employee> employees)
             {
                 data = employees.Where(x =>
-                    x.Email.IndexOf(SearchQuery, StringComparison.CurrentCultureIgnoreCase) > -1
-                    || x.FirstName.IndexOf(SearchQuery, StringComparison.CurrentCultureIgnoreCase) == 0
-                    || x.LastName.IndexOf(SearchQuery, StringComparison.CurrentCultureIgnoreCase) == 0
-                    || x.Id.ToString() == SearchQuery
+                    x.Email.IndexOf(searchQuery, StringComparison.CurrentCultureIgnoreCase) > -1
+                    || x.FirstName.IndexOf(searchQuery, StringComparison.CurrentCultureIgnoreCase) == 0
+                    || x.LastName.IndexOf(searchQuery, StringComparison.CurrentCultureIgnoreCase) == 0
+                    || x.Id.ToString() == searchQuery
                 ).Cast<T>();
 
                 totalCount = data.Count();
@@ -63,7 +87,7 @@ namespace BlazorGrid.Demo.Providers
             var finalResult = new BlazorGridResult<T>
             {
                 TotalCount = totalCount,
-                Data = data.Skip(Offset).Take(Length).ToList()
+                Data = data.Skip(offset).Take(length).ToList()
             };
 
             return finalResult;
