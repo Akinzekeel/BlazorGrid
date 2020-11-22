@@ -132,7 +132,7 @@ namespace BlazorGrid.Tests
 
             // Now let's try changing the sorting
             var col = grid.FindComponent<GridCol<string>>();
-            await col.InvokeAsync(() => grid.Instance.TryApplySorting(col.Instance));
+            await col.InvokeAsync(() => grid.Instance.TryApplySortingAsync(col.Instance));
 
             Assert.AreEqual(4, grid.RenderCount);
         }

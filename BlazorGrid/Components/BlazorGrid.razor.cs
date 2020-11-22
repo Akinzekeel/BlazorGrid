@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace BlazorGrid.Components
 {
-    public partial class BlazorGrid<TRow> : IDisposable, IBlazorGrid where TRow : class
+    public partial class BlazorGrid<TRow> : ComponentBase, IDisposable, IBlazorGrid where TRow : class
     {
         private bool AreColumnsProcessed;
         private bool IgnoreSetParameters;
@@ -67,6 +67,8 @@ namespace BlazorGrid.Components
         private IList<IGridCol> ColumnAddBuffer = new List<IGridCol>();
         public IEnumerable<IGridCol> Columns => RegisteredColumns;
         private Exception LoadingError { get; set; }
+        private Virtualize<TRow> VirtualizeRef;
+        private bool IgnoreRender;
 
         private async ValueTask<ItemsProviderResult<TRow>> GetItemsVirtualized(ItemsProviderRequest request)
         {
@@ -218,11 +220,20 @@ namespace BlazorGrid.Components
             }
         }
 
-        private void OnFilterCollectionChanged(object sender, NotifyCollectionChangedEventArgs e) => Reload();
-        private void OnFilterChanged(object sender, PropertyChangedEventArgs e) => Reload();
-        public void Reload() => StateHasChanged();
+        private async void OnFilterCollectionChanged(object sender, NotifyCollectionChangedEventArgs e) => await ReloadAsync();
+        private async void OnFilterChanged(object sender, PropertyChangedEventArgs e) => await ReloadAsync();
 
-        public void TryApplySorting(IGridCol column)
+        public async Task ReloadAsync()
+        {
+            if (VirtualizeRef != null)
+            {
+                await VirtualizeRef.RefreshDataAsync();
+            }
+
+            StateHasChanged();
+        }
+
+        public async Task TryApplySortingAsync(IGridCol column)
         {
             if (column.PropertyName == null)
             {
@@ -241,7 +252,7 @@ namespace BlazorGrid.Components
             }
 
             //IgnoreRender = false;
-            Reload();
+            await ReloadAsync();
         }
 
         public string GetPropertyName<T>(Expression<Func<T>> property)
@@ -368,34 +379,34 @@ namespace BlazorGrid.Components
             if (mustReload)
             {
                 await base.SetParametersAsync(parameters);
-                Reload();
+                await ReloadAsync();
                 return;
             }
 
-            //if (IgnoreRender)
-            //{
-            //    foreach (var parameter in RerenderParameterNames)
-            //    {
-            //        if (!p.ContainsKey(parameter))
-            //        {
-            //            continue;
-            //        }
+            if (IgnoreRender)
+            {
+                foreach (var parameter in RerenderParameterNames)
+                {
+                    if (!p.ContainsKey(parameter))
+                    {
+                        continue;
+                    }
 
-            //        if (!Equals(typeInfo.GetProperty(parameter), p[parameter]))
-            //        {
-            //            IgnoreRender = false;
-            //            break;
-            //        }
-            //    }
-            //}
+                    if (!Equals(typeInfo.GetProperty(parameter), p[parameter]))
+                    {
+                        IgnoreRender = false;
+                        break;
+                    }
+                }
+            }
 
             await base.SetParametersAsync(parameters);
         }
 
-        //protected override bool ShouldRender()
-        //{
-        //    return !IgnoreRender;
-        //}
+        protected override bool ShouldRender()
+        {
+            return !IgnoreRender;
+        }
 
         public void Dispose()
         {

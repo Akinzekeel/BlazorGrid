@@ -10,7 +10,7 @@
             <header class="grid-row grid-header">
                 @foreach (var col in RegisteredColumns)
                 {
-                    <div @onclick="() => TryApplySorting(col)" class="@col.CssClass">
+                    <div @onclick="() => TryApplySortingAsync(col)" class="@col.CssClass">
                         @if (!col.AlignRight)
                         {
                             @col.GetCaptionOrDefault()
@@ -64,7 +64,7 @@
             }
             else
             {
-                <Virtualize ItemsProvider="GetItemsVirtualized">
+                <Virtualize ItemsProvider="GetItemsVirtualized" @ref="VirtualizeRef">
                     <Placeholder>
                         <div class="grid-row grid-row-placeholder" aria-label="@Resources.Loading_Text">
                             @foreach (var col in RegisteredColumns)
