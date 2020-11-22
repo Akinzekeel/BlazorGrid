@@ -37,6 +37,7 @@ namespace BlazorGrid.Tests
             Services.AddMockJSRuntime();
         }
 
+        [Ignore]
         [TestMethod]
         public async Task Query_Set_Triggers_Provider_Call()
         {

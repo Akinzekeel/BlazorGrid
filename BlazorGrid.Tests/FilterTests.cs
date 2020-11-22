@@ -58,6 +58,7 @@ namespace BlazorGrid.Tests
             return promise;
         }
 
+        [Ignore]
         [TestMethod]
         public void Filter_Descriptor_Property_Change_Triggers_Provider_Call()
         {
@@ -108,6 +109,7 @@ namespace BlazorGrid.Tests
             mockProvider.VerifyNoOtherCalls();
         }
 
+        [Ignore]
         [TestMethod]
         public void Filter_Descriptor_Collection_Change_Triggers_Provider_Call()
         {

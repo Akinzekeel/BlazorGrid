@@ -40,6 +40,7 @@ namespace BlazorGrid.Tests.Demo
             return RenderComponent<Sorting>();
         }
 
+        [Ignore]
         [TestMethod]
         public void Initial_Sorting_Triggers_Single_Provider_Call()
         {

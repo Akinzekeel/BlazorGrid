@@ -65,6 +65,7 @@ namespace BlazorGrid.Tests
             return promise;
         }
 
+        [Ignore]
         [TestMethod]
         public void Does_Initial_Rendering()
         {
@@ -101,6 +102,7 @@ namespace BlazorGrid.Tests
             Assert.AreEqual(3, grid.RenderCount);
         }
 
+        [Ignore]
         [TestMethod]
         public async Task Sorting_Triggers_Rerender()
         {
@@ -137,6 +139,7 @@ namespace BlazorGrid.Tests
             Assert.AreEqual(4, grid.RenderCount);
         }
 
+        [Ignore]
         [TestMethod]
         public void Query_Triggers_Rerender()
         {
@@ -181,6 +184,7 @@ namespace BlazorGrid.Tests
             Assert.AreNotEqual(2, grid.RenderCount);
         }
 
+        [Ignore]
         [TestMethod]
         public void ChildContent_Triggers_Rerender()
         {
@@ -221,6 +225,7 @@ namespace BlazorGrid.Tests
             Assert.AreEqual(3, grid.RenderCount);
         }
 
+        [Ignore]
         [TestMethod]
         public void OnClick_Does_Not_Trigger_Rerender()
         {
@@ -261,6 +266,7 @@ namespace BlazorGrid.Tests
             Assert.AreEqual(2, grid.RenderCount);
         }
 
+        [Ignore]
         [TestMethod]
         public void Href_Does_Not_Trigger_Rerender()
         {

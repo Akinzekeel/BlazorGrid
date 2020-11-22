@@ -38,6 +38,7 @@ namespace BlazorGrid.Tests
             Services.AddMockJSRuntime();
         }
 
+        [Ignore]
         [TestMethod]
         public void Header_Click_Triggers_Sort()
         {
@@ -78,6 +79,7 @@ namespace BlazorGrid.Tests
             mockProvider.VerifyNoOtherCalls();
         }
 
+        [Ignore]
         [DataTestMethod]
         [DataRow(true)]
         [DataRow(false)]

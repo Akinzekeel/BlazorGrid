@@ -162,6 +162,7 @@ namespace BlazorGrid.Tests
             Assert.AreEqual("grid-scrollview", scroller.ClassName);
         }
 
+        [Ignore]
         [TestMethod]
         public void Has_Grid_Column_Style()
         {
@@ -224,6 +225,7 @@ namespace BlazorGrid.Tests
             Assert.AreEqual("sortable", th.ClassName);
         }
 
+        [Ignore]
         [TestMethod]
         public void Can_Modify_Columns()
         {
@@ -311,6 +313,7 @@ namespace BlazorGrid.Tests
             VerifyColumnCount(grid, 2);
         }
 
+        [Ignore]
         [TestMethod]
         public void Can_Set_Custom_Attributes()
         {
@@ -364,6 +367,7 @@ namespace BlazorGrid.Tests
             grid.MarkupMatches("");
         }
 
+        [Ignore]
         [TestMethod]
         public void Sorting_Shows_Loading_State()
         {
