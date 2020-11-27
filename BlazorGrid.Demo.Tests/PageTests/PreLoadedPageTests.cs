@@ -5,7 +5,6 @@ using BlazorGrid.Demo.Pages.Examples;
 using BlazorGrid.Demo.Tests.Mock;
 using BlazorGrid.Interfaces;
 using Bunit;
-using Bunit.TestDoubles.JSInterop;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -16,12 +15,6 @@ namespace BlazorGrid.Tests.Demo
     [TestClass]
     public class PreLoadedPageTests : Bunit.TestContext
     {
-        [TestInitialize]
-        public void Initialize()
-        {
-            Services.AddMockJSRuntime();
-        }
-
         [TestMethod]
         public void Can_Render_Page()
         {

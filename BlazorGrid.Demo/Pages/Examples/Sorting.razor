@@ -12,7 +12,9 @@
 
 <Tabs>
     <Tab Caption="Result" class="p-3">
-        <BlazorGrid TRow="Employee" SourceUrl="data/employees.json" style="max-height: 340px;" DefaultOrderBy="x => x.FirstName">
+        <BlazorGrid TRow="Employee" SourceUrl="data/employees.json"
+                    style="max-height: 340px;"
+                    DefaultOrderBy="x => x.FirstName">
             <StaticGridCol FitToContent="true">
                 <img src="@context.Avatar" style="width: 20px; height: 20px;" />
             </StaticGridCol>

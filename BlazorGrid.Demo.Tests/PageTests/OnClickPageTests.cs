@@ -8,7 +8,6 @@ using BlazorGrid.Demo.Pages.Examples;
 using BlazorGrid.Demo.Tests.Mock;
 using BlazorGrid.Interfaces;
 using Bunit;
-using Bunit.TestDoubles.JSInterop;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -22,12 +21,6 @@ namespace BlazorGrid.Tests.Demo
     [TestClass]
     public class OnClickPageTests : Bunit.TestContext
     {
-        [TestInitialize]
-        public void Initialize()
-        {
-            Services.AddMockJSRuntime();
-        }
-
         private IRenderedComponent<OnClick> RenderPage()
         {
             var provider = new Mock<IGridProvider>();
@@ -62,22 +55,19 @@ namespace BlazorGrid.Tests.Demo
             RenderPage();
         }
 
-        [Ignore]
         [TestMethod]
-        public void Click_Does_Not_Cause_Rerender()
+        public async Task Click_Does_Not_Cause_Rerender()
         {
             var page = RenderPage();
             var grid = page.FindComponent<BlazorGrid<Employee>>();
 
-            Task.Delay(200).Wait();
-
-            //Assert.IsTrue(grid.Instance.IgnoreRender);
+            await Task.Delay(200);
 
             var renderCount = grid.RenderCount;
-            var row = grid.Find(".grid-header + .grid-row");
-            row.Click();
+            var row = grid.Find(".grid-row:not(.grid-header)");
+            await grid.InvokeAsync(() => row.Click());
 
-            Task.Delay(200).Wait();
+            await Task.Delay(200);
 
             Assert.AreEqual(renderCount, grid.RenderCount);
         }

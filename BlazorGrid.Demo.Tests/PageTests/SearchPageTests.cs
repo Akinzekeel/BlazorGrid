@@ -8,7 +8,6 @@ using BlazorGrid.Demo.Pages.Examples;
 using BlazorGrid.Demo.Tests.Mock;
 using BlazorGrid.Interfaces;
 using Bunit;
-using Bunit.TestDoubles.JSInterop;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -24,12 +23,6 @@ namespace BlazorGrid.Tests.Demo
     [TestClass]
     public class SearchPageTests : Bunit.TestContext
     {
-        [TestInitialize]
-        public void Initialize()
-        {
-            Services.AddMockJSRuntime();
-        }
-
         public IRenderedComponent<Search> RenderPage()
         {
             var provider = new Mock<IGridProvider>();
@@ -59,7 +52,6 @@ namespace BlazorGrid.Tests.Demo
             return RenderComponent<Search>();
         }
 
-        [Ignore]
         [TestMethod]
         public void Search_Input_Triggers_Provider_Call_Delayed()
         {
