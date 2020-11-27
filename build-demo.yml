@@ -15,6 +15,10 @@ variables:
 
 steps:
 
+- task: NuGetAuthenticate@0
+  inputs:
+    nuGetServiceConnections: 'Bunit nightly builds'
+
 - task: DotNetCoreCLI@2
   displayName: 'Build BlazorGrid.Demo'
   inputs:
