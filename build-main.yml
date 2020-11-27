@@ -29,6 +29,10 @@ steps:
 
 - task: NuGetToolInstaller@1
 
+- task: NuGetAuthenticate@0
+  inputs:
+    nuGetServiceConnections: 'Bunit nightly builds'
+
 - task: DotNetCoreCLI@2
   displayName: 'Build BlazorGrid'
   inputs:
