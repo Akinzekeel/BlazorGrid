@@ -38,12 +38,19 @@ steps:
     nuGetServiceConnections: 'Bunit nightly builds'
 
 - task: DotNetCoreCLI@2
+  displayName: 'NuGet restore'
+  inputs:
+    command: restore
+    projects: '**/*.csproj'
+    configuration: $(buildConfiguration)
+
+- task: DotNetCoreCLI@2
   displayName: 'Build BlazorGrid'
   inputs:
     command: 'build'
     projects: 'BlazorGrid/BlazorGrid.csproj'
     configuration: $(buildConfiguration)
-    arguments: '-o $(Build.ArtifactStagingDirectory)'
+    arguments: '-o $(Build.ArtifactStagingDirectory) --no-restore'
 
 - task: DotNetCoreCLI@2
   displayName: 'Test'
@@ -51,6 +58,7 @@ steps:
     command: 'test'
     projects: 'BlazorGrid.Tests/BlazorGrid.Tests.csproj'
     configuration: $(buildConfiguration)
+    arguments: '--no-restore'
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish artifacts'
