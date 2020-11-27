@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="bunit.web" Version="1.0.0-beta-11" />
+    <PackageReference Include="bunit.web" Version="1.0.0-preview-01-gf1c95e2f14" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.0-preview-20201020-06" />
     <PackageReference Include="Moq" Version="4.15.1" />
     <PackageReference Include="MSTest.TestAdapter" Version="2.1.2" />

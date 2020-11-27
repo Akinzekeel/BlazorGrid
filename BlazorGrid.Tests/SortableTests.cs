@@ -12,8 +12,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
+using System.Threading.Tasks;
 using static Bunit.ComponentParameterFactory;
 
 namespace BlazorGrid.Tests
@@ -35,13 +37,26 @@ namespace BlazorGrid.Tests
             Services.AddTransient(_ => mockProvider.Object);
             Services.AddSingleton<IBlazorGridConfig>(_ => new DefaultConfig { Styles = new SpectreStyles() });
             Services.AddTransient<NavigationManager>(_ => new MockNav());
-            Services.AddMockJSRuntime();
         }
 
-        [Ignore]
         [TestMethod]
-        public void Header_Click_Triggers_Sort()
+        public async Task Header_Click_Triggers_Sort()
         {
+            mockProvider.Setup(x => x.GetAsync<MyDto>(
+                It.IsAny<string>(),
+                It.IsAny<int>(),
+                It.IsAny<int>(),
+                It.IsAny<string>(),
+                It.IsAny<bool>(),
+                It.IsAny<string>(),
+                It.IsAny<FilterDescriptor>(),
+                It.IsAny<CancellationToken>()
+            )).ReturnsAsync(new BlazorGridResult<MyDto>
+            {
+                TotalCount = 3,
+                Data = Enumerable.Repeat(new MyDto(), 3).ToList()
+            });
+
             var grid = RenderComponent<BlazorGrid<MyDto>>(
                 Template<MyDto>(nameof(ChildContent), (dto) => (b) =>
                 {
@@ -63,7 +78,9 @@ namespace BlazorGrid.Tests
             ), Times.Once());
 
             var th = grid.Find(".grid-header > *");
-            th.Click();
+            Assert.IsNotNull(th, "Failed to find the column header element");
+
+            await grid.InvokeAsync(() => th.Click());
 
             mockProvider.Verify(x => x.GetAsync<MyDto>(
                 It.IsAny<string>(),
@@ -79,12 +96,26 @@ namespace BlazorGrid.Tests
             mockProvider.VerifyNoOtherCalls();
         }
 
-        [Ignore]
         [DataTestMethod]
         [DataRow(true)]
         [DataRow(false)]
         public void Can_Detect_Sorted_Column(bool desc)
         {
+            mockProvider.Setup(x => x.GetAsync<MyDto>(
+                It.IsAny<string>(),
+                It.IsAny<int>(),
+                It.IsAny<int>(),
+                It.IsAny<string>(),
+                It.IsAny<bool>(),
+                It.IsAny<string>(),
+                It.IsAny<FilterDescriptor>(),
+                It.IsAny<CancellationToken>()
+            )).ReturnsAsync(new BlazorGridResult<MyDto>
+            {
+                TotalCount = 3,
+                Data = Enumerable.Repeat(new MyDto(), 3).ToList()
+            });
+
             var grid = RenderComponent<BlazorGrid<MyDto>>(
                 Parameter(nameof(BlazorGrid<MyDto>.DefaultOrderBy), (Expression<Func<MyDto, object>>)(x => x.Name)),
                 Parameter(nameof(BlazorGrid<MyDto>.DefaultOrderByDescending), desc),

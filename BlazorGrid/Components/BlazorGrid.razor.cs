@@ -20,19 +20,12 @@ namespace BlazorGrid.Components
     {
         private bool AreColumnsProcessed;
         private bool IgnoreSetParameters;
+        private bool IgnoreShouldRender;
         private bool IsInitialRenderDone;
         private readonly Type typeInfo = typeof(BlazorGrid<TRow>);
 
         public const int DefaultPageSize = 25;
         public const int SearchQueryInputDebounceMs = 400;
-
-        // Setting these parameters will cause a grid re-render
-        private static readonly string[] RerenderParameterNames = new string[]
-        {
-            nameof(OnClick),
-            nameof(Href),
-            nameof(Attributes)
-        };
 
         // Setting these parameters will not immediately cause a re-render, but a reload
         private static readonly string[] ReloadTriggerParameterNames = new string[]
@@ -48,7 +41,6 @@ namespace BlazorGrid.Components
         [Parameter] public List<TRow> Rows { get; set; }
         [Parameter] public string SourceUrl { get; set; }
         [Parameter] public RenderFragment<TRow> ChildContent { get; set; }
-        [Parameter] public int PageSize { get; set; } = DefaultPageSize;
         [Parameter] public TRow EmptyRow { get; set; }
         [Parameter] public string Query { get; set; }
         [Parameter] public string QueryUserInput { get => QueryDebounceValue; set => SetQueryDebounced(value); }
@@ -67,12 +59,13 @@ namespace BlazorGrid.Components
         private IList<IGridCol> ColumnAddBuffer = new List<IGridCol>();
         public IEnumerable<IGridCol> Columns => RegisteredColumns;
         private Exception LoadingError { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Modifizierer \"readonly\" hinzufügen", Justification = "<Ausstehend>")]
         private Virtualize<TRow> VirtualizeRef;
-        private bool IgnoreRender;
 
         private async ValueTask<ItemsProviderResult<TRow>> GetItemsVirtualized(ItemsProviderRequest request)
         {
-            var len = Math.Max(request.Count, PageSize);
+            var len = Math.Max(request.Count, DefaultPageSize);
 
             if (Rows != null)
             {
@@ -108,7 +101,7 @@ namespace BlazorGrid.Components
                 Query,
                 Filter,
                 request.CancellationToken
-            );
+            ).ConfigureAwait(false);
 
             if (request.CancellationToken.IsCancellationRequested)
             {
@@ -205,17 +198,12 @@ namespace BlazorGrid.Components
                 IsInitialRenderDone = true;
             }
 
-            if (AreColumnsProcessed)
-            {
-                //IgnoreRender = true;
-            }
-            else if (ColumnAddBuffer.Any())
+            if (!AreColumnsProcessed && ColumnAddBuffer.Any())
             {
                 // Now that the columns are processed, trigger another render
                 RegisteredColumns = ColumnAddBuffer;
                 ColumnAddBuffer = new List<IGridCol>();
                 AreColumnsProcessed = true;
-                //IgnoreRender = false;
                 StateHasChanged();
             }
         }
@@ -227,10 +215,11 @@ namespace BlazorGrid.Components
         {
             if (VirtualizeRef != null)
             {
+                TotalRowCount = null;
+                StateHasChanged();
+
                 await VirtualizeRef.RefreshDataAsync();
             }
-
-            StateHasChanged();
         }
 
         public async Task TryApplySortingAsync(IGridCol column)
@@ -251,7 +240,6 @@ namespace BlazorGrid.Components
                 OrderByDescending = false;
             }
 
-            //IgnoreRender = false;
             await ReloadAsync();
         }
 
@@ -273,11 +261,13 @@ namespace BlazorGrid.Components
             if (onClickUrl != null)
             {
                 IgnoreSetParameters = true;
+                IgnoreShouldRender = true;
                 Nav.NavigateTo(onClickUrl);
             }
             else if (OnClick.HasDelegate)
             {
                 IgnoreSetParameters = true;
+                IgnoreShouldRender = true;
                 await OnClick.InvokeAsync(row);
             }
         }
@@ -323,6 +313,14 @@ namespace BlazorGrid.Components
             return EmptyRow ?? Activator.CreateInstance<TRow>();
         }
 
+        protected override bool ShouldRender()
+        {
+            var ret = IgnoreShouldRender;
+            IgnoreShouldRender = false;
+
+            return !ret;
+        }
+
         private Dictionary<string, object> NextSetParametersAsyncMerge;
         public override async Task SetParametersAsync(ParameterView parameters)
         {
@@ -332,10 +330,9 @@ namespace BlazorGrid.Components
                 return;
             }
 
-            //IgnoreRender = true;
-
             var mustReload = false;
             var p = parameters.ToDictionary().ToDictionary(x => x.Key, x => x.Value);
+            var pc = p.Count;
 
             if (p.ContainsKey(nameof(QueryUserInput)) && (string)p[nameof(QueryUserInput)] != QueryUserInput)
             {
@@ -343,6 +340,7 @@ namespace BlazorGrid.Components
                 QueryUserInput = (string)p[nameof(QueryUserInput)];
                 p.Remove(nameof(QueryUserInput));
                 NextSetParametersAsyncMerge = p;
+                IgnoreShouldRender = true;
 
                 // Cancel further processing
                 return;
@@ -371,8 +369,6 @@ namespace BlazorGrid.Components
 
                 RegisteredColumns.Clear();
                 ColumnAddBuffer.Clear();
-
-                //IgnoreRender = false;
                 AreColumnsProcessed = false;
             }
 
@@ -383,29 +379,7 @@ namespace BlazorGrid.Components
                 return;
             }
 
-            if (IgnoreRender)
-            {
-                foreach (var parameter in RerenderParameterNames)
-                {
-                    if (!p.ContainsKey(parameter))
-                    {
-                        continue;
-                    }
-
-                    if (!Equals(typeInfo.GetProperty(parameter), p[parameter]))
-                    {
-                        IgnoreRender = false;
-                        break;
-                    }
-                }
-            }
-
             await base.SetParametersAsync(parameters);
-        }
-
-        protected override bool ShouldRender()
-        {
-            return !IgnoreRender;
         }
 
         public void Dispose()

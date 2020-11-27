@@ -27,7 +27,6 @@ namespace BlazorGrid.Tests
         [TestInitialize]
         public void Initialize()
         {
-            Services.AddMockJSRuntime();
         }
 
         class MyDto
@@ -54,7 +53,6 @@ namespace BlazorGrid.Tests
             fakeGrid.Verify(x => x.Register(It.Is<IGridCol>(col => ReferenceEquals(col, unit.Instance))), Times.Once());
         }
 
-        [Ignore]
         [TestMethod]
         public void Can_Merge_Css_Classes()
         {

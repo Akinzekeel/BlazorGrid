@@ -9,6 +9,7 @@ using Bunit.TestDoubles;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.AspNetCore.Components.Routing;
+using Microsoft.AspNetCore.Components.Web.Virtualization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -41,14 +42,16 @@ namespace BlazorGrid.Tests
             Services.AddSingleton<NavigationManager>(mockNav);
             Services.AddSingleton<IBlazorGridConfig>(new DefaultConfig());
 
-            Services.AddMockJSRuntime();
+            var provider = new Mock<IGridProvider>();
+            Services.AddSingleton(provider);
+            Services.AddSingleton(provider.Object);
         }
 
-        private TaskCompletionSource<BlazorGridResult<MyDto>> SetupMockProvider()
+        [TestMethod]
+        public void Does_Initial_Rendering()
         {
-            var promise = new TaskCompletionSource<BlazorGridResult<MyDto>>();
+            var provider = Services.GetRequiredService<Mock<IGridProvider>>();
 
-            var provider = new Mock<IGridProvider>();
             provider.Setup(x => x.GetAsync<MyDto>(
                 It.IsAny<string>(),
                 It.IsAny<int>(),
@@ -58,18 +61,13 @@ namespace BlazorGrid.Tests
                 It.IsAny<string>(),
                 It.IsAny<FilterDescriptor>(),
                 It.IsAny<CancellationToken>()
-            )).Returns(promise.Task);
-
-            Services.AddSingleton(provider.Object);
-
-            return promise;
-        }
-
-        [Ignore]
-        [TestMethod]
-        public void Does_Initial_Rendering()
-        {
-            var promise = SetupMockProvider();
+            )).ReturnsAsync(new BlazorGridResult<MyDto>
+            {
+                TotalCount = 1,
+                Data = new List<MyDto> {
+                    new MyDto { Name = "Unit test" }
+                }
+            });
 
             var grid = RenderComponent<BlazorGrid<MyDto>>(
                 Template<MyDto>(nameof(ChildContent), (context) => (RenderTreeBuilder b) =>
@@ -82,33 +80,27 @@ namespace BlazorGrid.Tests
                 })
             );
 
-            // There should have been one initial render 
-            // to process the columns and then a second 
-            // one to actually render the grid itself
-            Assert.AreEqual(2, grid.RenderCount);
+            Assert.AreEqual(1, grid.RenderCount);
 
-            promise.SetResult(new BlazorGridResult<MyDto>
-            {
-                TotalCount = 1,
-                Data = new List<MyDto> {
-                    new MyDto { Name = "Unit test" }
-                }
-            });
-
-            // After receiving a response from the provider,
-            // the result must be rendered. This may take a
-            // moment
-            Task.Delay(150).Wait();
-            Assert.AreEqual(3, grid.RenderCount);
+            var virtualize = grid.FindComponent<Virtualize<MyDto>>();
+            Assert.AreEqual(1, virtualize.RenderCount);
         }
 
-        [Ignore]
         [TestMethod]
         public async Task Sorting_Triggers_Rerender()
         {
-            var promise = SetupMockProvider();
+            var provider = Services.GetRequiredService<Mock<IGridProvider>>();
 
-            promise.SetResult(new BlazorGridResult<MyDto>
+            provider.Setup(x => x.GetAsync<MyDto>(
+                It.IsAny<string>(),
+                It.IsAny<int>(),
+                It.IsAny<int>(),
+                It.IsAny<string>(),
+                It.IsAny<bool>(),
+                It.IsAny<string>(),
+                It.IsAny<FilterDescriptor>(),
+                It.IsAny<CancellationToken>()
+            )).ReturnsAsync(new BlazorGridResult<MyDto>
             {
                 TotalCount = 1,
                 Data = new List<MyDto> {
@@ -126,26 +118,29 @@ namespace BlazorGrid.Tests
                     b.CloseComponent();
                 })
             );
-
-            // There should have been one initial render 
-            // to process the columns and then a second 
-            // one to actually render the grid itself
-            Assert.AreEqual(2, grid.RenderCount);
 
             // Now let's try changing the sorting
             var col = grid.FindComponent<GridCol<string>>();
             await col.InvokeAsync(() => grid.Instance.TryApplySortingAsync(col.Instance));
 
-            Assert.AreEqual(4, grid.RenderCount);
+            Assert.AreEqual(2, grid.RenderCount);
         }
 
-        [Ignore]
         [TestMethod]
         public void Query_Triggers_Rerender()
         {
-            var promise = SetupMockProvider();
+            var provider = Services.GetRequiredService<Mock<IGridProvider>>();
 
-            promise.SetResult(new BlazorGridResult<MyDto>
+            provider.Setup(x => x.GetAsync<MyDto>(
+                It.IsAny<string>(),
+                It.IsAny<int>(),
+                It.IsAny<int>(),
+                It.IsAny<string>(),
+                It.IsAny<bool>(),
+                It.IsAny<string>(),
+                It.IsAny<FilterDescriptor>(),
+                It.IsAny<CancellationToken>()
+            )).ReturnsAsync(new BlazorGridResult<MyDto>
             {
                 TotalCount = 1,
                 Data = new List<MyDto> {
@@ -163,11 +158,6 @@ namespace BlazorGrid.Tests
                     b.CloseComponent();
                 })
             );
-
-            // There should have been one initial render 
-            // to process the columns and then a second 
-            // one to actually render the grid itself
-            Assert.AreEqual(2, grid.RenderCount);
 
             // Now let's try changing the sorting
             var col = grid.FindComponent<GridCol<string>>();
@@ -176,21 +166,29 @@ namespace BlazorGrid.Tests
             );
 
             // Since this property uses a debounce, there shouldn't be any render yet
-            Assert.AreEqual(2, grid.RenderCount);
+            Assert.AreEqual(1, grid.RenderCount);
 
             // Wait for it...
             Task.Delay(500).Wait();
 
-            Assert.AreNotEqual(2, grid.RenderCount);
+            Assert.AreNotEqual(1, grid.RenderCount);
         }
 
-        [Ignore]
         [TestMethod]
         public void ChildContent_Triggers_Rerender()
         {
-            var promise = SetupMockProvider();
+            var provider = Services.GetRequiredService<Mock<IGridProvider>>();
 
-            promise.SetResult(new BlazorGridResult<MyDto>
+            provider.Setup(x => x.GetAsync<MyDto>(
+                It.IsAny<string>(),
+                It.IsAny<int>(),
+                It.IsAny<int>(),
+                It.IsAny<string>(),
+                It.IsAny<bool>(),
+                It.IsAny<string>(),
+                It.IsAny<FilterDescriptor>(),
+                It.IsAny<CancellationToken>()
+            )).ReturnsAsync(new BlazorGridResult<MyDto>
             {
                 TotalCount = 1,
                 Data = new List<MyDto> {
@@ -209,11 +207,6 @@ namespace BlazorGrid.Tests
                 })
             );
 
-            // There should have been one initial render 
-            // to process the columns and then a second 
-            // one to actually render the grid itself
-            Assert.AreEqual(2, grid.RenderCount);
-
             // Now let's try changing the sorting
             grid.SetParametersAndRender(
                 Template<MyDto>(nameof(ChildContent), (context) => (RenderTreeBuilder b) =>
@@ -222,16 +215,24 @@ namespace BlazorGrid.Tests
                 })
             );
 
-            Assert.AreEqual(3, grid.RenderCount);
+            Assert.AreEqual(2, grid.RenderCount);
         }
 
-        [Ignore]
         [TestMethod]
-        public void OnClick_Does_Not_Trigger_Rerender()
+        public async Task OnClick_Does_Not_Trigger_Rerender()
         {
-            var promise = SetupMockProvider();
+            var provider = Services.GetRequiredService<Mock<IGridProvider>>();
 
-            promise.SetResult(new BlazorGridResult<MyDto>
+            provider.Setup(x => x.GetAsync<MyDto>(
+                It.IsAny<string>(),
+                It.IsAny<int>(),
+                It.IsAny<int>(),
+                It.IsAny<string>(),
+                It.IsAny<bool>(),
+                It.IsAny<string>(),
+                It.IsAny<FilterDescriptor>(),
+                It.IsAny<CancellationToken>()
+            )).ReturnsAsync(new BlazorGridResult<MyDto>
             {
                 TotalCount = 1,
                 Data = new List<MyDto> {
@@ -252,27 +253,30 @@ namespace BlazorGrid.Tests
                 })
             );
 
-            // There should have been one initial render 
-            // to process the columns and then a second 
-            // one to actually render the grid itself
-            Assert.AreEqual(2, grid.RenderCount);
-
             // Try clicking on a row
-            var row = grid.Find(".grid-header + .grid-row");
-            row.Click();
+            var row = grid.Find(".grid-row:not(.grid-header)");
+            await grid.InvokeAsync(() => row.Click());
 
             Task.Delay(100).Wait();
 
-            Assert.AreEqual(2, grid.RenderCount);
+            Assert.AreEqual(1, grid.RenderCount);
         }
 
-        [Ignore]
         [TestMethod]
-        public void Href_Does_Not_Trigger_Rerender()
+        public async Task Href_Does_Not_Trigger_Rerender()
         {
-            var promise = SetupMockProvider();
+            var provider = Services.GetRequiredService<Mock<IGridProvider>>();
 
-            promise.SetResult(new BlazorGridResult<MyDto>
+            provider.Setup(x => x.GetAsync<MyDto>(
+                It.IsAny<string>(),
+                It.IsAny<int>(),
+                It.IsAny<int>(),
+                It.IsAny<string>(),
+                It.IsAny<bool>(),
+                It.IsAny<string>(),
+                It.IsAny<FilterDescriptor>(),
+                It.IsAny<CancellationToken>()
+            )).ReturnsAsync(new BlazorGridResult<MyDto>
             {
                 TotalCount = 1,
                 Data = new List<MyDto> {
@@ -300,18 +304,15 @@ namespace BlazorGrid.Tests
                     Parameter(nameof(BlazorGrid<string>.QueryUserInput), grid.Instance.QueryUserInput)
                 );
 
-            // There should have been one initial render 
-            // to process the columns and then a second 
-            // one to actually render the grid itself
-            Assert.AreEqual(2, grid.RenderCount);
+            Assert.AreEqual(1, grid.RenderCount);
 
             // Try clicking on a row
-            var row = grid.Find(".grid-header + .grid-row");
-            row.Click();
+            var row = grid.Find(".grid-row:not(.grid-header)");
+            await grid.InvokeAsync(() => row.Click());
 
             Task.Delay(100).Wait();
 
-            Assert.AreEqual(2, grid.RenderCount);
+            Assert.AreEqual(1, grid.RenderCount);
         }
     }
 }

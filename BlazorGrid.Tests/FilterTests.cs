@@ -33,7 +33,6 @@ namespace BlazorGrid.Tests
         {
             Services.AddSingleton<IBlazorGridConfig>(_ => new DefaultConfig() { Styles = new SpectreStyles() });
             Services.AddTransient<NavigationManager>(_ => new MockNav());
-            Services.AddMockJSRuntime();
         }
 
         private TaskCompletionSource<BlazorGridResult<MyDto>> SetupMockProvider()

@@ -14,6 +14,8 @@ using Moq;
 using System.Threading.Tasks;
 using System.Threading;
 using Bunit.TestDoubles;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace BlazorGrid.Tests
 {
@@ -34,13 +36,26 @@ namespace BlazorGrid.Tests
             Services.AddTransient(_ => mockProvider.Object);
             Services.AddSingleton<IBlazorGridConfig>(_ => new DefaultConfig { Styles = new SpectreStyles() });
             Services.AddTransient<NavigationManager>(_ => new MockNav());
-            Services.AddMockJSRuntime();
         }
 
-        [Ignore]
         [TestMethod]
         public async Task Query_Set_Triggers_Provider_Call()
         {
+            mockProvider.Setup(x => x.GetAsync<Model>(
+                It.IsAny<string>(),
+                0,
+                It.IsAny<int>(),
+                null,
+                false,
+                null,
+                It.IsAny<FilterDescriptor>(),
+                It.IsAny<CancellationToken>()
+            )).ReturnsAsync(new BlazorGridResult<Model>
+            {
+                Data = Enumerable.Repeat(new Model(), 3).ToList(),
+                TotalCount = 3
+            });
+
             var grid = RenderComponent<BlazorGrid<Model>>(
                 Template<Model>(nameof(ChildContent), (dto) => (b) =>
                 {

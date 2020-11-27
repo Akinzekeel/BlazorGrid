@@ -90,11 +90,14 @@
                         </div>
                     </ItemContent>
                 </Virtualize>
-                <div style="grid-column: span @RegisteredColumns.Count()">
-                    <div class="@Config.Styles.FooterWrapperClass">
-                        <div class="@Config.Styles.FooterTextClass">@string.Format(Resources.Footer_RowCount, TotalRowCount ?? 0)</div>
-                    </div>
-                </div>
+                @if (TotalRowCount.HasValue)
+                {
+                    <footer class="grid-row-span-all">
+                        <div class="@Config.Styles.FooterWrapperClass">
+                            <div class="@Config.Styles.FooterTextClass">@string.Format(Resources.Footer_RowCount, TotalRowCount ?? 0)</div>
+                        </div>
+                    </footer>
+                }
             }
         </div>
     </div>

@@ -58,8 +58,6 @@ namespace BlazorGrid.Tests
             Services.AddSingleton(provider.Object);
             Services.AddSingleton<IBlazorGridConfig>(new DefaultConfig { Styles = new SpectreStyles() });
             Services.AddSingleton<NavigationManager>(new MockNav());
-
-            Services.AddMockJSRuntime();
         }
 
         private static void VerifyColumnCount(IRenderedComponent<BlazorGrid<MyDto>> grid, int expectedColumnCount)
@@ -71,13 +69,8 @@ namespace BlazorGrid.Tests
             Assert.AreEqual(expectedColumnCount, header.Children.Count());
 
             // Verify number of cells per row
-            var row = grid.Find(".grid-header + .grid-row");
+            var row = grid.Find(".grid-row");
             Assert.AreEqual(expectedColumnCount, row.Children.Count());
-
-            // Verify colspan of the footer
-            var colspan = grid.Find(".grid-header + .grid-row + div");
-            var columnStyle = colspan.GetStyle().First(x => x.Name == "grid-column-start");
-            Assert.AreEqual("span " + expectedColumnCount, columnStyle.Value);
 
             // Verify the number of column widths
             var scroller = grid.Find(".grid-scrollview");
@@ -162,7 +155,6 @@ namespace BlazorGrid.Tests
             Assert.AreEqual("grid-scrollview", scroller.ClassName);
         }
 
-        [Ignore]
         [TestMethod]
         public void Has_Grid_Column_Style()
         {
@@ -185,7 +177,7 @@ namespace BlazorGrid.Tests
             var scroller = grid.Find("*").FirstElementChild;
             var style = scroller.GetAttribute("style");
 
-            Assert.AreEqual("grid-template-columns: auto max-content", style);
+            Assert.AreEqual("grid-template-columns: auto max-content; height: 100%;", style);
         }
 
         [TestMethod]
@@ -225,7 +217,6 @@ namespace BlazorGrid.Tests
             Assert.AreEqual("sortable", th.ClassName);
         }
 
-        [Ignore]
         [TestMethod]
         public void Can_Modify_Columns()
         {
@@ -246,9 +237,6 @@ namespace BlazorGrid.Tests
                     builder.CloseComponent();
                 })
             );
-
-            // Two renders should have happened at this point
-            Assert.AreEqual(2, grid.RenderCount);
 
             // Verify that two columns are rendered
             var rowElement = grid.FindAll(".grid-row").First();
@@ -300,7 +288,7 @@ namespace BlazorGrid.Tests
             );
 
             // Another render should have happened
-            Assert.AreEqual(6, grid.RenderCount);
+            Assert.AreEqual(7, grid.RenderCount);
 
             // Verify that two columns are rendered
             rowElement = grid.FindAll(".grid-row").First();
@@ -313,7 +301,6 @@ namespace BlazorGrid.Tests
             VerifyColumnCount(grid, 2);
         }
 
-        [Ignore]
         [TestMethod]
         public void Can_Set_Custom_Attributes()
         {
@@ -365,58 +352,6 @@ namespace BlazorGrid.Tests
             );
 
             grid.MarkupMatches("");
-        }
-
-        [Ignore]
-        [TestMethod]
-        public void Sorting_Shows_Loading_State()
-        {
-            var provider = Services.GetRequiredService<Mock<IGridProvider>>();
-
-            var grid = RenderComponent<BlazorGrid<MyDto>>(
-                Template<MyDto>("ChildContent", context => (RenderTreeBuilder b) =>
-                {
-                    Expression<Func<string>> colFor = () => context.Name;
-                    b.OpenComponent<GridCol<string>>(0);
-                    b.AddAttribute(1, "For", colFor);
-                    b.CloseComponent();
-                })
-            );
-
-            var promise = new TaskCompletionSource<BlazorGridResult<MyDto>>();
-
-            provider.Reset();
-            provider.Setup(x => x.GetAsync<MyDto>(
-                It.IsAny<string>(),
-                It.IsAny<int>(),
-                It.IsAny<int>(),
-                It.IsAny<string>(),
-                It.IsAny<bool>(),
-                It.IsAny<string>(),
-                It.IsAny<FilterDescriptor>(),
-                It.IsAny<CancellationToken>()
-            )).Returns(promise.Task);
-
-            // Trigger sorting
-            var th = grid.Find(".grid-row.grid-header > .sortable");
-            th.Click();
-
-            var gridStyle = Services.GetRequiredService<IBlazorGridConfig>();
-            Assert.Fail();
-            //var spinner = grid.Find("." + gridStyle.Styles.LoadingSpinnerOuterClass.Replace(' ', '.'));
-
-            //Assert.IsNotNull(spinner);
-
-            //promise.SetResult(new BlazorGridResult<MyDto>
-            //{
-            //    TotalCount = 1,
-            //    Data = new List<MyDto> { new MyDto() }
-            //});
-
-            //Task.Delay(100).Wait();
-
-            //var spinners = grid.FindAll("." + gridStyle.Styles.LoadingSpinnerOuterClass.Replace(' ', '.'));
-            //Assert.AreEqual(0, spinners.Count);
         }
     }
 }

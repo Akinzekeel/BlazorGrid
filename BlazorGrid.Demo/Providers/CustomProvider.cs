@@ -14,6 +14,7 @@ namespace BlazorGrid.Demo.Providers
     public class CustomProvider : DefaultHttpProvider
     {
         private readonly HttpClient http;
+        internal static int ArtificialDelayMs { get; set; }
 
         public CustomProvider(HttpClient http) : base(http)
         {
@@ -36,6 +37,17 @@ namespace BlazorGrid.Demo.Providers
             var httpCancellationToken = new CancellationTokenSource();
             var httpTask = http.GetAsync(url, httpCancellationToken.Token);
 
+            Task delay;
+
+            if (ArtificialDelayMs <= 0)
+            {
+                delay = Task.CompletedTask;
+            }
+            else
+            {
+                delay = Task.Delay(ArtificialDelayMs);
+            }
+
             while (!httpTask.IsCompleted)
             {
                 if (cancellationToken.IsCancellationRequested)
@@ -46,6 +58,8 @@ namespace BlazorGrid.Demo.Providers
 
                 await Task.Delay(150);
             }
+
+            await delay;
 
             var result = await DeserializeJsonAsync<BlazorGridResult<T>>(httpTask.Result);
             var totalCount = result.TotalCount;
