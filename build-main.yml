@@ -27,6 +27,10 @@ steps:
     gulpFile: 'BlazorGrid/gulpfile.js'
     targets: 'default'
 
+- task: UseDotNet@2
+  inputs:
+    version: 5.0.100
+
 - task: NuGetToolInstaller@1
 
 - task: NuGetAuthenticate@0
