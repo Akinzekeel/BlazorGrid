@@ -15,6 +15,10 @@ variables:
 
 steps:
 
+- task: UseDotNet@2
+  inputs:
+    version: 5.0.100
+
 - task: NuGetAuthenticate@0
   inputs:
     nuGetServiceConnections: 'Bunit nightly builds'

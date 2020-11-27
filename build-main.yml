@@ -26,13 +26,16 @@ steps:
   inputs:
     gulpFile: 'BlazorGrid/gulpfile.js'
     targets: 'default'
-    
-- task: DotNetCoreCLI@2
+
+- task: UseDotNet@2
   inputs:
-    command: 'restore'
-    projects: '**/*.csproj'
-    feedsToUse: 'config'
-    externalFeedCredentials: 'Bunit nightly builds'
+    version: 5.0.100
+
+- task: NuGetToolInstaller@1
+
+- task: NuGetAuthenticate@0
+  inputs:
+    nuGetServiceConnections: 'Bunit nightly builds'
 
 - task: DotNetCoreCLI@2
   displayName: 'Build BlazorGrid'
@@ -40,7 +43,7 @@ steps:
     command: 'build'
     projects: 'BlazorGrid/BlazorGrid.csproj'
     configuration: $(buildConfiguration)
-    arguments: '-o $(Build.ArtifactStagingDirectory) --no-restore'
+    arguments: '-o $(Build.ArtifactStagingDirectory)'
 
 - task: DotNetCoreCLI@2
   displayName: 'Test'
@@ -48,7 +51,6 @@ steps:
     command: 'test'
     projects: 'BlazorGrid.Tests/BlazorGrid.Tests.csproj'
     configuration: $(buildConfiguration)
-    arguments: '--no-restore'
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish artifacts'
