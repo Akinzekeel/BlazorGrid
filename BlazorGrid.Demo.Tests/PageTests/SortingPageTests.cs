@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using System.Linq;
 using System.Threading;
 
 namespace BlazorGrid.Tests.Demo
@@ -19,7 +20,8 @@ namespace BlazorGrid.Tests.Demo
     [TestClass]
     public class SortingPageTests : Bunit.TestContext
     {
-        public IRenderedComponent<Sorting> RenderPage()
+        [TestInitialize]
+        public void Initialize()
         {
             var provider = new Mock<IGridProvider>();
             Services.AddSingleton(provider);
@@ -29,21 +31,34 @@ namespace BlazorGrid.Tests.Demo
             Services.AddSingleton<NavigationManager>(nav);
 
             Services.AddSingleton<IBlazorGridConfig>(_ => new DefaultConfig { Styles = new SpectreStyles() });
-
-            return RenderComponent<Sorting>();
         }
 
-        [Ignore]
         [TestMethod]
         public void Initial_Sorting_Triggers_Single_Provider_Call()
         {
-            var page = RenderPage();
             var provider = Services.GetRequiredService<Mock<IGridProvider>>();
+
+            provider.Setup(x => x.GetAsync<Employee>(
+                It.IsAny<string>(),
+                It.IsAny<int>(),
+                It.IsAny<int>(),
+                It.IsAny<string>(),
+                It.IsAny<bool>(),
+                It.IsAny<string>(),
+                It.IsAny<FilterDescriptor>(),
+                It.IsAny<CancellationToken>()
+            )).ReturnsAsync(new BlazorGridResult<Employee>
+            {
+                TotalCount = 50,
+                Data = Enumerable.Repeat(new Employee(), 50).ToList()
+            });
+
+            var page = RenderComponent<Sorting>();
 
             provider.Verify(x => x.GetAsync<Employee>(
                 It.IsAny<string>(),
                 0,
-                BlazorGrid<Employee>.DefaultPageSize,
+                It.Is<int>(i => i > 0),
                 It.Is<string>(s => !string.IsNullOrEmpty(s)),
                 false,
                 null,

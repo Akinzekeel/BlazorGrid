@@ -23,9 +23,11 @@ namespace BlazorGrid.Tests.Demo
     [TestClass]
     public class SearchPageTests : Bunit.TestContext
     {
-        public IRenderedComponent<Search> RenderPage()
+        [TestInitialize]
+        public void Initialize()
         {
             var provider = new Mock<IGridProvider>();
+
             provider.Setup(x => x.GetAsync<Employee>(
                 It.IsAny<string>(),
                 It.IsAny<int>(),
@@ -48,26 +50,39 @@ namespace BlazorGrid.Tests.Demo
             Services.AddSingleton<NavigationManager>(nav);
 
             Services.AddSingleton<IBlazorGridConfig>(_ => new DefaultConfig { Styles = new SpectreStyles() });
-
-            return RenderComponent<Search>();
         }
 
-        [Ignore]
         [TestMethod]
-        public void Search_Input_Triggers_Provider_Call_Delayed()
+        public async Task Search_Input_Triggers_Provider_Call_Delayed()
         {
-            var page = RenderPage();
-            var input = page.Find("input[type=search]");
             var provider = Services.GetRequiredService<Mock<IGridProvider>>();
+
+            provider.Setup(x => x.GetAsync<Employee>(
+                It.IsAny<string>(),
+                It.IsAny<int>(),
+                It.IsAny<int>(),
+                It.IsAny<string>(),
+                It.IsAny<bool>(),
+                It.IsAny<string>(),
+                It.IsAny<FilterDescriptor>(),
+                It.IsAny<CancellationToken>()
+            )).ReturnsAsync(new BlazorGridResult<Employee>
+            {
+                TotalCount = 50,
+                Data = Enumerable.Repeat(new Employee(), 50).ToList()
+            });
+
+            var page = RenderComponent<Search>();
+            var input = page.Find("input[type=search]");
 
             provider.Verify((Expression<Func<IGridProvider, Task<BlazorGridResult<Employee>>>>)provider.Setups.First().OriginalExpression, Times.Once());
             Assert.AreEqual(1, provider.Invocations.Count);
 
-            input.Input("test");
+            await page.InvokeAsync(() => input.Input("test"));
 
             Assert.AreEqual(1, provider.Invocations.Count);
 
-            Task.Delay(BlazorGrid<Employee>.SearchQueryInputDebounceMs + 100).Wait();
+            Task.Delay(BlazorGrid<Employee>.SearchQueryInputDebounceMs + 500).Wait();
 
             Assert.AreEqual(2, provider.Invocations.Count);
         }
