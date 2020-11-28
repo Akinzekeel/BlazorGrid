@@ -6,6 +6,7 @@
 
     .grid-scrollview {
         display: grid;
+        align-content: start;
         background-color: inherit;
         grid-template-columns: repeat(auto);
 
