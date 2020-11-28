@@ -1,27 +1,43 @@
 @typeparam TRow
 @using Microsoft.AspNetCore.Components.Web.Virtualization
-<CascadingValue Value="this" IsFixed="true">
-    @ChildContent(GetEmptyRow())
-</CascadingValue>
-@if (AreColumnsProcessed && RegisteredColumns.Any())
+@if (DetectColumns)
+{
+    <BlazorGrid.Infrastructure.ColumnBuffer TRow="TRow" OnColumnsChanged="OnColumnsChanged">
+        @ChildContent(GetEmptyRow())
+    </BlazorGrid.Infrastructure.ColumnBuffer>
+}
+@if (RegisteredColumns.Any())
 {
     <div @attributes="FinalAttributes">
         <div class="grid-scrollview" style="grid-template-columns: @GridTemplateColumns(); height: 100%;">
             <header class="grid-row grid-header">
                 @foreach (var col in RegisteredColumns)
                 {
-                    <div @onclick="() => TryApplySortingAsync(col)" class="@col.CssClass">
+                    var isSorted = IsSortedBy(col);
+                    var sortable = col.For != null;
+                    var cls = col.CssClass;
+
+                    if (sortable)
+                    {
+                        cls += " sortable";
+
+                        if (isSorted)
+                        {
+                            cls += " sorted";
+                        }
+                    }
+                    <div @onclick="() => TryApplySortingAsync(col)" class="@cls">
                         @if (!col.AlignRight)
                         {
                             @col.GetCaptionOrDefault()
                         }
                         @if (IsFilteredBy(col))
                         {
-                            <span class="blazor-grid-filter-icon active" />
+                            <span class="blazor-grid-filter-icon active"></span>
                         }
-                        else
+                        else if (sortable)
                         {
-                            <span class="@col.SortIconCssClass()" />
+                            <span class="@ColHeaderSortIconCssClass(col)"></span>
                         }
                         @if (col.AlignRight)
                         {

@@ -1,4 +1,5 @@
 using BlazorGrid.Helpers;
+using BlazorGrid.Infrastructure;
 using BlazorGrid.Interfaces;
 using Microsoft.AspNetCore.Components;
 using System;
@@ -8,14 +9,15 @@ using System.Linq.Expressions;
 
 namespace BlazorGrid.Components
 {
-    public partial class GridCol<T> : IGridCol<T>
+    public partial class GridCol<T> : IGridCol<T>, IDisposable
     {
-        [CascadingParameter] internal IBlazorGrid Parent { get; set; }
+        [CascadingParameter] internal IColumnRegister Register { get; set; }
         [Parameter] public string Caption { get; set; }
         [Parameter] public RenderFragment ChildContent { get; set; }
         [Parameter] public bool FitToContent { get; set; }
         [Parameter] public bool AlignRight { get; set; }
 
+        private IColumnRegister RegisterCache;
         private bool IsPropertyNameQueried;
         private string PropertyNameCached;
         public string PropertyName
@@ -28,7 +30,7 @@ namespace BlazorGrid.Components
 
                     if (For != null)
                     {
-                        PropertyNameCached = Parent.GetPropertyName(For);
+                        PropertyNameCached = RegisterCache.GetPropertyName(For);
                     }
                 }
 
@@ -55,7 +57,6 @@ namespace BlazorGrid.Components
         [Parameter(CaptureUnmatchedValues = true)] public IDictionary<string, object> Attributes { get; set; }
 
         Expression IGridCol.For => For;
-        public bool IsRegistered { get; private set; }
 
         private T GetAutoValue()
         {
@@ -96,16 +97,6 @@ namespace BlazorGrid.Components
                     AlignRight ? "text-right" : ""
                 };
 
-                if (Parent != null)
-                {
-                    cls.Add("sortable");
-
-                    if (IsSorted)
-                    {
-                        cls.Add("sorted");
-                    }
-                }
-
                 if (Attributes != null)
                 {
                     string customClasses = Attributes
@@ -124,14 +115,14 @@ namespace BlazorGrid.Components
             }
         }
 
-        private bool IsSorted => Parent?.IsSortedBy(this) == true;
         public bool IsFilterable => true;
 
         protected override void OnParametersSet()
         {
-            if (!IsRegistered && Parent != null)
+            if (Register != null)
             {
-                IsRegistered = Parent.Register(this);
+                Register.Register(this);
+                RegisterCache = Register;
             }
         }
 
@@ -146,35 +137,9 @@ namespace BlazorGrid.Components
             return Caption;
         }
 
-        public string SortIconCssClass()
+        public void Dispose()
         {
-            var cls = "blazor-grid-sort-icon";
-
-            if (IsSorted)
-            {
-                cls += " active";
-
-                if (Parent.OrderByDescending)
-                {
-                    cls += " sorted-desc";
-                }
-                else
-                {
-                    cls += " sorted-asc";
-                }
-            }
-
-            return cls;
-        }
-
-        protected override bool ShouldRender()
-        {
-            return !IsRegistered;
-        }
-
-        public void Unlink()
-        {
-            IsRegistered = false;
+            RegisterCache = null;
         }
     }
 }

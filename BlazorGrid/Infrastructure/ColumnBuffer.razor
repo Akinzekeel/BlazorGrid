@@ -1,0 +1,7 @@
+﻿@typeparam TRow
+@{
+    Buffer = new ColumnRegister<TRow>();
+}
+<CascadingValue Value="Buffer">
+    @ChildContent
+</CascadingValue>

@@ -159,15 +159,19 @@ namespace BlazorGrid.Tests
         public void Has_Grid_Column_Style()
         {
             var noData = new List<MyDto>();
+            var row = new MyDto();
+            Expression<Func<string>> forProperty = () => row.Name;
 
             var grid = RenderComponent<BlazorGrid<MyDto>>(
                 Template<MyDto>(nameof(ChildContent), (dto) => (b) =>
                 {
                     b.OpenComponent(0, typeof(GridCol<string>));
-                    b.AddMarkupContent(1, "<span></span>");
+                    b.AddAttribute(1, nameof(GridCol<string>.For), forProperty);
+                    b.AddMarkupContent(2, "<span></span>");
                     b.CloseComponent();
 
                     b.OpenComponent(2, typeof(GridCol<string>));
+                    b.AddAttribute(1, nameof(GridCol<string>.For), forProperty);
                     b.AddAttribute(3, nameof(GridCol<string>.FitToContent), true);
                     b.AddMarkupContent(4, "<span></span>");
                     b.CloseComponent();
@@ -196,7 +200,7 @@ namespace BlazorGrid.Tests
             );
 
             var th = grid.Find(".grid-header > *");
-            Assert.AreEqual("sortable", th.ClassName);
+            Assert.AreEqual("sortable", th.ClassName.Trim());
         }
 
         [TestMethod]
@@ -208,13 +212,18 @@ namespace BlazorGrid.Tests
                 Parameter(nameof(BlazorGrid<MyDto>.Rows), noData),
                 Template<MyDto>(nameof(ChildContent), (dto) => (b) =>
                 {
-                    b.OpenComponent<GridCol<string>>(0);
+                    b.OpenComponent<StaticGridCol>(0);
+                    b.AddAttribute(1, nameof(IGridCol.Caption), "NonSortable");
+                    b.AddAttribute(2, "class", "my-custom-class");
+                    b.AddContent(3, new MarkupString("<h1>hello</h1>"));
                     b.CloseComponent();
                 })
             );
 
+            Assert.IsFalse(string.IsNullOrWhiteSpace(grid.Markup));
+
             var th = grid.Find(".grid-header > *");
-            Assert.AreEqual("sortable", th.ClassName);
+            Assert.AreEqual("my-custom-class", th.ClassName.Trim());
         }
 
         [TestMethod]
@@ -259,8 +268,7 @@ namespace BlazorGrid.Tests
                 })
             );
 
-            // Another render should have happened
-            Assert.AreEqual(4, grid.RenderCount);
+            Assert.AreEqual(3, grid.RenderCount);
 
             // Verify that only one column is rendered
             rowElement = grid.FindAll(".grid-row").First();
@@ -287,8 +295,7 @@ namespace BlazorGrid.Tests
                 })
             );
 
-            // Another render should have happened
-            Assert.AreEqual(7, grid.RenderCount);
+            Assert.AreEqual(5, grid.RenderCount);
 
             // Verify that two columns are rendered
             rowElement = grid.FindAll(".grid-row").First();

@@ -120,8 +120,8 @@ namespace BlazorGrid.Tests
             );
 
             // Now let's try changing the sorting
-            var col = grid.FindComponent<GridCol<string>>();
-            await col.InvokeAsync(() => grid.Instance.TryApplySortingAsync(col.Instance));
+            var headerCell = grid.Find(".grid-header .sortable");
+            await grid.InvokeAsync(() => headerCell.Click());
 
             Assert.AreEqual(2, grid.RenderCount);
         }

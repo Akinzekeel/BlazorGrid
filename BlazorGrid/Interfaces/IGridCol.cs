@@ -11,7 +11,6 @@ namespace BlazorGrid.Interfaces
 
     public interface IGridCol
     {
-        bool IsRegistered { get; }
         string Caption { get; }
         RenderFragment ChildContent { get; }
         string CssClass { get; }
@@ -20,7 +19,6 @@ namespace BlazorGrid.Interfaces
         bool IsFilterable { get; }
         Expression For { get; }
         string PropertyName { get; }
-        string SortIconCssClass();
 
         /// <summary>
         /// Returns the Caption property if it is not null,
@@ -29,6 +27,5 @@ namespace BlazorGrid.Interfaces
         /// </summary>
         /// <returns>A caption or null</returns>
         string GetCaptionOrDefault();
-        void Unlink();
     }
 }

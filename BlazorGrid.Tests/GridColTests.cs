@@ -1,6 +1,7 @@
 using BlazorGrid.Abstractions;
 using BlazorGrid.Abstractions.Filters;
 using BlazorGrid.Components;
+using BlazorGrid.Infrastructure;
 using BlazorGrid.Interfaces;
 using BlazorGrid.Tests.Mock;
 using Bunit;
@@ -43,14 +44,14 @@ namespace BlazorGrid.Tests
         [TestMethod]
         public void Does_Register_With_Parent()
         {
-            var fakeGrid = new Mock<IBlazorGrid>();
+            var fakeRegister = new Mock<IColumnRegister>();
 
             var unit = RenderComponent<GridCol<string>>(
-                CascadingValue(fakeGrid.Object),
+                CascadingValue(fakeRegister.Object),
                 Parameter("Caption", "Name")
             );
 
-            fakeGrid.Verify(x => x.Register(It.Is<IGridCol>(col => ReferenceEquals(col, unit.Instance))), Times.Once());
+            fakeRegister.Verify(x => x.Register(It.Is<IGridCol>(col => ReferenceEquals(col, unit.Instance))), Times.Once());
         }
 
         [TestMethod]

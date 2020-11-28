@@ -18,10 +18,9 @@ namespace BlazorGrid.Components
 {
     public partial class BlazorGrid<TRow> : ComponentBase, IDisposable, IBlazorGrid where TRow : class
     {
-        private bool AreColumnsProcessed;
-        private bool IgnoreSetParameters;
-        private bool IgnoreShouldRender;
-        private bool IsInitialRenderDone;
+        private bool SkipNextRender;
+        private bool SkipNextSetParameters;
+        private bool DetectColumns = true;
         private readonly Type typeInfo = typeof(BlazorGrid<TRow>);
 
         public const int DefaultPageSize = 25;
@@ -55,8 +54,7 @@ namespace BlazorGrid.Components
         public string OrderByPropertyName { get; private set; }
         public bool OrderByDescending { get; private set; }
 
-        private IList<IGridCol> RegisteredColumns = new List<IGridCol>();
-        private IList<IGridCol> ColumnAddBuffer = new List<IGridCol>();
+        private ICollection<IGridCol> RegisteredColumns = new List<IGridCol>();
         public IEnumerable<IGridCol> Columns => RegisteredColumns;
         private Exception LoadingError { get; set; }
 
@@ -152,7 +150,6 @@ namespace BlazorGrid.Components
             {
                 var parameters = NextSetParametersAsyncMerge;
                 parameters[nameof(Query)] = userInput;
-
                 await SetParametersAsync(ParameterView.FromDictionary(parameters));
             }
         }
@@ -194,17 +191,6 @@ namespace BlazorGrid.Components
                 // Subscribe to Filter object changes
                 Filter.PropertyChanged += OnFilterChanged;
                 Filter.Filters.CollectionChanged += OnFilterCollectionChanged;
-
-                IsInitialRenderDone = true;
-            }
-
-            if (!AreColumnsProcessed && ColumnAddBuffer.Any())
-            {
-                // Now that the columns are processed, trigger another render
-                RegisteredColumns = ColumnAddBuffer;
-                ColumnAddBuffer = new List<IGridCol>();
-                AreColumnsProcessed = true;
-                StateHasChanged();
             }
         }
 
@@ -243,11 +229,6 @@ namespace BlazorGrid.Components
             await ReloadAsync();
         }
 
-        public string GetPropertyName<T>(Expression<Func<T>> property)
-        {
-            return ExpressionHelper.GetPropertyName<TRow, T>(property);
-        }
-
         private string GridTemplateColumns()
         {
             var widths = RegisteredColumns.Select(col => col.FitToContent ? "max-content" : "auto");
@@ -260,30 +241,21 @@ namespace BlazorGrid.Components
 
             if (onClickUrl != null)
             {
-                IgnoreSetParameters = true;
-                IgnoreShouldRender = true;
+                SkipNextSetParameters = true;
+                SkipNextRender = true;
+
                 Nav.NavigateTo(onClickUrl);
             }
             else if (OnClick.HasDelegate)
             {
-                IgnoreSetParameters = true;
-                IgnoreShouldRender = true;
+                SkipNextSetParameters = true;
+                SkipNextRender = true;
+
                 await OnClick.InvokeAsync(row);
             }
         }
 
-        public bool Register(IGridCol col)
-        {
-            if (!col.IsRegistered)
-            {
-                ColumnAddBuffer.Add(col);
-                return true;
-            }
-
-            return false;
-        }
-
-        public bool IsFilteredBy(IGridCol column)
+        private bool IsFilteredBy(IGridCol column)
         {
             if (column.PropertyName == null)
             {
@@ -293,7 +265,7 @@ namespace BlazorGrid.Components
             return Filter?.Filters.Any(x => x.Property == column.PropertyName) == true;
         }
 
-        public bool IsSortedBy(IGridCol column)
+        private bool IsSortedBy(IGridCol column)
         {
             if (column.PropertyName == null)
             {
@@ -313,26 +285,16 @@ namespace BlazorGrid.Components
             return EmptyRow ?? Activator.CreateInstance<TRow>();
         }
 
-        protected override bool ShouldRender()
-        {
-            var ret = IgnoreShouldRender;
-            IgnoreShouldRender = false;
-
-            return !ret;
-        }
-
         private Dictionary<string, object> NextSetParametersAsyncMerge;
         public override async Task SetParametersAsync(ParameterView parameters)
         {
-            if (IgnoreSetParameters)
+            if (SkipNextSetParameters)
             {
-                IgnoreSetParameters = false;
+                SkipNextSetParameters = false;
                 return;
             }
 
-            var mustReload = false;
             var p = parameters.ToDictionary().ToDictionary(x => x.Key, x => x.Value);
-            var pc = p.Count;
 
             if (p.ContainsKey(nameof(QueryUserInput)) && (string)p[nameof(QueryUserInput)] != QueryUserInput)
             {
@@ -340,39 +302,18 @@ namespace BlazorGrid.Components
                 QueryUserInput = (string)p[nameof(QueryUserInput)];
                 p.Remove(nameof(QueryUserInput));
                 NextSetParametersAsyncMerge = p;
-                IgnoreShouldRender = true;
-
-                // Cancel further processing
                 return;
             }
 
+            if (p.ContainsKey(nameof(ChildContent)))
+            {
+                DetectColumns = true;
+            }
+
             if (
-                IsInitialRenderDone
-                && p.Keys.Intersect(ReloadTriggerParameterNames)
+                p.Keys.Intersect(ReloadTriggerParameterNames)
                     .Any(x => (string)typeInfo.GetProperty(x).GetValue(this) != (string)p[x])
             )
-            {
-                await base.SetParametersAsync(parameters);
-                mustReload = true;
-            }
-
-            if (
-                IsInitialRenderDone
-                && RegisteredColumns.Any()
-                && p.ContainsKey(nameof(ChildContent))
-            )
-            {
-                foreach (var c in RegisteredColumns)
-                {
-                    c.Unlink();
-                }
-
-                RegisteredColumns.Clear();
-                ColumnAddBuffer.Clear();
-                AreColumnsProcessed = false;
-            }
-
-            if (mustReload)
             {
                 await base.SetParametersAsync(parameters);
                 await ReloadAsync();
@@ -380,6 +321,19 @@ namespace BlazorGrid.Components
             }
 
             await base.SetParametersAsync(parameters);
+        }
+
+        private void OnColumnsChanged(ICollection<IGridCol> cols)
+        {
+            DetectColumns = false;
+            RegisteredColumns = cols;
+        }
+
+        protected override bool ShouldRender()
+        {
+            var ret = !SkipNextRender;
+            SkipNextRender = false;
+            return ret;
         }
 
         public void Dispose()
@@ -393,6 +347,27 @@ namespace BlazorGrid.Components
                     Filter.Filters.CollectionChanged -= OnFilterCollectionChanged;
                 }
             }
+        }
+
+        public string ColHeaderSortIconCssClass(IGridCol col)
+        {
+            var cls = "blazor-grid-sort-icon";
+
+            if (IsSortedBy(col))
+            {
+                cls += " active";
+
+                if (OrderByDescending)
+                {
+                    cls += " sorted-desc";
+                }
+                else
+                {
+                    cls += " sorted-asc";
+                }
+            }
+
+            return cls;
         }
     }
 }

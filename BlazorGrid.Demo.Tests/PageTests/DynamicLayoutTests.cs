@@ -56,21 +56,13 @@ namespace BlazorGrid.Tests.Demo
         {
             Assert.AreEqual(expectedColumnCount, grid.Instance.Columns.Count());
 
-            // Commented out until bUnit support Virtualize
-            //// Verify number of th's
-            //var header = grid.Find(".grid-row.grid-header");
-            //Assert.AreEqual(expectedColumnCount, header.Children.Count());
+            // Verify number of th's
+            var header = grid.Find(".grid-row.grid-header");
+            Assert.AreEqual(expectedColumnCount, header.Children.Count());
 
-            //// Verify number of td's per row
-            //var row = grid.Find(".grid-header + .grid-row");
-            //Assert.AreEqual(expectedColumnCount, row.Children.Count());
-
-            //// Verify colspan of the "load more" footer
-            //var footer = grid.Find(".grid-row + div:last-child");
-            //var style = footer.GetStyle().GetProperty("grid-column");
-            //Assert.AreEqual("span " + expectedColumnCount + " / auto", style.Value);
-
-            //Assert.AreEqual(expectedColumnCount, grid.Instance.Columns.Count());
+            // Verify number of td's per row
+            var row = grid.Find(".grid-row:not(.grid-header)");
+            Assert.AreEqual(expectedColumnCount, row.Children.Count());
         }
 
         [TestMethod]
@@ -97,7 +89,7 @@ namespace BlazorGrid.Tests.Demo
         }
 
         [TestMethod]
-        public void Is_Grid_Layout_Correct()
+        public async Task Is_Grid_Layout_Correct()
         {
             var page = RenderPage();
             var grid = page.FindComponent<BlazorGrid<Employee>>();
@@ -106,12 +98,13 @@ namespace BlazorGrid.Tests.Demo
             VerifyGridColumnCount(grid, 5);
 
             var toggleBtn = page.Find(".col-3 .btn.btn-secondary");
-            toggleBtn.Click();
+            await page.InvokeAsync(() => toggleBtn.Click());
 
             VerifyGridColumnCount(grid, 4);
 
             // Restore the original columns
-            toggleBtn.Click();
+            await page.InvokeAsync(() => toggleBtn.Click());
+
             VerifyGridColumnCount(grid, 5);
         }
     }

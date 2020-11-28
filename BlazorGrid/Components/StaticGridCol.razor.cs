@@ -8,7 +8,7 @@ namespace BlazorGrid.Components
 {
     public partial class StaticGridCol : IGridCol
     {
-        [CascadingParameter] internal IBlazorGrid Parent { get; set; }
+        [CascadingParameter] internal IColumnRegister Register { get; set; }
         [Parameter] public string Caption { get; set; }
         [Parameter] public RenderFragment ChildContent { get; set; }
         [Parameter] public bool FitToContent { get; set; }
@@ -17,13 +17,6 @@ namespace BlazorGrid.Components
 
         Expression IGridCol.For => null;
         string IGridCol.PropertyName => null;
-
-        public bool IsRegistered { get; private set; }
-
-        protected override bool ShouldRender()
-        {
-            return !IsRegistered;
-        }
 
         private IDictionary<string, object> FinalAttributes
         {
@@ -79,19 +72,12 @@ namespace BlazorGrid.Components
 
         protected override void OnParametersSet()
         {
-            if (!IsRegistered && Parent != null)
+            if (Register != null)
             {
-                IsRegistered = Parent.Register(this);
+                Register.Register(this);
             }
         }
 
         public string GetCaptionOrDefault() => Caption;
-
-        public string SortIconCssClass() => null;
-
-        public void Unlink()
-        {
-            IsRegistered = false;
-        }
     }
 }
