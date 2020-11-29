@@ -8,7 +8,6 @@
         display: grid;
         align-content: start;
         background-color: inherit;
-        grid-template-columns: repeat(auto);
 
         > *:not(.grid-row), .grid-row-span-all {
             grid-column: 1/-1;
