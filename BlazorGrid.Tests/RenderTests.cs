@@ -314,5 +314,51 @@ namespace BlazorGrid.Tests
 
             Assert.AreEqual(1, grid.RenderCount);
         }
+
+        [TestMethod]
+        public void No_Data_Shows_Empty_Message()
+        {
+            var provider = Services.GetRequiredService<Mock<IGridProvider>>();
+            provider.Reset();
+
+            provider.Setup(x => x.GetAsync<MyDto>(
+                It.IsAny<string>(),
+                It.IsAny<int>(),
+                It.IsAny<int>(),
+                It.IsAny<string>(),
+                It.IsAny<bool>(),
+                It.IsAny<string>(),
+                It.IsAny<FilterDescriptor>(),
+                It.IsAny<CancellationToken>()
+            )).ReturnsAsync(new BlazorGridResult<MyDto>
+            {
+                TotalCount = 0,
+                Data = new List<MyDto> { }
+            }).Verifiable();
+
+            var grid = RenderComponent<BlazorGrid<MyDto>>(
+                Template<MyDto>(nameof(ChildContent), (context) => (RenderTreeBuilder b) =>
+                {
+                    Expression<Func<string>> colFor = () => context.Name;
+
+                    b.OpenComponent<GridCol<string>>(0);
+                    b.AddAttribute(1, "For", colFor);
+                    b.CloseComponent();
+                })
+            );
+
+            provider.Verify();
+
+            var conf = Services.GetRequiredService<IBlazorGridConfig>();
+            var messageContainer = grid.Find("." + string.Join('.', conf.Styles.PlaceholderWrapperClass.Split(' ')));
+
+            Assert.IsNotNull(messageContainer);
+            messageContainer.MarkupMatches(
+                $"<div class=\"{conf.Styles.PlaceholderWrapperClass}\">" +
+                    $"<h5 class=\"{conf.Styles.NoDataHeadingClass}\">{BlazorGrid.Resources.Empty_Title}</h5>" +
+                    $"<p class=\"{conf.Styles.NoDataTextClass}\">{BlazorGrid.Resources.Empty_Text}</p>" +
+                "</div>"
+            );
+        }
     }
 }

@@ -107,6 +107,12 @@ namespace BlazorGrid.Components
             }
 
             TotalRowCount = result.TotalCount;
+
+            if (TotalRowCount == 0)
+            {
+                StateHasChanged();
+            }
+
             return new ItemsProviderResult<TRow>(result.Data, result.TotalCount);
         }
 
