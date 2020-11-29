@@ -20,4 +20,8 @@ $bzg-header-cell-hover-bg: $bzg-cell-hover-bg !default;
 $bzg-header-cell-hover-color: $primary-color-light !default;
 $bzg-header-cell-hover-left-border-width: 2px !default;
 
+$bzg-placeholder-border-radius: $border-radius !default;
+$bzg-placeholder-foreground: rgba(0,0,0,.08) !default;
+$bzg-placeholder-bg: rgba(0,0,0,.04) !default;
+
 @import 'blazorgrid.scss';

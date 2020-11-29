@@ -19,10 +19,22 @@
 
         &.grid-row-placeholder .grid-cell-placeholder {
             display: block;
-            animation: placeholderBackground 1.8s infinite linear forwards;
-            background: linear-gradient(to right, #fafafa 8%, #f4f4f4 38%, #fafafa 54%);
-            background-size: 1000px 640px;
             user-select: none;
+            border-radius: $bzg-placeholder-border-radius;
+            background: $bzg-placeholder-bg;
+            overflow: hidden;
+            position: relative;
+
+            > span {
+                top: 0;
+                position: absolute;
+                display: block;
+                width: 400px;
+                height: 100%;
+                animation: placeholderBackground 5s infinite ease-in-out;
+                background: linear-gradient(270deg, transparent, $bzg-placeholder-foreground, $bzg-placeholder-foreground, transparent);
+                background-size: 400px 100%;
+            }
         }
 
         > * {
@@ -130,10 +142,10 @@
 
 @keyframes placeholderBackground {
     0% {
-        background-position: -468px 0
+        transform: translateX(-400px);
     }
 
-    100% {
-        background-position: 468px 0
+    to {
+        transform: translateX(100vw);
     }
 }
