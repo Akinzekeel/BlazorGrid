@@ -1,4 +1,5 @@
 ﻿@page "/examples/virtualization"
+@implements IDisposable
 @layout ExampleLayout
 <h1>Virtualization</h1>
 <p>Since .NET 5, BlazorGrid uses virtualization by default for best performance.</p>
@@ -36,5 +37,15 @@
         {
             CurrentDelay = Providers.CustomProvider.ArtificialDelayMs = delay;
         }
+    }
+
+    protected override void OnInitialized()
+    {
+        Providers.CustomProvider.ArtificialDelayMs = CurrentDelay;
+    }
+
+    public void Dispose()
+    {
+        Providers.CustomProvider.ArtificialDelayMs = 0;
     }
 }
