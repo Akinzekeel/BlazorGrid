@@ -231,7 +231,7 @@ namespace BlazorGrid.Components
 
         private string GridTemplateColumns()
         {
-            var widths = RegisteredColumns.Select(col => col.FitToContent ? "max-content" : "auto");
+            var widths = RegisteredColumns.Select(col => col.FitToContent ? "max-content" : "minmax(auto, 1fr)");
             return string.Join(' ', widths);
         }
 

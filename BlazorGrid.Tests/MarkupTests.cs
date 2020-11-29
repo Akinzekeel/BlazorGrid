@@ -75,7 +75,11 @@ namespace BlazorGrid.Tests
             // Verify the number of column widths
             var scroller = grid.Find(".grid-scrollview");
             var scrollerStyle = scroller.GetStyle().First(x => x.Name == "grid-template-columns");
-            var colSizes = scrollerStyle.Value.Trim().Split(' ');
+            var colSizes = scrollerStyle.Value
+                .Trim()
+                .Split(' ')
+                .Where(x => x == "max-content" || x.StartsWith("minmax"));
+
             Assert.AreEqual(expectedColumnCount, colSizes.Count());
         }
 
@@ -181,7 +185,7 @@ namespace BlazorGrid.Tests
             var scroller = grid.Find("*").FirstElementChild;
             var style = scroller.GetAttribute("style");
 
-            Assert.AreEqual("grid-template-columns: auto max-content; height: 100%;", style);
+            Assert.AreEqual("grid-template-columns: minmax(auto, 1fr) max-content; height: 100%;", style);
         }
 
         [TestMethod]
