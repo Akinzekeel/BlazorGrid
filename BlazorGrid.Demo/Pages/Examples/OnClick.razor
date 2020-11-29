@@ -13,7 +13,7 @@
 <Tabs>
     <Tab Caption="Result" class="p-3">
         <div class="row">
-            <div class="col-9">
+            <div class="col-9 align-self-start">
                 <BlazorGrid TRow="Employee" SourceUrl="data/employees.json" OnClick="row => ShowDetails(row)" style="max-height: 340px;">
                     <StaticGridCol FitToContent="true">
                         <img src="@context.Avatar" style="width: 20px; height: 20px;" />
