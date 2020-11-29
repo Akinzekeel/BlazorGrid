@@ -9,7 +9,6 @@ namespace BlazorGrid.Interfaces
     {
         string OrderByPropertyName { get; }
         bool OrderByDescending { get; }
-        IEnumerable<IGridCol> Columns { get; }
         FilterDescriptor Filter { get; }
     }
 }

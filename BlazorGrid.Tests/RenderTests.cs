@@ -263,59 +263,6 @@ namespace BlazorGrid.Tests
         }
 
         [TestMethod]
-        public async Task Href_Does_Not_Trigger_Rerender()
-        {
-            var provider = Services.GetRequiredService<Mock<IGridProvider>>();
-
-            provider.Setup(x => x.GetAsync<MyDto>(
-                It.IsAny<string>(),
-                It.IsAny<int>(),
-                It.IsAny<int>(),
-                It.IsAny<string>(),
-                It.IsAny<bool>(),
-                It.IsAny<string>(),
-                It.IsAny<FilterDescriptor>(),
-                It.IsAny<CancellationToken>()
-            )).ReturnsAsync(new BlazorGridResult<MyDto>
-            {
-                TotalCount = 1,
-                Data = new List<MyDto> {
-                    new MyDto { Name = "Unit test" }
-                }
-            });
-
-            Func<MyDto, string> href = (MyDto _) => "/go-to/here";
-
-            var grid = RenderComponent<BlazorGrid<MyDto>>(
-                Parameter(nameof(BlazorGrid<MyDto>.Href), href),
-                Template<MyDto>(nameof(ChildContent), (context) => (RenderTreeBuilder b) =>
-                {
-                    Expression<Func<string>> colFor = () => context.Name;
-
-                    b.OpenComponent<GridCol<string>>(0);
-                    b.AddAttribute(1, "For", colFor);
-                    b.CloseComponent();
-                })
-            );
-
-            var nav = Services.GetRequiredService<MockNav>();
-            nav.LocationChanged += (object sender, LocationChangedEventArgs args)
-                => grid.SetParametersAndRender(
-                    Parameter(nameof(BlazorGrid<string>.QueryUserInput), grid.Instance.QueryUserInput)
-                );
-
-            Assert.AreEqual(1, grid.RenderCount);
-
-            // Try clicking on a row
-            var row = grid.Find(".grid-row:not(.grid-header)");
-            await grid.InvokeAsync(() => row.Click());
-
-            Task.Delay(100).Wait();
-
-            Assert.AreEqual(1, grid.RenderCount);
-        }
-
-        [TestMethod]
         public void No_Data_Shows_Empty_Message()
         {
             var provider = Services.GetRequiredService<Mock<IGridProvider>>();

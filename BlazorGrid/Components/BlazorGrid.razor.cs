@@ -19,7 +19,6 @@ namespace BlazorGrid.Components
     public partial class BlazorGrid<TRow> : ComponentBase, IDisposable, IBlazorGrid where TRow : class
     {
         private bool SkipNextRender;
-        private bool SkipNextSetParameters;
         private bool DetectColumns = true;
         private readonly Type typeInfo = typeof(BlazorGrid<TRow>);
 
@@ -37,6 +36,7 @@ namespace BlazorGrid.Components
         [Inject] private IBlazorGridConfig Config { get; set; }
         [Inject] private NavigationManager Nav { get; set; }
 
+        [Parameter] public int VirtualItemSize { get; set; } = 50;
         [Parameter] public List<TRow> Rows { get; set; }
         [Parameter] public string SourceUrl { get; set; }
         [Parameter] public RenderFragment<TRow> ChildContent { get; set; }
@@ -54,8 +54,7 @@ namespace BlazorGrid.Components
         public string OrderByPropertyName { get; private set; }
         public bool OrderByDescending { get; private set; }
 
-        private ICollection<IGridCol> RegisteredColumns = new List<IGridCol>();
-        public IEnumerable<IGridCol> Columns => RegisteredColumns;
+        internal ICollection<IGridCol> Columns = new List<IGridCol>();
         private Exception LoadingError { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Modifizierer \"readonly\" hinzufügen", Justification = "<Ausstehend>")]
@@ -99,7 +98,7 @@ namespace BlazorGrid.Components
                 Query,
                 Filter,
                 request.CancellationToken
-            ).ConfigureAwait(false);
+            );
 
             if (request.CancellationToken.IsCancellationRequested)
             {
@@ -237,7 +236,7 @@ namespace BlazorGrid.Components
 
         private string GridTemplateColumns()
         {
-            var widths = RegisteredColumns.Select(col => col.FitToContent ? "max-content" : "minmax(auto, 1fr)");
+            var widths = Columns.Select(col => col.FitToContent ? "max-content" : "minmax(auto, 1fr)");
             return string.Join(' ', widths);
         }
 
@@ -247,16 +246,12 @@ namespace BlazorGrid.Components
 
             if (onClickUrl != null)
             {
-                SkipNextSetParameters = true;
                 SkipNextRender = true;
-
                 Nav.NavigateTo(onClickUrl);
             }
             else if (OnClick.HasDelegate)
             {
-                SkipNextSetParameters = true;
                 SkipNextRender = true;
-
                 await OnClick.InvokeAsync(row);
             }
         }
@@ -294,13 +289,12 @@ namespace BlazorGrid.Components
         private Dictionary<string, object> NextSetParametersAsyncMerge;
         public override async Task SetParametersAsync(ParameterView parameters)
         {
-            if (SkipNextSetParameters)
-            {
-                SkipNextSetParameters = false;
-                return;
-            }
-
             var p = parameters.ToDictionary().ToDictionary(x => x.Key, x => x.Value);
+
+            if (p.ContainsKey(nameof(ChildContent)))
+            {
+                DetectColumns = true;
+            }
 
             if (p.ContainsKey(nameof(QueryUserInput)) && (string)p[nameof(QueryUserInput)] != QueryUserInput)
             {
@@ -311,15 +305,9 @@ namespace BlazorGrid.Components
                 return;
             }
 
-            if (p.ContainsKey(nameof(ChildContent)))
-            {
-                DetectColumns = true;
-            }
+            var reloadParams = p.Keys.Intersect(ReloadTriggerParameterNames);
 
-            if (
-                p.Keys.Intersect(ReloadTriggerParameterNames)
-                    .Any(x => (string)typeInfo.GetProperty(x).GetValue(this) != (string)p[x])
-            )
+            if (reloadParams.Any(x => (string)typeInfo.GetProperty(x).GetValue(this) != (string)p[x]))
             {
                 await base.SetParametersAsync(parameters);
                 await ReloadAsync();
@@ -332,7 +320,7 @@ namespace BlazorGrid.Components
         private void OnColumnsChanged(ICollection<IGridCol> cols)
         {
             DetectColumns = false;
-            RegisteredColumns = cols;
+            Columns = cols;
         }
 
         protected override bool ShouldRender()

@@ -6,12 +6,12 @@
         @ChildContent(GetEmptyRow())
     </BlazorGrid.Infrastructure.ColumnBuffer>
 }
-@if (RegisteredColumns.Any())
+@if (Columns.Any())
 {
     <div @attributes="FinalAttributes">
         <div class="grid-scrollview" style="grid-template-columns: @GridTemplateColumns(); height: 100%;">
             <header class="grid-row grid-header">
-                @foreach (var col in RegisteredColumns)
+                @foreach (var col in Columns)
                 {
                     var isSorted = IsSortedBy(col);
                     var sortable = col.For != null;
@@ -80,10 +80,10 @@
             }
             else
             {
-                <Virtualize ItemsProvider="GetItemsVirtualized" @ref="VirtualizeRef">
+                <Virtualize ItemsProvider="GetItemsVirtualized" @ref="VirtualizeRef" ItemSize="VirtualItemSize">
                     <Placeholder>
                         <div class="grid-row grid-row-placeholder" aria-label="@Resources.Loading_Text">
-                            @foreach (var col in RegisteredColumns)
+                            @foreach (var col in Columns)
                             {
                                 <div>
                                     <div class="grid-cell-placeholder">&#8203;<span></span></div>

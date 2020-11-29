@@ -54,22 +54,5 @@ namespace BlazorGrid.Tests.Demo
         {
             RenderPage();
         }
-
-        [TestMethod]
-        public async Task Click_Does_Not_Cause_Rerender()
-        {
-            var page = RenderPage();
-            var grid = page.FindComponent<BlazorGrid<Employee>>();
-
-            await Task.Delay(200);
-
-            var renderCount = grid.RenderCount;
-            var row = grid.Find(".grid-row:not(.grid-header)");
-            await grid.InvokeAsync(() => row.Click());
-
-            await Task.Delay(200);
-
-            Assert.AreEqual(renderCount, grid.RenderCount);
-        }
     }
 }
