@@ -105,11 +105,12 @@ namespace BlazorGrid.Components
                 return await ValueTask.FromCanceled<ItemsProviderResult<TRow>>(request.CancellationToken);
             }
 
-            TotalRowCount = result.TotalCount;
+            TotalRowCount = result?.TotalCount ?? 0;
 
             if (TotalRowCount == 0)
             {
                 StateHasChanged();
+                return new ItemsProviderResult<TRow>();
             }
 
             return new ItemsProviderResult<TRow>(result.Data, result.TotalCount);
