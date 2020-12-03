@@ -155,8 +155,9 @@ namespace BlazorGrid.Components
             if (QueryDebounceValue == userInput)
             {
                 var parameters = NextSetParametersAsyncMerge;
+                NextSetParametersAsyncMerge = null;
                 parameters[nameof(Query)] = userInput;
-                await SetParametersAsync(ParameterView.FromDictionary(parameters));
+                await InvokeAsync(() => SetParametersAsync(ParameterView.FromDictionary(parameters)));
             }
         }
 
@@ -211,6 +212,7 @@ namespace BlazorGrid.Components
                 StateHasChanged();
 
                 await VirtualizeRef.RefreshDataAsync();
+                StateHasChanged();
             }
         }
 
@@ -292,11 +294,6 @@ namespace BlazorGrid.Components
         {
             var p = parameters.ToDictionary().ToDictionary(x => x.Key, x => x.Value);
 
-            if (p.ContainsKey(nameof(ChildContent)))
-            {
-                DetectColumns = true;
-            }
-
             if (p.ContainsKey(nameof(QueryUserInput)) && (string)p[nameof(QueryUserInput)] != QueryUserInput)
             {
                 // This will cause a debounce after which SetParametersAsync is called again
@@ -306,16 +303,34 @@ namespace BlazorGrid.Components
                 return;
             }
 
-            var reloadParams = p.Keys.Intersect(ReloadTriggerParameterNames);
-
-            if (reloadParams.Any(x => (string)typeInfo.GetProperty(x).GetValue(this) != (string)p[x]))
+            if (p.ContainsKey(nameof(ChildContent)))
             {
-                await base.SetParametersAsync(parameters);
-                await ReloadAsync();
-                return;
+                DetectColumns = true;
+            }
+
+            var mustReload = false;
+
+            foreach (var k in ReloadTriggerParameterNames)
+            {
+                if (p.ContainsKey(k))
+                {
+                    var newVal = p[k] as string ?? "";
+                    var oldVal = typeInfo.GetProperty(k).GetValue(this) as string ?? "";
+                    mustReload = newVal != oldVal;
+                }
+
+                if (mustReload)
+                {
+                    break;
+                }
             }
 
             await base.SetParametersAsync(parameters);
+
+            if (mustReload)
+            {
+                await ReloadAsync();
+            }
         }
 
         private void OnColumnsChanged(ICollection<IGridCol> cols)

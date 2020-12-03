@@ -107,5 +107,45 @@ namespace BlazorGrid.Tests
             // Those must be the only 2 requests
             mockProvider.VerifyNoOtherCalls();
         }
+
+        [TestMethod]
+        public async Task Query_Set_Triggers_Render()
+        {
+            mockProvider.Setup(x => x.GetAsync<Model>(
+                It.IsAny<string>(),
+                0,
+                It.IsAny<int>(),
+                null,
+                false,
+                null,
+                It.IsAny<FilterDescriptor>(),
+                It.IsAny<CancellationToken>()
+            )).ReturnsAsync(new BlazorGridResult<Model>
+            {
+                Data = Enumerable.Repeat(new Model(), 3).ToList(),
+                TotalCount = 3
+            });
+
+            var grid = RenderComponent<BlazorGrid<Model>>(
+                Template<Model>(nameof(ChildContent), (dto) => (b) =>
+                {
+                    b.OpenComponent(0, typeof(GridCol<string>));
+                    b.AddAttribute(1, nameof(GridCol<string>.Caption), nameof(Model.Name));
+                    b.CloseComponent();
+                })
+            );
+
+            // Set a filter query
+            grid.SetParametersAndRender(
+                Parameter(nameof(BlazorGrid<Model>.QueryUserInput), "unit-test")
+            );
+
+            var rc = grid.RenderCount;
+
+            // Wait for the debounce
+            await Task.Delay(500);
+
+            Assert.AreNotEqual(rc, grid.RenderCount);
+        }
     }
 }
