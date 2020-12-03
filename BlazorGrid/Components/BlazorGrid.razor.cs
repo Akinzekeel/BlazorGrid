@@ -49,6 +49,7 @@ namespace BlazorGrid.Components
         [Parameter] public bool DefaultOrderByDescending { get; set; }
         [Parameter(CaptureUnmatchedValues = true)] public IDictionary<string, object> Attributes { get; set; }
 
+        private bool? ShowLoadingOverlay;
         private int? TotalRowCount;
         public FilterDescriptor Filter { get; private set; } = new FilterDescriptor();
         public string OrderByPropertyName { get; private set; }
@@ -62,58 +63,80 @@ namespace BlazorGrid.Components
 
         private async ValueTask<ItemsProviderResult<TRow>> GetItemsVirtualized(ItemsProviderRequest request)
         {
-            var len = Math.Max(request.Count, DefaultPageSize);
-
-            if (Rows != null)
+            if (ShowLoadingOverlay is null)
             {
-                var rows = Rows.AsQueryable();
+                ShowLoadingOverlay = true;
+                StateHasChanged();
+            }
 
-                if (OrderByPropertyName != null)
+            try
+            {
+                var len = Math.Max(request.Count, DefaultPageSize);
+
+                if (Rows != null)
                 {
-                    // Apply client-side sorting
-                    if (OrderByDescending)
+                    var rows = Rows.AsQueryable();
+
+                    if (OrderByPropertyName != null)
                     {
-                        rows = rows.OrderByDescending(OrderByPropertyName);
+                        // Apply client-side sorting
+                        if (OrderByDescending)
+                        {
+                            rows = rows.OrderByDescending(OrderByPropertyName);
+                        }
+                        else
+                        {
+                            rows = rows.OrderBy(OrderByPropertyName);
+                        }
                     }
-                    else
-                    {
-                        rows = rows.OrderBy(OrderByPropertyName);
-                    }
+
+                    rows = rows
+                        .Skip(request.StartIndex)
+                        .Take(len);
+
+                    return new ItemsProviderResult<TRow>(rows, Rows.Count);
                 }
 
-                rows = rows
-                    .Skip(request.StartIndex)
-                    .Take(len);
+                var result = await Provider.GetAsync<TRow>
+                (
+                    SourceUrl,
+                    request.StartIndex,
+                    len,
+                    OrderByPropertyName,
+                    OrderByDescending,
+                    Query,
+                    Filter,
+                    request.CancellationToken
+                );
 
-                return new ItemsProviderResult<TRow>(rows, Rows.Count);
+                if (request.CancellationToken.IsCancellationRequested)
+                {
+                    return await ValueTask.FromCanceled<ItemsProviderResult<TRow>>(request.CancellationToken);
+                }
+
+                TotalRowCount = result?.TotalCount ?? 0;
+
+                if (TotalRowCount != 0)
+                {
+                    return new ItemsProviderResult<TRow>(result.Data, result.TotalCount);
+                }
             }
-
-            var result = await Provider.GetAsync<TRow>
-            (
-                SourceUrl,
-                request.StartIndex,
-                len,
-                OrderByPropertyName,
-                OrderByDescending,
-                Query,
-                Filter,
-                request.CancellationToken
-            );
-
-            if (request.CancellationToken.IsCancellationRequested)
+            catch (TaskCanceledException) { }
+            catch (Exception x)
             {
-                return await ValueTask.FromCanceled<ItemsProviderResult<TRow>>(request.CancellationToken);
+                LoadingError = x;
             }
-
-            TotalRowCount = result?.TotalCount ?? 0;
-
-            if (TotalRowCount == 0)
+            finally
             {
-                StateHasChanged();
-                return new ItemsProviderResult<TRow>();
+                if (ShowLoadingOverlay == true)
+                {
+                    ShowLoadingOverlay = false;
+                    StateHasChanged();
+                }
             }
 
-            return new ItemsProviderResult<TRow>(result.Data, result.TotalCount);
+            // Return empty result set (fallback)
+            return new ItemsProviderResult<TRow>();
         }
 
         private IDictionary<string, object> FinalAttributes
@@ -165,7 +188,7 @@ namespace BlazorGrid.Components
         {
             get
             {
-                var cls = new List<string> { "blazor-grid" };
+                var cls = new List<string> { "blazor-grid-wrapper" };
 
                 if (Attributes != null)
                 {
@@ -208,6 +231,7 @@ namespace BlazorGrid.Components
         {
             if (VirtualizeRef != null)
             {
+                ShowLoadingOverlay = null;
                 TotalRowCount = null;
                 StateHasChanged();
 

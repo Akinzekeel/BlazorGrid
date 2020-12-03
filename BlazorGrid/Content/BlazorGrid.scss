@@ -1,139 +1,162 @@
-.blazor-grid {
+.blazor-grid-wrapper {
+    position: relative;
     height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
-    background-color: inherit;
 
-    .grid-scrollview {
-        display: grid;
-        align-content: start;
-        background-color: inherit;
-
-        > *:not(.grid-row), .grid-row-span-all {
-            grid-column: 1/-1;
-        }
+    .grid-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        top: 0;
+        display: flex;
+        flex-flow: column;
+        justify-content: center;
+        background: $bzg-overlay-bg;
+        z-index: 100;
     }
 
-    .grid-row {
-        display: contents;
+    .blazor-grid {
+        height: 100%;
+        background-color: inherit;
 
-        &.grid-row-placeholder .grid-cell-placeholder {
-            display: block;
-            user-select: none;
-            border-radius: $bzg-placeholder-border-radius;
-            background: $bzg-placeholder-bg;
-            overflow: hidden;
-            position: relative;
+        .grid-scrollview {
+            display: grid;
+            align-content: start;
+            background-color: inherit;
 
-            > span {
-                top: 0;
-                position: absolute;
-                display: block;
-                width: 400px;
+            > *:not(.grid-row), .grid-row-span-all {
+                grid-column: 1/-1;
+            }
+
+            .grid-row-stretch {
+                justify-self: stretch;
                 height: 100%;
-                animation: placeholderBackground 5s infinite ease-in-out;
-                background: linear-gradient(270deg, transparent, $bzg-placeholder-foreground, $bzg-placeholder-foreground, transparent);
-                background-size: 400px 100%;
             }
         }
 
-        > * {
-            padding: $bzg-cell-padding-x $bzg-cell-padding-y;
-            border-bottom: $bzg-cell-border-bottom-width solid $bzg-cell-border-color;
-            border-left: $bzg-header-cell-hover-left-border-width solid transparent;
-            // This border will balance out the bottom border to make sure
-            // the content is perfectly centered vertically
-            border-top: $bzg-cell-border-bottom-width solid transparent;
-        }
+        .grid-row {
+            display: contents;
 
-        &.grid-header {
-            background-color: inherit;
+            &.grid-row-placeholder .grid-cell-placeholder {
+                display: block;
+                user-select: none;
+                border-radius: $bzg-placeholder-border-radius;
+                background: $bzg-placeholder-bg;
+                overflow: hidden;
+                position: relative;
+
+                > span {
+                    top: 0;
+                    position: absolute;
+                    display: block;
+                    width: 400px;
+                    height: 100%;
+                    animation: placeholderBackground 5s infinite ease-in-out;
+                    background: linear-gradient(270deg, transparent, $bzg-placeholder-foreground, $bzg-placeholder-foreground, transparent);
+                    background-size: 400px 100%;
+                }
+            }
 
             > * {
-                top: 0;
-                position: sticky;
-                white-space: nowrap;
-                background: $bzg-header-bg-color;
-                z-index: 10;
-                font-weight: bold;
+                padding: $bzg-cell-padding-x $bzg-cell-padding-y;
+                border-bottom: $bzg-cell-border-bottom-width solid $bzg-cell-border-color;
+                border-left: $bzg-header-cell-hover-left-border-width solid transparent;
+                // This border will balance out the bottom border to make sure
+                // the content is perfectly centered vertically
+                border-top: $bzg-cell-border-bottom-width solid transparent;
+            }
 
-                &:first-child {
-                    border-left-color: transparent !important;
-                }
+            &.grid-header {
+                background-color: inherit;
 
-                .blazor-grid-sort-icon::after {
-                    opacity: 0.2;
-                    transform: rotate(90deg);
-                    display: inline-block;
-                    content: $bzg-header-sort-icon-content;
-                    font-size: $bzg-header-sort-icon-font-size;
-                    vertical-align: middle;
-                    line-height: 0;
-                    min-height: .5rem;
-                }
+                > * {
+                    top: 0;
+                    position: sticky;
+                    white-space: nowrap;
+                    background: $bzg-header-bg-color;
+                    z-index: 10;
+                    font-weight: bold;
 
-                &.sorted {
+                    &:first-child {
+                        border-left-color: transparent !important;
+                    }
+
                     .blazor-grid-sort-icon::after {
-                        opacity: 1 !important;
-                        color: $bzg-header-sort-icon-active-color;
+                        opacity: 0.2;
+                        transform: rotate(90deg);
+                        display: inline-block;
+                        content: $bzg-header-sort-icon-content;
+                        font-size: $bzg-header-sort-icon-font-size;
+                        vertical-align: middle;
+                        line-height: 0;
+                        min-height: .5rem;
                     }
 
-                    .blazor-grid-sort-icon.sorted-asc::after {
-                        content: $bzg-header-sort-icon-asc-content;
-                    }
-
-                    .blazor-grid-sort-icon.sorted-desc::after {
-                        content: $bzg-header-sort-icon-desc-content;
-                    }
-                }
-
-                &.sortable {
-                    cursor: pointer;
-
-                    &:hover,
-                    &:focus {
-                        color: $bzg-header-cell-hover-color !important;
-                        background: $bzg-header-cell-hover-bg;
-
+                    &.sorted {
                         .blazor-grid-sort-icon::after {
-                            opacity: 0.5;
+                            opacity: 1 !important;
+                            color: $bzg-header-sort-icon-active-color;
+                        }
+
+                        .blazor-grid-sort-icon.sorted-asc::after {
+                            content: $bzg-header-sort-icon-asc-content;
+                        }
+
+                        .blazor-grid-sort-icon.sorted-desc::after {
+                            content: $bzg-header-sort-icon-desc-content;
                         }
                     }
 
-                    &:active {
-                        background: $bzg-cell-active-bg;
+                    &.sortable {
+                        cursor: pointer;
+
+                        &:hover,
+                        &:focus {
+                            color: $bzg-header-cell-hover-color !important;
+                            background: $bzg-header-cell-hover-bg;
+
+                            .blazor-grid-sort-icon::after {
+                                opacity: 0.5;
+                            }
+                        }
+
+                        &:active {
+                            background: $bzg-cell-active-bg;
+                        }
+                    }
+
+                    .blazor-grid-filter-icon {
+                        padding: 0;
+                        display: inline-block;
+                        color: $bzg-header-filter-icon-color;
                     }
                 }
 
-                .blazor-grid-filter-icon {
-                    padding: 0;
-                    display: inline-block;
-                    color: $bzg-header-filter-icon-color;
+                &:hover {
+                    > *:not(:first-child) {
+                        border-left: $bzg-header-cell-hover-left-border-width solid $bzg-header-cell-hover-bg;
+                    }
                 }
             }
 
-            &:hover {
-                > *:not(:first-child) {
-                    border-left: $bzg-header-cell-hover-left-border-width solid $bzg-header-cell-hover-bg;
+            &.clickable {
+                cursor: pointer;
+
+                &:hover,
+                &:focus {
+                    > * {
+                        background-color: $bzg-cell-hover-bg;
+                        color: $bzg-cell-hover-color;
+                    }
                 }
-            }
-        }
 
-        &.clickable {
-            cursor: pointer;
-
-            &:hover,
-            &:focus {
-                > * {
-                    background-color: $bzg-cell-hover-bg;
-                    color: $bzg-cell-hover-color;
-                }
-            }
-
-            &:active {
-                > * {
-                    background-color: $bzg-cell-active-bg;
-                    color: $bzg-cell-active-color;
+                &:active {
+                    > * {
+                        background-color: $bzg-cell-active-bg;
+                        color: $bzg-cell-active-color;
+                    }
                 }
             }
         }
