@@ -109,11 +109,6 @@ namespace BlazorGrid.Components
                     request.CancellationToken
                 );
 
-                if (request.CancellationToken.IsCancellationRequested)
-                {
-                    return await ValueTask.FromCanceled<ItemsProviderResult<TRow>>(request.CancellationToken);
-                }
-
                 TotalRowCount = result?.TotalCount ?? 0;
 
                 if (TotalRowCount != 0)
@@ -121,7 +116,14 @@ namespace BlazorGrid.Components
                     return new ItemsProviderResult<TRow>(result.Data, result.TotalCount);
                 }
             }
-            catch (TaskCanceledException) { }
+            catch (TaskCanceledException)
+            {
+                throw; // Let the Virtualize component handle this 
+            }
+            catch (OperationCanceledException)
+            {
+                throw; // Let the Virtualize component handle this 
+            }
             catch (Exception x)
             {
                 LoadingError = x;
@@ -145,7 +147,7 @@ namespace BlazorGrid.Components
             {
                 var attr = new Dictionary<string, object>
                 {
-                    { "class", CssClass }
+                    { "class", CssClass("blazor-grid-wrapper") }
                 };
 
                 if (Attributes != null)
@@ -184,28 +186,25 @@ namespace BlazorGrid.Components
             }
         }
 
-        public string CssClass
+        public string CssClass(string mergeClassName)
         {
-            get
+            var cls = new List<string> { mergeClassName };
+
+            if (Attributes != null)
             {
-                var cls = new List<string> { "blazor-grid-wrapper" };
+                string customClasses = Attributes
+                    .Where(x => x.Key == "class")
+                    .Select(x => x.Value?.ToString())
+                    .FirstOrDefault();
 
-                if (Attributes != null)
+                if (!string.IsNullOrEmpty(customClasses))
                 {
-                    string customClasses = Attributes
-                        .Where(x => x.Key == "class")
-                        .Select(x => x.Value?.ToString())
-                        .FirstOrDefault();
-
-                    if (!string.IsNullOrEmpty(customClasses))
-                    {
-                        // Merge custom classes
-                        cls.AddRange(customClasses.Split(' '));
-                    }
+                    // Merge custom classes
+                    cls.AddRange(customClasses.Split(' '));
                 }
-
-                return string.Join(' ', cls).Trim();
             }
+
+            return string.Join(' ', cls).Trim();
         }
 
         protected override void OnAfterRender(bool firstRender)
@@ -381,6 +380,8 @@ namespace BlazorGrid.Components
                     Filter.Filters.CollectionChanged -= OnFilterCollectionChanged;
                 }
             }
+
+            GC.SuppressFinalize(this);
         }
 
         public string ColHeaderSortIconCssClass(IGridCol col)
