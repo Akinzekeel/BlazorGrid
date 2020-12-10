@@ -38,24 +38,24 @@
                                 cls += " sorted";
                             }
                         }
-                        <div @onclick="() => TryApplySortingAsync(col)" class="@cls">
-                            @if (!col.AlignRight)
-                            {
-                                @col.GetCaptionOrDefault()
-                            }
-                            @if (IsFilteredBy(col))
-                            {
-                                <span class="blazor-grid-filter-icon active"></span>
-                            }
-                            else if (sortable)
-                            {
-                                <span class="@ColHeaderSortIconCssClass(col)"></span>
-                            }
-                            @if (col.AlignRight)
-                            {
-                                @col.GetCaptionOrDefault()
-                            }
-                        </div>
+                    <div @onclick="() => TryApplySortingAsync(col)" class="@cls">
+                        @if (!col.AlignRight)
+                        {
+                            @col.GetCaptionOrDefault()
+                        }
+                        @if (IsFilteredBy(col))
+                        {
+                            <span class="blazor-grid-filter-icon active"></span>
+                        }
+                        else if (sortable)
+                        {
+                            <span class="@ColHeaderSortIconCssClass(col)"></span>
+                        }
+                        @if (col.AlignRight)
+                        {
+                            @col.GetCaptionOrDefault()
+                        }
+                    </div>
                     }
                 </header>
                 @if (LoadingError != null)
