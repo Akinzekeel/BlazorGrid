@@ -4,6 +4,9 @@ namespace BlazorGrid.Config.Styles
 {
     public class BootstrapStyles : IBlazorGridConfigStyles
     {
+        public string LoadingSpinnerOuterClass => "text-muted my-2";
+        public string LoadingSpinnerInnerClass => "spinner-grow spinner-grow-sm";
+        public string LoadingTextClass => "text-muted small";
         public string PlaceholderWrapperClass => "my-5 text-center";
         public string ErrorHeadingClass => "h6 text-danger";
         public string ErrorSubHeadingClass => "text-danger";

@@ -98,7 +98,7 @@ namespace BlazorGrid.Tests
             );
 
             var outer = grid.Find("*");
-            Assert.AreEqual("blazor-grid", outer.ClassName);
+            Assert.AreEqual("blazor-grid-wrapper", outer.ClassName);
         }
 
         [TestMethod]
@@ -118,7 +118,7 @@ namespace BlazorGrid.Tests
             );
 
             var outer = grid.Find("*");
-            Assert.AreEqual("blazor-grid my-custom-class", outer.ClassName);
+            Assert.AreEqual("blazor-grid-wrapper my-custom-class", outer.ClassName);
         }
 
         [TestMethod]
@@ -155,7 +155,7 @@ namespace BlazorGrid.Tests
                 })
             );
 
-            var scroller = grid.Find("*").FirstElementChild;
+            var scroller = grid.Find(".blazor-grid").FirstElementChild;
             Assert.AreEqual("grid-scrollview", scroller.ClassName);
         }
 
@@ -182,10 +182,10 @@ namespace BlazorGrid.Tests
                 })
             );
 
-            var scroller = grid.Find("*").FirstElementChild;
+            var scroller = grid.Find(".grid-scrollview");
             var style = scroller.GetAttribute("style");
 
-            Assert.AreEqual("grid-template-columns: minmax(auto, 1fr) max-content; height: 100%;", style);
+            Assert.AreEqual("grid-template-columns: minmax(auto, 1fr) max-content;", style);
         }
 
         [TestMethod]

@@ -9,112 +9,125 @@
 @if (Columns.Any())
 {
     <div @attributes="FinalAttributes">
-        <div class="grid-scrollview" style="grid-template-columns: @GridTemplateColumns(); height: 100%;">
-            <header class="grid-row grid-header">
-                @foreach (var col in Columns)
-                {
-                    var isSorted = IsSortedBy(col);
-                    var sortable = col.For != null;
-                    var cls = col.CssClass;
-
-                    if (sortable)
+        @if (ShowLoadingOverlay == true)
+        {
+            <div class="grid-overlay">
+                <div class="@Config.Styles.PlaceholderWrapperClass">
+                    <div class="@Config.Styles.LoadingSpinnerOuterClass">
+                        <div class="@Config.Styles.LoadingSpinnerInnerClass"></div>
+                    </div>
+                    <div class="@Config.Styles.LoadingTextClass">@Resources.Loading_Text</div>
+                </div>
+            </div>
+        }
+        <div class="blazor-grid">
+            <div class="grid-scrollview" style="grid-template-columns: @GridTemplateColumns();">
+                <header class="grid-row grid-header">
+                    @foreach (var col in Columns)
                     {
-                        cls += " sortable";
+                        var isSorted = IsSortedBy(col);
+                        var sortable = col.For != null;
+                        var cls = col.CssClass;
 
-                        if (isSorted)
+                        if (sortable)
                         {
-                            cls += " sorted";
-                        }
-                    }
-                    <div @onclick="() => TryApplySortingAsync(col)" class="@cls">
-                        @if (!col.AlignRight)
-                        {
-                            @col.GetCaptionOrDefault()
-                        }
-                        @if (IsFilteredBy(col))
-                        {
-                            <span class="blazor-grid-filter-icon active"></span>
-                        }
-                        else if (sortable)
-                        {
-                            <span class="@ColHeaderSortIconCssClass(col)"></span>
-                        }
-                        @if (col.AlignRight)
-                        {
-                            @col.GetCaptionOrDefault()
-                        }
-                    </div>
-                }
-            </header>
-            @if (LoadingError != null)
-            {
-                <div class="grid-row-span-all">
-                    <div class="@Config.Styles.PlaceholderWrapperClass">
-                        <div class="@Config.Styles.ErrorHeadingClass">
-                            <h2>@Resources.LoadingError_Title</h2>
-                        </div>
-                        <div class="@Config.Styles.ErrorSubHeadingClass">@Resources.LoadingError_Text</div>
-                        <small class="@Config.Styles.ErrorTextClass">@LoadingError.Message</small>
-                        @if (System.Diagnostics.Debugger.IsAttached)
-                        {
-                            <code style="line-break: auto">@LoadingError.StackTrace</code>
-                        }
-                    </div>
-                </div>
-            }
-            else if (TotalRowCount == 0)
-            {
-                <div class="grid-row-span-all">
-                    <div class="@Config.Styles.PlaceholderWrapperClass">
-                        <h5 class="@Config.Styles.NoDataHeadingClass">@Resources.Empty_Title</h5>
-                        @if (string.IsNullOrEmpty(Query))
-                        {
-                            <p class="@Config.Styles.NoDataTextClass">@Resources.Empty_Text</p>
-                        }
-                        else
-                        {
-                            <p class="@Config.Styles.NoDataTextClass">@Resources.Empty_Text_Filtered</p>
-                        }
-                    </div>
-                </div>
-            }
-            else
-            {
-                <Virtualize ItemsProvider="GetItemsVirtualized" @ref="VirtualizeRef" ItemSize="VirtualItemSize">
-                    <Placeholder>
-                        <div class="grid-row grid-row-placeholder" aria-label="@Resources.Loading_Text">
-                            @foreach (var col in Columns)
+                            cls += " sortable";
+
+                            if (isSorted)
                             {
-                                <div>
-                                    <div class="grid-cell-placeholder">&#8203;<span></span></div>
-                                </div>
+                                cls += " sorted";
+                            }
+                        }
+                        <div @onclick="() => TryApplySortingAsync(col)" class="@cls">
+                            @if (!col.AlignRight)
+                            {
+                                @col.GetCaptionOrDefault()
+                            }
+                            @if (IsFilteredBy(col))
+                            {
+                                <span class="blazor-grid-filter-icon active"></span>
+                            }
+                            else if (sortable)
+                            {
+                                <span class="@ColHeaderSortIconCssClass(col)"></span>
+                            }
+                            @if (col.AlignRight)
+                            {
+                                @col.GetCaptionOrDefault()
                             }
                         </div>
-                    </Placeholder>
-                    <ItemContent>
-                        @{
-                                    var cls = "grid-row";
-
-                                    if (OnClick.HasDelegate || Href != null)
-                                    {
-                                        cls += " " + Config.Styles.RowClickableClass;
-                                    }
-                        }
-                        <div class="@cls"
-                             @onclick="_ => OnRowClicked(context)">
-                            @ChildContent(context)
-                        </div>
-                    </ItemContent>
-                </Virtualize>
-                @if (TotalRowCount.HasValue)
+                    }
+                </header>
+                @if (LoadingError != null)
                 {
-                    <footer class="grid-row-span-all">
-                        <div class="@Config.Styles.FooterWrapperClass">
-                            <div class="@Config.Styles.FooterTextClass">@string.Format(Resources.Footer_RowCount, TotalRowCount ?? 0)</div>
+                    <div class="grid-row-span-all">
+                        <div class="@Config.Styles.PlaceholderWrapperClass">
+                            <div class="@Config.Styles.ErrorHeadingClass">
+                                <h2>@Resources.LoadingError_Title</h2>
+                            </div>
+                            <div class="@Config.Styles.ErrorSubHeadingClass">@Resources.LoadingError_Text</div>
+                            <small class="@Config.Styles.ErrorTextClass">@LoadingError.Message</small>
+                            @if (System.Diagnostics.Debugger.IsAttached)
+                            {
+                                <code style="line-break: auto">@LoadingError.StackTrace</code>
+                            }
                         </div>
-                    </footer>
+                    </div>
                 }
-            }
+                else if (TotalRowCount == 0)
+                {
+                    <div class="grid-row-span-all">
+                        <div class="@Config.Styles.PlaceholderWrapperClass">
+                            <h5 class="@Config.Styles.NoDataHeadingClass">@Resources.Empty_Title</h5>
+                            @if (string.IsNullOrEmpty(Query))
+                            {
+                                <p class="@Config.Styles.NoDataTextClass">@Resources.Empty_Text</p>
+                            }
+                            else
+                            {
+                                <p class="@Config.Styles.NoDataTextClass">@Resources.Empty_Text_Filtered</p>
+                            }
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <Virtualize ItemsProvider="GetItemsVirtualized" @ref="VirtualizeRef" ItemSize="VirtualItemSize">
+                        <Placeholder>
+                            <div class="grid-row grid-row-placeholder" aria-label="@Resources.Loading_Text">
+                                @foreach (var col in Columns)
+                                {
+                                    <div>
+                                        <div class="grid-cell-placeholder">&#8203;<span></span></div>
+                                    </div>
+                                }
+                            </div>
+                        </Placeholder>
+                        <ItemContent>
+                            @{
+                                        var cls = "grid-row";
+
+                                        if (OnClick.HasDelegate || Href != null)
+                                        {
+                                            cls += " " + Config.Styles.RowClickableClass;
+                                        }
+                            }
+                            <div class="@cls"
+                                 @onclick="_ => OnRowClicked(context)">
+                                @ChildContent(context)
+                            </div>
+                        </ItemContent>
+                    </Virtualize>
+                    @if (TotalRowCount.HasValue)
+                    {
+                        <footer class="grid-row-span-all">
+                            <div class="@Config.Styles.FooterWrapperClass">
+                                <div class="@Config.Styles.FooterTextClass">@string.Format(Resources.Footer_RowCount, TotalRowCount ?? 0)</div>
+                            </div>
+                        </footer>
+                    }
+                }
+            </div>
         </div>
     </div>
 }

@@ -2,6 +2,9 @@
 {
     public interface IBlazorGridConfigStyles
     {
+        public string LoadingSpinnerOuterClass { get; }
+        public string LoadingSpinnerInnerClass { get; }
+        public string LoadingTextClass { get; }
         public string PlaceholderWrapperClass { get; }
         public string ErrorHeadingClass { get; }
         public string ErrorSubHeadingClass { get; }
