@@ -50,7 +50,7 @@ namespace BlazorGrid.Components
         [Parameter(CaptureUnmatchedValues = true)] public IDictionary<string, object> Attributes { get; set; }
 
         private bool? ShowLoadingOverlay;
-        private int? TotalRowCount;
+        public int? TotalRowCount { get; private set; }
         public FilterDescriptor Filter { get; private set; } = new FilterDescriptor();
         public string OrderByPropertyName { get; private set; }
         public bool OrderByDescending { get; private set; }
