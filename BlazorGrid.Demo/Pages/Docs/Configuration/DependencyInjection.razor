@@ -1,0 +1,8 @@
+﻿@layout DocumentationLayout
+@page "/docs/configuration/dependency-injection"
+    <h1>Dependency injection</h1>
+    <p>BlazorGrid requires a data provider to load data on demand. The library therefore comes with a default provider with the very original name <code>DefaultHttpProvider</code>. This builtin provider assembles the request URI by passing in all the options as a query string, placing an <code>HTTP GET</code> request and then deserializing the <code>JSON</code> response.</p>
+    <p>Of course, you may also write your own provider by implementing <code>IGridProvider</code>. This is useful if, for example, you want to use gRPC instead of JSON or if you don't want to use HTTP at all and read data from some other source.</p>
+    <p>To register a provider, add the following to your <code>Program.cs</code> file:</p>
+<pre class="pre-scrollable"><code>builder.Services.AddBlazorGrid&lt;DefaultHttpProvider&gt;()</code></pre>
+    <p>If you want to see a sample implementation of a provider, check out the source code of the <code>DefaultHttpProvider</code> on <a target="_blank" href="https://github.com/Akinzekeel/BlazorGrid/blob/master/BlazorGrid/Providers/DefaultHttpProvider.cs">GitHub</a>.</p>

@@ -1,0 +1,12 @@
+﻿@layout DocumentationLayout
+@page "/docs/configuration/styling"
+    <h1>Styling</h1>
+    <p>The grid is actually not made out of a <code>table</code> element, but uses the CSS <code>display: grid</code> property instead. This means that even if you have styles in place that would normally apply to a table, it would have no effect on the BlazorGrid component.</p>
+    <p>Therefore, it is mandatory that you include the CSS that comes with this library in your application.</p>
+    <p>To do so, simply add a reference to the <code>&lt;head&gt;</code> section of your <code>index.html</code> or <code>_Host.html</code> file:</p>
+<pre class="pre-scrollable"><code>&lt;link href="_content/Akinzekeel.BlazorGrid/dist/blazorgrid-bootstrap.min.css" rel="stylesheet" /&gt;</code></pre>
+    <p>This stylesheet will style the grid very similarly to a Bootstrap table. If you happen to use the Spectre CSS framework, you can use the following instead:</p>
+<pre class="pre-scrollable"><code>&lt;link href="_content/Akinzekeel.BlazorGrid/dist/blazorgrid-spectre.min.css" rel="stylesheet" /&gt;</code></pre>
+
+    <h5 class="mt-4">What if I don't use either of those CSS frameworks?</h5>
+    <p>You can build your own stylesheet with Sass instead and customize it with variables. Go to <a href="/docs/advanced/sass">Build your own CSS</a> for more information.</p>
