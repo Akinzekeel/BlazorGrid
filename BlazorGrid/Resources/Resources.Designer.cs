@@ -115,6 +115,15 @@ namespace BlazorGrid {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Retry ähnelt.
+        /// </summary>
+        public static string LoadingError_ReloadBtnText {
+            get {
+                return ResourceManager.GetString("LoadingError_ReloadBtnText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Failed to load data ähnelt.
         /// </summary>
         public static string LoadingError_Text {

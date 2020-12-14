@@ -132,6 +132,9 @@
   <data name="Footer_RowCountFiltered" xml:space="preserve">
     <value>Zeige {0} von {1} Ergebnissen</value>
   </data>
+  <data name="LoadingError_ReloadBtnText" xml:space="preserve">
+    <value>Erneut versuchen</value>
+  </data>
   <data name="LoadingError_Text" xml:space="preserve">
     <value>Daten konnten nicht geladen werden</value>
   </data>

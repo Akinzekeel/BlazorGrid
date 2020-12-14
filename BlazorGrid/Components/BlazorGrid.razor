@@ -20,6 +20,25 @@
                 </div>
             </div>
         }
+        else if (LoadingError != null)
+        {
+            <div class="grid-overlay">
+                <div class="@Config.Styles.PlaceholderWrapperClass">
+                    <div class="@Config.Styles.ErrorHeadingClass">
+                        <h2>@Resources.LoadingError_Title</h2>
+                    </div>
+                    <div class="@Config.Styles.ErrorSubHeadingClass">@Resources.LoadingError_Text</div>
+                    <small class="@Config.Styles.ErrorTextClass">@LoadingError.Message</small>
+                    @if (System.Diagnostics.Debugger.IsAttached)
+                    {
+                        <code style="line-break: auto">@LoadingError.StackTrace</code>
+                    }
+                    <div class="@Config.Styles.ErrorFooterClass">
+                        <button class="@Config.Styles.ErrorFooterBtnClass" @onclick="ReloadAsync">@Resources.LoadingError_ReloadBtnText</button>
+                    </div>
+                </div>
+            </div>
+        }
         <div class="blazor-grid">
             <div class="grid-scrollview" style="grid-template-columns: @GridTemplateColumns();">
                 <header class="grid-row grid-header">
@@ -38,43 +57,27 @@
                                 cls += " sorted";
                             }
                         }
-                    <div @onclick="() => TryApplySortingAsync(col)" class="@cls">
-                        @if (!col.AlignRight)
-                        {
-                            @col.GetCaptionOrDefault()
-                        }
-                        @if (IsFilteredBy(col))
-                        {
-                            <span class="blazor-grid-filter-icon active"></span>
-                        }
-                        else if (sortable)
-                        {
-                            <span class="@ColHeaderSortIconCssClass(col)"></span>
-                        }
-                        @if (col.AlignRight)
-                        {
-                            @col.GetCaptionOrDefault()
-                        }
-                    </div>
-                    }
-                </header>
-                @if (LoadingError != null)
-                {
-                    <div class="grid-row-span-all">
-                        <div class="@Config.Styles.PlaceholderWrapperClass">
-                            <div class="@Config.Styles.ErrorHeadingClass">
-                                <h2>@Resources.LoadingError_Title</h2>
-                            </div>
-                            <div class="@Config.Styles.ErrorSubHeadingClass">@Resources.LoadingError_Text</div>
-                            <small class="@Config.Styles.ErrorTextClass">@LoadingError.Message</small>
-                            @if (System.Diagnostics.Debugger.IsAttached)
+                        <div @onclick="() => TryApplySortingAsync(col)" class="@cls">
+                            @if (!col.AlignRight)
                             {
-                                <code style="line-break: auto">@LoadingError.StackTrace</code>
+                                @col.GetCaptionOrDefault()
+                            }
+                            @if (IsFilteredBy(col))
+                            {
+                                <span class="blazor-grid-filter-icon active"></span>
+                            }
+                            else if (sortable)
+                            {
+                                <span class="@ColHeaderSortIconCssClass(col)"></span>
+                            }
+                            @if (col.AlignRight)
+                            {
+                                @col.GetCaptionOrDefault()
                             }
                         </div>
-                    </div>
-                }
-                else if (TotalRowCount == 0)
+                    }
+                </header>
+                @if (TotalRowCount == 0)
                 {
                     <div class="grid-row-span-all">
                         <div class="@Config.Styles.PlaceholderWrapperClass">

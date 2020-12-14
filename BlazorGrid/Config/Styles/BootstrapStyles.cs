@@ -11,6 +11,8 @@ namespace BlazorGrid.Config.Styles
         public string ErrorHeadingClass => "h6 text-danger";
         public string ErrorSubHeadingClass => "text-danger";
         public string ErrorTextClass => "d-block text-danger small";
+        public string ErrorFooterClass => "text-center my-3";
+        public string ErrorFooterBtnClass => "btn btn-sm btn-danger";
         public string NoDataHeadingClass => "h6 text-muted";
         public string NoDataTextClass => "text-muted small";
         public string FooterWrapperClass => "m-5 text-center";

@@ -132,6 +132,9 @@
   <data name="Footer_RowCount" xml:space="preserve">
     <value>{0} rows total</value>
   </data>
+  <data name="LoadingError_ReloadBtnText" xml:space="preserve">
+    <value>Retry</value>
+  </data>
   <data name="LoadingError_Text" xml:space="preserve">
     <value>Failed to load data</value>
   </data>
