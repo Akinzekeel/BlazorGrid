@@ -1,0 +1,153 @@
+﻿@layout DocumentationLayout
+@page "/docs/components/grid"
+<h1>BlazorGrid component</h1>
+<p>This is the main, top-level component that renders the grid.</p>
+
+<h5 class="mt-4">Parameters</h5>
+<table class="table table-striped table-borderless rounded-lg">
+    <thead class="thead-dark">
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="text-monospace">TRow</td>
+            <td class="text-monospace">System.Type</td>
+            <td>Yes</td>
+            <td>This is the type of the row which will be made available to the <code>ChildContent</code> via <code>context</code>.</td>
+        </tr>
+        <tr>
+            <td class="text-monospace">ChildContent</td>
+            <td class="text-monospace">RenderFragment&lt;TRow&gt;</td>
+            <td>Yes</td>
+            <td>The <code>ChildContent</code> is where your <code>GridCol</code> and <code>StaticGridCol</code> components should be. If/else statements for conditional columns are supported here, however anything besides that may break the grid or simply not be rendered.</td>
+        </tr>
+        <tr>
+            <td class="text-monospace">VirtualItemSize</td>
+            <td class="text-monospace">int</td>
+            <td class="text-muted">No</td>
+            <td>This value will be relayed to the inner <code>Virtualize</code> component to calculate the height of unrendered items. Default value is <code>50</code>.</td>
+        </tr>
+        <tr>
+            <td class="text-monospace">Rows</td>
+            <td class="text-monospace">List&lt;TRow&gt;</td>
+            <td class="text-muted">No</td>
+            <td>If you wish to manually set data on the table you can set this parameter. Note that provider calls are disabled in this mode and that filtering &amp; search will not work.</td>
+        </tr>
+        <tr>
+            <td class="text-monospace">SourceUrl</td>
+            <td class="text-monospace">string</td>
+            <td class="text-muted">No</td>
+            <td>This is the path that is relayed to any calls to the <code>IGridProvider</code>. In a typical scenario, the final request Url would be the <code>HttpClient</code>'s <code>BaseAddress</code> + <code>SourceUrl</code> + a query string containing additional arguments such as the requested number of items and a search query.</td>
+        </tr>
+        <tr>
+            <td class="text-monospace">EmptyRow</td>
+            <td class="text-monospace">TRow</td>
+            <td class="text-muted">No</td>
+            <td>The grid will perform an initial render simply to detect the column definitions. During this initial render, an empty row object is provided to the <code>ChildContent</code>. In some scenarios, BlazorGrid may not be able to instantiate a <code>TRow</code> object by itself. For those rare cases, you may provide a your own object reference here.</td>
+        </tr>
+        <tr>
+            <td class="text-monospace">Query</td>
+            <td class="text-monospace">string</td>
+            <td class="text-muted">No</td>
+            <td>
+                <p>This value will be passed to the <code>IGridProvider</code> and is supposed to filter the items server-side. Which columns exactly are filtered and how this value is interpreted is entirely up to the server-side implementation.</p>
+                <Caution>Setting or changing this parameter will cause an immediate refresh. If you want to bind the query to an input, use the <code>QueryInput</code> parameter instead.</Caution>
+            </td>
+        </tr>
+        <tr>
+            <td class="text-monospace">QueryInput</td>
+            <td class="text-monospace">string</td>
+            <td class="text-muted">No</td>
+            <td>Similar to the <code>Query</code> parameter, however it has a builtin debounce so it is safe to bind it to an input with the <code>oninput</code> event. The default debounce time is 400ms.</td>
+        </tr>
+        <tr>
+            <td class="text-monospace">OnClick</td>
+            <td class="text-monospace">EventCallback&lt;TRow&gt;</td>
+            <td class="text-muted">No</td>
+            <td>A callback which is invoked when clicking on a row. If a non-empty EventCallback is provided or if the <code>Href</code> parameter is not null, all rows in the grid will have a <code>clickable</code> CSS class applied to them.</td>
+        </tr>
+        <tr>
+            <td class="text-monospace">Href</td>
+            <td class="text-monospace">System.Func&lt;TRow&gt;</td>
+            <td class="text-muted">No</td>
+            <td>Similar to the <code>OnClick</code> parameter, however the returned string (if it is not empty) will be navigated to using the <code>NavigationManager</code>. If this parameter is not null or if a non-empty EventCallback is set for the <code>OnClick</code> parameter, all rows in the grid will have a <code>clickable</code> CSS class applied to them.</td>
+        </tr>
+        <tr>
+            <td class="text-monospace">DefaultOrderBy</td>
+            <td class="text-monospace">Expression&lt;Func&lt;TRow, object&gt;&gt;</td>
+            <td class="text-muted">No</td>
+            <td>An order-by expression that will be used in all <code>IGridProvider</code> calls until the user changes the sorting by clicking on the header of any sortable column.</td>
+        </tr>
+        <tr>
+            <td class="text-monospace">DefaultOrderByDescending</td>
+            <td class="text-monospace">bool</td>
+            <td class="text-muted">No</td>
+            <td>Used in conjunction with the <code>DefaultOrderBy</code> parameter.</td>
+        </tr>
+        <tr>
+            <td class="text-monospace">*</td>
+            <td class="text-monospace"></td>
+            <td class="text-muted">-</td>
+            <td>Any other attributes such as <code>class</code> or <code>style</code> will be applied to the outer wrapper element.</td>
+        </tr>
+    </tbody>
+</table>
+
+<h5 class="mt-4">Properties</h5>
+<table class="table table-striped table-borderless rounded-lg">
+    <thead class="thead-dark">
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="text-monospace">TotalRowCount</td>
+            <td class="text-monospace">int?</td>
+            <td>The currently known number of total rows as provided by the <code>IGridProvider</code>.</td>
+        </tr>
+        <tr>
+            <td class="text-monospace">DefaultPageSize <span class="badge badge-primary">const</span></td>
+            <td class="text-monospace">int</td>
+            <td>The minimum number of items that should be returned by the <code>IGridProvider</code>.</td>
+        </tr>
+        <tr>
+            <td class="text-monospace">SearchQueryInputDebounceMs <span class="badge badge-primary">const</span></td>
+            <td class="text-monospace">int</td>
+            <td>The delay in milliseconds between setting the <code>QueryInput</code> parameter and reloading the grid.</td>
+        </tr>
+    </tbody>
+</table>
+
+<h5 class="mt-4">Methods</h5>
+<table class="table table-striped table-borderless rounded-lg">
+    <thead class="thead-dark">
+        <tr>
+            <th>Name</th>
+            <th>Return type</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="text-monospace">ReloadAsync()</td>
+            <td class="text-monospace">Task</td>
+            <td>Force the grid to reload the data.</td>
+        </tr>
+    </tbody>
+</table>
+
+<h5 class="mt-4">Dependencies</h5>
+<p>The following dependencies are injected into each grid and must be available in your DI container:</p>
+<ul>
+    <li><code>NavigationManager</code></li>
+    <li><code>IGridProvider</code></li>
+    <li><code>IBlazorGridConfig</code></li>
+</ul>

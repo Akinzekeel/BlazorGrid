@@ -1,0 +1,51 @@
+﻿@layout DocumentationLayout
+@page "/docs/components/static-grid-col"
+<h1>StaticGridCol</h1>
+<p>The StaticGridCol is a non-sortable version of the GridCol component. It is not bound to any particular property and may contain - as the name suggests - static content such as buttons, for example.</p>
+
+<h5 class="mt-4">Parameters</h5>
+<table class="table table-striped table-borderless rounded-lg">
+    <thead class="thead-dark">
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="text-monospace">Caption</td>
+            <td class="text-monospace">string</td>
+            <td class="text-muted">No</td>
+            <td>The text that will appear in the header of this column.</td>
+        </tr>
+        <tr>
+            <td class="text-monospace">ChildContent</td>
+            <td class="text-monospace">RenderFragment</td>
+            <td class="text-muted">Yes</td>
+            <td>The content that will be rendered in each row's cell for this particular column.</td>
+        </tr>
+        <tr>
+            <td class="text-monospace">FitToContent</td>
+            <td class="text-monospace">bool</td>
+            <td class="text-muted">No</td>
+            <td>Set to <code>true</code> to shrink the column to the minimum size necessary.</td>
+        </tr>
+        <tr>
+            <td class="text-monospace">AlignRight</td>
+            <td class="text-monospace">bool</td>
+            <td class="text-muted">No</td>
+            <td>Set to <code>true</code> to align the text in this column to the right.</td>
+        </tr>
+        <tr>
+            <td class="text-monospace">*</td>
+            <td class="text-monospace"></td>
+            <td class="text-muted">-</td>
+            <td>
+                <p>Any other attributes such as <code>class</code> or <code>style</code> will be applied to the cell elements.</p>
+                <Caution>If you reference <code>context</code> in any of these attributes, remember that on first render it will be null.</Caution>
+            </td>
+        </tr>
+    </tbody>
+</table>
