@@ -50,10 +50,11 @@ namespace BlazorGrid.Components
         [Parameter(CaptureUnmatchedValues = true)] public IDictionary<string, object> Attributes { get; set; }
 
         private bool? ShowLoadingOverlay;
+        private string OrderByPropertyName;
+        private bool OrderByDescending;
+
         public int? TotalRowCount { get; private set; }
         public FilterDescriptor Filter { get; private set; } = new FilterDescriptor();
-        public string OrderByPropertyName { get; private set; }
-        public bool OrderByDescending { get; private set; }
 
         internal ICollection<IGridCol> Columns = new List<IGridCol>();
         private Exception LoadingError { get; set; }
@@ -186,7 +187,7 @@ namespace BlazorGrid.Components
             }
         }
 
-        public string CssClass
+        private string CssClass
         {
             get
             {
@@ -242,7 +243,7 @@ namespace BlazorGrid.Components
             }
         }
 
-        public async Task TryApplySortingAsync(IGridCol column)
+        private async Task TryApplySortingAsync(IGridCol column)
         {
             if (column.PropertyName == null)
             {
@@ -387,7 +388,7 @@ namespace BlazorGrid.Components
             GC.SuppressFinalize(this);
         }
 
-        public string ColHeaderSortIconCssClass(IGridCol col)
+        private string ColHeaderSortIconCssClass(IGridCol col)
         {
             var cls = "blazor-grid-sort-icon";
 

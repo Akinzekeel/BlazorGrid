@@ -7,8 +7,6 @@ namespace BlazorGrid.Interfaces
 {
     public interface IBlazorGrid
     {
-        string OrderByPropertyName { get; }
-        bool OrderByDescending { get; }
         FilterDescriptor Filter { get; }
     }
 }
