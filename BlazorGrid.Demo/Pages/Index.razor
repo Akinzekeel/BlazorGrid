@@ -1,23 +1,66 @@
 ﻿@page "/"
-<div class="container my-5">
-    <h1>Welcome to BlazorGrid</h1>
-    <p class="lead">BlazorGrid is an interactive data grid component for the <a href="https://blazor.net/" target="_blank">Blazor</a> framework.</p>
-
-    <h3>Features</h3>
-    <ul class="list-unstyled">
-        <li><i class="fa fa-fw fa-angle-right"></i>Sorting</li>
-        <li><i class="fa fa-fw fa-angle-right"></i>Filtering</li>
-        <li><i class="fa fa-fw fa-angle-right"></i>Remote data</li>
-    </ul>
-
-    <h3>Supported UI frameworks</h3>
-    <ul class="list-unstyled">
-        <li><i class="fa fa-fw fa-check"></i>Bootstrap</li>
-        <li><i class="fa fa-fw fa-check"></i>Spectre</li>
-    </ul>
-
-    <h3>About this page</h3>
-    <p>This is a simple Blazor application which demonstrates the abilities of the BlazorGrid data grid component.</p>
-    <p>This site is still in active development and some of the demos are not available yet. There will also be a more to-the-point documentation that describes the types and names of the parameters.</p>
-
+<div class="px-md-5 px-2 d-flex" style="min-height: 100vh;">
+    <div class="container my-auto pb-md-4 pb-xl-5">
+        <a href="https://www.nuget.org/packages/Akinzekeel.BlazorGrid"><img src="https://buildstats.info/nuget/Akinzekeel.BlazorGrid?includePrereleases=true" alt="NuGet package statistics" /></a>
+        <div class="display-3 my-2 mb-md-4 mb-xl-5">The <span class="badge badge-info">free</span> data grid component of choice for <a href="https://blazor.net/" target="_blank" class="badge badge-primary">Blazor</a>.</div>
+        <div class="row mb-5">
+            <div class="col-lg-4">
+                <h4>Features</h4>
+                <ul class="list-unstyled lead">
+                    <li><i class="fa fa-angle-right mr-2 text-secondary"></i>Virtualization</li>
+                    <li><i class="fa fa-angle-right mr-2 text-secondary"></i>Custom styling</li>
+                    <li><i class="fa fa-angle-right mr-2 text-secondary"></i>Server side sorting &amp; filtering</li>
+                </ul>
+            </div>
+            <div class="col-lg-4 col-xl-3">
+                <h4>Supports</h4>
+                <ul class="list-unstyled lead">
+                    <li><i class="fa fa-angle-right mr-2 text-secondary"></i>Blazor WebAssembly</li>
+                    <li><i class="fa fa-angle-right mr-2 text-secondary"></i>Blazor server side</li>
+                </ul>
+            </div>
+            <div class="col-lg-4 col-xl-5">
+                <h4>Packages</h4>
+                <ul class="list-unstyled lead">
+                    <li>
+                        <i class="fa fa-angle-right mr-2 text-secondary"></i>
+                        <a class="text-monospace" href="https://www.nuget.org/packages/Akinzekeel.BlazorGrid">Akinzekeel.BlazorGrid</a>
+                        <span class="badge badge-dark ml-1" title="Including optional assets">~139 KB</span>
+                    </li>
+                    <li>
+                        <i class="fa fa-angle-right mr-2 text-secondary"></i>
+                        <a class="text-monospace" href="https://www.nuget.org/packages/Akinzekeel.BlazorGrid.Abstractions">Akinzekeel.BlazorGrid.Abstractions</a>
+                        <span class="badge badge-dark ml-1">~18 KB</span>
+                    </li>
+                </ul>
+                <div><strong>Only ~33 KB payload</strong></div>
+                <div><small>Less than 160 KB including optional assets</small></div>
+            </div>
+        </div>
+        <div class="d-flex">
+            <div>
+                <a class="btn btn-lg btn-info mb-2" href="https://www.nuget.org/packages/Akinzekeel.BlazorGrid" target="_blank">Get it now on NuGet <i class="fa fa-external-link"></i></a>
+                <span class="d-block my-1"><i class="fa fa-check mr-2"></i>.NET 5 ready</span>
+            </div>
+            <div class="ml-2">
+                <a class="btn btn-lg btn-outline-info" href="/examples">Try it</a>
+            </div>
+            <div class="ml-2">
+                <a class="btn btn-lg btn-outline-secondary" href="/docs">Documentation</a>
+            </div>
+            <div class="ml-auto text-right">
+                <div class="mb-1">Already downloaded?</div>
+                <a class="lead" href="/getting-started"><strong>Follow the getting started guide</strong><i class="fa fa-long-arrow-right ml-1"></i></a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container py-5">
+    <h1>FAQ</h1>
+    <h5 class="mt-4">Is BlazorGrid free?</h5>
+    <p>Yes, BlazorGrid is an open-source project licensed under the MIT license. This means it's free to use even for commercial projects.</p>
+    <h5 class="mt-4">I found a bug! What can I do?</h5>
+    <p>If you have any issues with BlazorGrid, please report them on <a href="https://github.com/Akinzekeel/BlazorGrid/issues">GitHub</a>.</p>
+    <hr />
+    <p>Got another question? <a href="https://github.com/Akinzekeel/BlazorGrid/issues">Ask on GitHub <i class="fa fa-long-arrow-right"></i></a></p>
 </div>
