@@ -9,8 +9,8 @@ sass.compiler = require('node-sass');
 
 var files = {
     css: {
-        spectre: "./Content/blazorgrid-spectre.scss",
-        bootstrap: "./Content/blazorgrid-bootstrap.scss"
+        spectre: "./Styles/blazorgrid-spectre.scss",
+        bootstrap: "./Styles/blazorgrid-bootstrap.scss"
     }
 };
 

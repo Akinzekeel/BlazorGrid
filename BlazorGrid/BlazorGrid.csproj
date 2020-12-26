@@ -31,16 +31,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Content\**\*" BuildAction="Content">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <None Remove="Styles\bootstrap\scss\_functions.scss" />
+    <None Remove="Styles\bootstrap\scss\_variables.scss" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Content\blazorgrid-bootstrap.scss" />
-    <None Remove="Content\blazorgrid-spectre.scss" />
-    <None Remove="Content\bootstrap\scss\_functions.scss" />
-    <None Remove="Content\bootstrap\scss\_variables.scss" />
+    <Content Include="Styles\blazorgrid-bootstrap.scss" />
+    <Content Include="Styles\blazorgrid-spectre.scss" />
+    <Content Include="Styles\BlazorGrid.scss" />
+    <Content Include="Styles\bootstrap\scss\_functions.scss" />
+    <Content Include="Styles\bootstrap\scss\_variables.scss" />
+    <Content Include="Styles\spectre\_variables.scss" />
   </ItemGroup>
 
   <ItemGroup>
