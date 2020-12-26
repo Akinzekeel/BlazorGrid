@@ -5,13 +5,13 @@
     <RazorLangVersion>3.0</RazorLangVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>Akinzekeel.BlazorGrid</PackageId>
-    <Version>0.9.8-preview</Version>
+    <Version>1.0.0</Version>
     <Preview></Preview>
     <Authors>Majid Iqbal</Authors>
     <Company />
     <Description>A light weight data grid component for Blazor, focused on remote data. Supports filtering, sorting &amp; virtualization</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/Akinzekeel/BlazorGrid</PackageProjectUrl>
+    <PackageProjectUrl>https://blazorgrid.z6.web.core.windows.net/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Akinzekeel/BlazorGrid</RepositoryUrl>
     <PackageReleaseNotes></PackageReleaseNotes>
     <PackageTags>Blazor, data grid</PackageTags>
