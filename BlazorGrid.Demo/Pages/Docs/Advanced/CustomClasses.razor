@@ -1,0 +1,29 @@
+﻿@layout DocumentationLayout
+@page "/docs/advanced/custom-css-classes"
+<h1>Custom CSS classes</h1>
+<p>Certain building blocks in the grid use a set of pre-defined CSS class names when rendering. By default, BlazorGrid will use <code>Config.Styles.BootstrapStyles</code>. However, you can change the class names to customize the look of the grid - or even add your own configuration to add support for the UI framework of your choice.</p>
+<p>For example, you could make a class like this that uses your own custom CSS classes:</p>
+<pre class="pre-scrollable"><code>public class MyCustomStyles : IBlazorGridConfigStyles
+{
+    public string LoadingSpinnerOuterClass => "gray-text vertical-margin";
+    public string LoadingSpinnerInnerClass => "ring-loader";
+    public string LoadingTextClass => "blue-text";
+    public string PlaceholderWrapperClass => "vertical-margin-lg centered";
+    public string ErrorHeadingClass => "small-heading red-text";
+    public string ErrorSubHeadingClass => "red-text";
+    public string ErrorTextClass => "display-block red-text small-text";
+    public string ErrorFooterClass => "centered vertical-margin-md";
+    public string ErrorFooterBtnClass => "red-button small-button";
+    public string NoDataHeadingClass => "small-heading gray-text";
+    public string NoDataTextClass => "gray-text small-text";
+    public string FooterWrapperClass => "margin-lg centered";
+    public string FooterTextClass => "gray-text";
+    public string RowClickableClass => "cursor-pointer";
+}</code></pre>
+
+<p>To make BlazorGrid use your custom styles, you then have to set it up in the dependency injection configuration:</p>
+<pre class="pre-scrollable"><code>builder.Services.AddBlazorGrid&lt;DefaultHttpProvider&gt;(o =>
+{
+    o.Styles = new MyCustomStyles();
+});
+</code></pre>
