@@ -100,8 +100,12 @@ pre code {
     display: flex;
     min-height: 100vh;
     background: rgb(23,162,184);
-    background: linear-gradient(312deg, rgba(23,162,184,1) 0%, rgba(97,60,205,1) 100%);
+    background: linear-gradient(312deg, $dark 0%, $primary 50%, $info 100%);
     color: $light;
     font-size: $font-size-lg;
     text-shadow: 0 0 5px rgba(0,0,0,.3);
+
+    .badge {
+        box-shadow: $box-shadow;
+    }
 }
