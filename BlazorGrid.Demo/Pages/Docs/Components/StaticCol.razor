@@ -1,6 +1,7 @@
 ﻿@layout DocumentationLayout
+@inherits CommonPageBase
 @page "/docs/components/static-grid-col"
-<h1>StaticGridCol</h1>
+<h1>@Title</h1>
 <p>The StaticGridCol is a non-sortable version of the GridCol component. It is not bound to any particular property and may contain - as the name suggests - static content such as buttons, for example.</p>
 
 <h5 class="mt-4">Parameters</h5>
@@ -49,3 +50,7 @@
         </tr>
     </tbody>
 </table>
+@code
+{
+    protected override string Title => "StaticGridCol";
+}

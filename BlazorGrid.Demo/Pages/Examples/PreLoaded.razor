@@ -1,7 +1,8 @@
+@inherits CommonPageBase
 @page "/examples/pre-loaded"
 @layout ExampleLayout
 @using System.Globalization
-<h1>Pre loaded data</h1>
+<h1>@Title</h1>
 
 <p>BlazorGrid has basic support for displaying client-side data. The following grid uses a list of .Net's <code>CultureInfo</code> objects without any provider. Sorting, paging and filtering is not supported because those features depend on a provider.</p>
 <p>Pre loading data in this fashion is not ideal due to limited features and potentially worse performance, however it can be suitable for small amounts of data.</p>
@@ -32,6 +33,8 @@
 </Tabs>
 @code
 {
+    protected override string Title => "Pre-loaded data";
+
     public bool ShowCode { get; set; }
     private List<CultureInfo> Data { get; set; } = CultureInfo.GetCultures(CultureTypes.NeutralCultures).ToList();
 }

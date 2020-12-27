@@ -1,7 +1,8 @@
-﻿@page "/examples/virtualization"
+﻿@inherits CommonPageBase
+@page "/examples/virtualization"
 @implements IDisposable
 @layout ExampleLayout
-<h1>Virtualization</h1>
+<h1>@Title</h1>
 <p>Since .NET 5, BlazorGrid uses virtualization by default for best performance.</p>
 <p>In this demo, you can use the slider control below to set an artificial loading delay to the grid provider so you can see the item loading animation when scrolling down.</p>
 <div class="form-group row">
@@ -29,6 +30,8 @@
 </Tabs>
 @code
 {
+    protected override string Title => "Virtualization";
+
     private int CurrentDelay = 2000;
 
     private void OnDelayChanged(ChangeEventArgs args)

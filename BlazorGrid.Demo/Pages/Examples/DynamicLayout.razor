@@ -1,6 +1,7 @@
-﻿@page "/examples/dynamic-layout"
+﻿@inherits CommonPageBase
+@page "/examples/dynamic-layout"
 @layout ExampleLayout
-<h1>Dynamic layout</h1>
+<h1>@Title</h1>
 <p>There are cases where you may want to dynamically change the columns. For example, if you are using the grid inside a container which the user can minimize, then it may be a good idea to hide one or more columns.</p>
 <p>BlazorGrid supports such scenarios as you can see here. You can click the <i>Toggle avatars</i> button to hide or show the first column.</p>
 <Tabs>
@@ -70,6 +71,8 @@
 </Tabs>
 @code
 {
+    protected override string Title => "Dynamic layout";
+
     internal bool ShowAvatars { get; set; } = true;
 
     private void ToggleAvatars()

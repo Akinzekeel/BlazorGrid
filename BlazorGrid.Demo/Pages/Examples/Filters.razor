@@ -1,7 +1,8 @@
-﻿@page "/examples/filters"
+﻿@inherits CommonPageBase
+@*@page "/examples/filters"*@
 @layout ExampleLayout
 @using BlazorGrid.Abstractions.Filters
-<h1>Filters</h1>
+<h1>@Title</h1>
 <pre class="code" data-lang="Razor"><code class="bg-dark text-light">&lt;BlazorGrid @@ref="Grid" Filter="MyFilter" Query="@@FilterInput" TRow="Employee" SourceUrl="data/employees.json"&gt;
         &lt;StaticGridCol FitToContent="true"&gt;
             &lt;img src="@@context.Avatar" style="width: 20px; height: 20px;" /&gt;
@@ -147,9 +148,10 @@
         </BlazorGrid>
     </Tab>
 </Tabs>
-
 @code
 {
+    protected override string Title => "Filters";
+
     public string FilterInput { get; set; }
 
     public BlazorGrid.Components.BlazorGrid<Employee> Grid { get; set; }

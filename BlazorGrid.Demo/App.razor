@@ -1,6 +1,8 @@
 <Router AppAssembly="@typeof(Program).Assembly">
     <Found Context="routeData">
-        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+        <CascadingValue Value="this" IsFixed="true">
+            <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+        </CascadingValue>
     </Found>
     <NotFound>
         <LayoutView Layout="@typeof(MainLayout)">
@@ -8,3 +10,19 @@
         </LayoutView>
     </NotFound>
 </Router>
+@code
+{
+    [Inject] private IJSRuntime Js { get; set; }
+
+    internal ValueTask SetHtmlTitleAsync(string newTitle)
+    {
+        var t = "BlazorGrid";
+
+        if (!string.IsNullOrEmpty(newTitle))
+        {
+            t += " – " + newTitle;
+        }
+
+        return Js.InvokeVoidAsync("setDocumentTitle", t);
+    }
+}

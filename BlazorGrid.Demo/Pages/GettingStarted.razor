@@ -1,6 +1,7 @@
 ﻿@page "/getting-started"
+@inherits CommonPageBase
 <div class="container my-5">
-    <h1>Getting started</h1>
+    <h1>@Title</h1>
     <p class="lead">Follow this quick guide to get started with BlazorGrid in just a few minutes. After you finished setting it up and got the basic grid working, you can head over to the <a href="/examples">examples</a> or the <a href="/docs">documentation</a> to learn more about customization.</p>
 
     <h3 class="mt-5">Part A: Setting up your backend</h3>
@@ -221,3 +222,7 @@ namespace MyBlazorProject
     </Tabs>
 
 </div>
+@code
+{
+    protected override string Title => "Getting started";
+}

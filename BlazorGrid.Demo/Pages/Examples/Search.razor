@@ -1,7 +1,7 @@
+@inherits CommonPageBase
 @page "/examples/search"
 @layout ExampleLayout
-<h1>Search</h1>
-
+<h1>@Title</h1>
 <p>The grid component has a <code>QueryUserInput</code> parameter which can be set to any value. The property has a builtin 350 ms debounce, so even if you bind it to a text input with the <code>oninput</code> event, it will not flood the provider with unnecessary requests.</p>
 <p>After the debounce, the value will be applied to the <code>Query</code> parameter which will trigger a provider call including the value of the search query. If you do not wish to use the debounce or if you prefer to have your own debounce logic, you can also use the <code>Query</code> parameter directly.</p>
 
@@ -56,5 +56,7 @@
 
 @code
 {
+    protected override string Title => "Search";
+
     public string FilterInput { get; set; }
 }

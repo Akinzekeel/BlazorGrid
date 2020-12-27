@@ -1,5 +1,10 @@
-﻿@layout DocumentationLayout
+﻿@inherits CommonPageBase
+@layout DocumentationLayout
 @page "/docs"
-    <h1>Documentation</h1>
-    <p>This documentation covers the different components in this library and explains their <code>Parameter</code>s and usages. Additionally, you can find more in-depth information about the configuration and customization.</p>
-    <p>Please be sure to check the <a href="/getting-started">Getting started</a> guide first.</p>
+<h1>@Title</h1>
+<p>This documentation covers the different components in this library and explains their <code>Parameter</code>s and usages. Additionally, you can find more in-depth information about the configuration and customization.</p>
+<p>Please be sure to check the <a href="/getting-started">Getting started</a> guide first.</p>
+@code
+{
+    protected override string Title => "Documentation";
+}

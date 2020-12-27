@@ -1,6 +1,7 @@
+@inherits CommonPageBase
 @page "/examples"
 @layout ExampleLayout
-<h1>Basic grid</h1>
+<h1>@Title</h1>
 <p>This example shows what the grid looks like with the minimum amount of configuration.</p>
 <p>For the purpose of this demo, all of the data is pulled from a static JSON file. Paging is handled by a custom provider which I wrote just for this demo.</p>
 <p>The captions of the columns are based on the <code>DisplayAttributes</code> of the <code>Employee</code> (row) class.</p>
@@ -33,3 +34,7 @@
 &lt;/BlazorGrid&gt;</code></pre>
     </Tab>
 </Tabs>
+@code
+{
+    protected override string Title => "Basic grid";
+}

@@ -1,6 +1,7 @@
 ﻿@layout DocumentationLayout
 @page "/docs/components/grid"
-<h1>BlazorGrid component</h1>
+@inherits CommonPageBase
+<h1>@Title</h1>
 <p>This is the main, top-level component that renders the grid.</p>
 
 <h5 class="mt-4">Parameters</h5>
@@ -151,3 +152,7 @@
     <li><code>IGridProvider</code></li>
     <li><code>IBlazorGridConfig</code></li>
 </ul>
+@code
+{
+    protected override string Title => "Grid component";
+}

@@ -1,6 +1,7 @@
 ﻿@layout DocumentationLayout
+@inherits CommonPageBase
 @page "/docs/advanced/custom-css-classes"
-<h1>Custom CSS classes</h1>
+<h1>@Title</h1>
 <p>Certain building blocks in the grid use a set of pre-defined CSS class names when rendering. By default, BlazorGrid will use <code>Config.Styles.BootstrapStyles</code>. However, you can change the class names to customize the look of the grid - or even add your own configuration to add support for the UI framework of your choice.</p>
 <p>For example, you could make a class like this that uses your own custom CSS classes:</p>
 <pre class="pre-scrollable"><code>public class MyCustomStyles : IBlazorGridConfigStyles
@@ -27,3 +28,7 @@
     o.Styles = new MyCustomStyles();
 });
 </code></pre>
+@code
+{
+    protected override string Title => "Custom CSS classes";
+}

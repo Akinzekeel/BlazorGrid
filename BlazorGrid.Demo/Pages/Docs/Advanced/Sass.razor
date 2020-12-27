@@ -1,6 +1,7 @@
 ﻿@layout DocumentationLayout
+@inherits CommonPageBase
 @page "/docs/advanced/sass"
-<h1>Build your own CSS</h1>
+<h1>@Title</h1>
 <p>If you need more fine-grained control over the look of the grid, you can build your own CSS based on BlazorGrid's SCSS files.</p>
 
 <h5 class="mt-4">Step 1</h5>
@@ -47,3 +48,7 @@ $bzg-overlay-bg: rgba(255,255,255,.8) !default;
 
 <h5 class="mt-4">Step 3</h5>
 <p>Build your CSS using your SCSS/Sass processor of choice and you're done! Keep in mind that you only need to include your own CSS file for BlazorGrid at this point and you should not also reference any of the included CSS files.</p>
+@code
+{
+    protected override string Title => "Build your own CSS";
+}

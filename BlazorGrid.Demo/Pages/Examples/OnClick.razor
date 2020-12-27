@@ -1,8 +1,8 @@
 @page "/examples/on-click"
 @layout ExampleLayout
 @inject NavigationManager nav
-<h1>OnClick actions</h1>
-
+@inherits CommonPageBase
+<h1>@Title</h1>
 <p>Grid rows can invoke an action when clicked. Simply provide a delegate to the grid's <code>OnClick</code> event handler which takes a parameter of type <code>TRow</code>.</p>
 <p>Alternatively, you may also set a function of type <code>Func&lt;TRow, string&gt;</code> to the <code>Href</code> parameter of the grid. This is a shorthand for calling the <code>NavigationManager.NavigateTo(string)</code>.</p>
 
@@ -108,6 +108,8 @@
 
 @code
 {
+    protected override string Title => "OnClick actions";
+
     private Employee ClickedRow;
 
     private void ShowDetails(Employee row)

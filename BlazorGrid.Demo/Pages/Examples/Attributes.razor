@@ -1,6 +1,7 @@
+@inherits CommonPageBase
 @page "/examples/attributes"
 @layout ExampleLayout
-<h1>Attributes</h1>
+<h1>@Title</h1>
 
 <p>Both the <code>BlazorGrid</code> and the <code>GridCol</code> components support custom attributes as well as custom CSS classes.</p>
 <p>In the following example, we decorate the <code>BlazorGrid</code> with a custom <code>id</code> and use CSS to hide the header, and we also add a <code>text-primary</code> class and a <code>title</code> attribute to the Id column.</p>
@@ -51,3 +52,7 @@
 &#125;</code></pre>
     </Tab>
 </Tabs>
+@code
+{
+    protected override string Title => "Attributes";
+}
