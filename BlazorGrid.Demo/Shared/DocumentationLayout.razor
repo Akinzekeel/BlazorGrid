@@ -1,51 +1,58 @@
 @inherits LayoutComponentBase
 <div class="min-vh-100 d-flex flex-column">
-    <TopNav />
+    <TopNav FullWidth="true" SidebarSubmenu="Menu" />
     <div class="flex-grow-1 d-flex">
         <!-- Docs navigation -->
-        <div class="pt-4 shadow sidebar">
-            <div class="menu">
-                <NavLink class="menu-item" href="/docs" Match="NavLinkMatch.All">
-                    Overview
-                </NavLink>
-
-                <h5 class="px-1 mx-3 mt-4 text-black-50">Configuration</h5>
-                <NavLink class="menu-item" href="/docs/configuration/dependency-injection">
-                    Dependency injection
-                </NavLink>
-                <NavLink class="menu-item" href="/docs/configuration/styling">
-                    Styling
-                </NavLink>
-
-                <h5 class="px-1 mx-3 mt-4 text-black-50">Components</h5>
-                <NavLink class="menu-item" href="/docs/components/grid" Match="NavLinkMatch.All">
-                    BlazorGrid
-                </NavLink>
-                <NavLink class="menu-item" href="/docs/components/grid-col">
-                    GridCol
-                </NavLink>
-                <NavLink class="menu-item" href="/docs/components/static-grid-col">
-                    StaticGridCol
-                </NavLink>
-
-                <h5 class="px-1 mx-3 mt-4 text-black-50">Advanced</h5>
-                <NavLink class="menu-item" href="/docs/advanced/custom-css-classes">
-                    Custom CSS classes
-                </NavLink>
-                <NavLink class="menu-item" href="/docs/advanced/sass">
-                    Build your own CSS
-                </NavLink>
-
-                <h5 class="px-1 mx-3 mt-4 text-black-50">Helpers</h5>
-                <NavLink class="menu-item" href="/docs/helpers/iqueryable-extensions">
-                    IQueryable extensions
-                </NavLink>
-            </div>
+        <div class="pt-4 sidebar d-none d-md-block">
+            @Menu
         </div>
         <!-- Content -->
-        <div class="p-5 flex-grow-1 overflow-auto">
+        <div class="container-fluid py-2 py-md-3 py-lg-4 py-xl-5 flex-grow-1 overflow-auto">
             @Body
         </div>
     </div>
     <PageFooter />
 </div>
+@code
+{
+    private RenderFragment Menu => __builder =>
+    {
+    <div class="menu">
+        <NavLink class="menu-item" href="/docs" Match="NavLinkMatch.All">
+            Overview
+        </NavLink>
+
+        <h5 class="px-1 mx-3 mt-4 text-black-50">Configuration</h5>
+        <NavLink class="menu-item" href="/docs/configuration/dependency-injection">
+            Dependency injection
+        </NavLink>
+        <NavLink class="menu-item" href="/docs/configuration/styling">
+            Styling
+        </NavLink>
+
+        <h5 class="px-1 mx-3 mt-4 text-black-50">Components</h5>
+        <NavLink class="menu-item" href="/docs/components/grid" Match="NavLinkMatch.All">
+            BlazorGrid
+        </NavLink>
+        <NavLink class="menu-item" href="/docs/components/grid-col">
+            GridCol
+        </NavLink>
+        <NavLink class="menu-item" href="/docs/components/static-grid-col">
+            StaticGridCol
+        </NavLink>
+
+        <h5 class="px-1 mx-3 mt-4 text-black-50">Advanced</h5>
+        <NavLink class="menu-item" href="/docs/advanced/custom-css-classes">
+            Custom CSS classes
+        </NavLink>
+        <NavLink class="menu-item" href="/docs/advanced/sass">
+            Build your own CSS
+        </NavLink>
+
+        <h5 class="px-1 mx-3 mt-4 text-black-50">Helpers</h5>
+        <NavLink class="menu-item" href="/docs/helpers/iqueryable-extensions">
+            IQueryable extensions
+        </NavLink>
+    </div>
+    };
+}

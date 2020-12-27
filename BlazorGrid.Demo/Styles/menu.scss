@@ -5,7 +5,7 @@
     @extend .list-group;
     @extend .list-group-flush;
 
-    .menu-item {
+    .menu-item, .nav-link {
         @extend .list-group-item;
         @extend .list-group-item-action;
         border: none !important;

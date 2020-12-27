@@ -91,21 +91,71 @@ pre code {
     }
 }
 
-.sidebar {
-    min-width: 200px;
-    background: $light;
-}
-
 .hero {
     display: flex;
     min-height: 100vh;
     background: rgb(23,162,184);
-    background: linear-gradient(312deg, $dark 0%, $primary 50%, $info 100%);
+    background: linear-gradient(132deg, darken($primary, 30%) 0%, $primary 30%, $info 85%, darken($info, 5%) 100%);
     color: $light;
     font-size: $font-size-lg;
     text-shadow: 0 0 5px rgba(0,0,0,.3);
 
     .badge {
-        box-shadow: $box-shadow;
+        color: inherit;
+        background: rgba(0, 0, 0, .4);
+    }
+
+    li .badge {
+        font-size: 60%;
+    }
+}
+
+.sidebar {
+    min-width: 200px;
+    max-width: 250px;
+    background: $modal-content-bg;
+    box-shadow: $box-shadow-lg;
+
+    &.sidebar-left, &.sidebar-right {
+        z-index: $zindex-modal;
+        position: fixed;
+        display: none;
+        top: 0;
+        bottom: 0;
+        overflow-y: scroll;
+
+        &.active {
+            display: block;
+        }
+    }
+
+    &.sidebar-left {
+        left: 0;
+        animation: slideInLeft ease-out 200ms;
+    }
+
+    &.sidebar-right {
+        right: 0;
+        animation: slideInRight ease-out 200ms;
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        transform: translateX(-100%);
+    }
+
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+    }
+
+    to {
+        transform: translateX(0);
     }
 }
