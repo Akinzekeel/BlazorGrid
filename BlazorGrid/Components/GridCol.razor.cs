@@ -1,5 +1,4 @@
 using BlazorGrid.Helpers;
-using BlazorGrid.Infrastructure;
 using BlazorGrid.Interfaces;
 using Microsoft.AspNetCore.Components;
 using System;

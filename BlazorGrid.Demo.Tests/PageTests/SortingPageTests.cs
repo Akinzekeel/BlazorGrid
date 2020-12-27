@@ -1,13 +1,11 @@
 ﻿using BlazorGrid.Abstractions;
 using BlazorGrid.Abstractions.Filters;
-using BlazorGrid.Components;
 using BlazorGrid.Config;
 using BlazorGrid.Config.Styles;
 using BlazorGrid.Demo.Models;
 using BlazorGrid.Demo.Pages.Examples;
 using BlazorGrid.Demo.Tests.Mock;
 using BlazorGrid.Interfaces;
-using Bunit;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

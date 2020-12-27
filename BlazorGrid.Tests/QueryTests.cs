@@ -6,16 +6,14 @@ using BlazorGrid.Config.Styles;
 using BlazorGrid.Interfaces;
 using BlazorGrid.Tests.Mock;
 using Bunit;
-using static Bunit.ComponentParameterFactory;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System.Threading.Tasks;
-using System.Threading;
-using Bunit.TestDoubles;
-using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using static Bunit.ComponentParameterFactory;
 
 namespace BlazorGrid.Tests
 {

@@ -1,5 +1,4 @@
 using AngleSharp.Css.Dom;
-using AngleSharp.Dom;
 using BlazorGrid.Abstractions;
 using BlazorGrid.Abstractions.Filters;
 using BlazorGrid.Components;
@@ -8,7 +7,6 @@ using BlazorGrid.Config.Styles;
 using BlazorGrid.Interfaces;
 using BlazorGrid.Tests.Mock;
 using Bunit;
-using Bunit.TestDoubles;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,7 +17,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
-using System.Threading.Tasks;
 using static Bunit.ComponentParameterFactory;
 
 namespace BlazorGrid.Tests

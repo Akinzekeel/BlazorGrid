@@ -1,11 +1,9 @@
 using BlazorGrid.Abstractions;
 using BlazorGrid.Abstractions.Filters;
 using BlazorGrid.Components;
-using BlazorGrid.Infrastructure;
 using BlazorGrid.Interfaces;
 using BlazorGrid.Tests.Mock;
 using Bunit;
-using Bunit.TestDoubles;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.Extensions.DependencyInjection;

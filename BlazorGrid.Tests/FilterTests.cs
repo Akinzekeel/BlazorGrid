@@ -5,8 +5,6 @@ using BlazorGrid.Config;
 using BlazorGrid.Config.Styles;
 using BlazorGrid.Interfaces;
 using BlazorGrid.Tests.Mock;
-using Bunit;
-using Bunit.TestDoubles;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
