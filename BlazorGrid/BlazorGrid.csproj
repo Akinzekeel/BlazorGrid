@@ -31,20 +31,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Styles\bootstrap\scss\_functions.scss" />
-    <None Remove="Styles\bootstrap\scss\_variables.scss" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Styles\blazorgrid-bootstrap.scss" />
-    <Content Include="Styles\blazorgrid-spectre.scss" />
-    <Content Include="Styles\BlazorGrid.scss" />
-    <Content Include="Styles\bootstrap\scss\_functions.scss" />
-    <Content Include="Styles\bootstrap\scss\_variables.scss" />
-    <Content Include="Styles\spectre\_variables.scss" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Update="Resources\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
