@@ -4,7 +4,7 @@ $warning: #f1a500;
 $font-family-monospace: monospace;
 
 @import "bootstrap/scss/bootstrap.scss";
-@import "../../BlazorGrid/Content/blazorgrid-bootstrap.scss";
+@import "../../BlazorGrid/Styles/blazorgrid-bootstrap.scss";
 @import "font-awesome/css/font-awesome.css";
 @import "menu.scss";
 
@@ -28,7 +28,7 @@ pre code {
     font-size: $font-size-base;
 }
 
-.pre-scrollable{
+.pre-scrollable {
     border: $border-width solid $primary;
     background-color: $light;
     border-radius: $border-radius;
@@ -94,4 +94,14 @@ pre code {
 .sidebar {
     min-width: 200px;
     background: $light;
+}
+
+.hero {
+    display: flex;
+    min-height: 100vh;
+    background: rgb(23,162,184);
+    background: linear-gradient(312deg, rgba(23,162,184,1) 0%, rgba(97,60,205,1) 100%);
+    color: $light;
+    font-size: $font-size-lg;
+    text-shadow: 0 0 5px rgba(0,0,0,.3);
 }
