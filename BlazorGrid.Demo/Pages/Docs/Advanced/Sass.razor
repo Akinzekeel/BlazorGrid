@@ -5,12 +5,13 @@
 <p>If you need more fine-grained control over the look of the grid, you can build your own CSS based on BlazorGrid's SCSS files.</p>
 
 <h5 class="mt-4">Step 1</h5>
-<p>Download the current version of BlazorGrid.scss from GitHub:</p>
+<p>Add the <code>Akinzekeel.BlazorGrid</code> NuGet package to your project. Once you added it, a folder named <code>Content</code> should appear in the project file explorer, containing a file named <code>BlazorGrid.scss</code>.</p>
+<p>If you do not see this file for whatever reason, you may also download a copy from here:</p>
 <a href="https://github.com/Akinzekeel/BlazorGrid/tree/master/BlazorGrid/Content" class="btn btn-dark" target="_blank">GitHub<i class="fa fa-external-link ml-1"></i></a>
 
 <h5 class="mt-4">Step 2</h5>
-<p>Create a new SCSS file and set the variables you wish to customize. Then import the SCSS file which you downloaded in step 1.</p>
-<p>In fact, BlazorGrid's own CSS files are built in exactly the same way. For example, this is how the bootstrap version is built using SCSS:</p>
+<p>Create a new SCSS file and set the variables you wish to customize. Then <code>@@import</code> the Scss file from step 1.</p>
+<p>BlazorGrid's own CSS files are built in exactly the same way. For example, this is how the bootstrap version is built using:</p>
 <pre class="pre-scrollable"><code>@@import './bootstrap/scss/_functions';
 @@import './bootstrap/scss/_variables';
 
@@ -44,10 +45,10 @@ $bzg-placeholder-bg: rgba(0,0,0,.04) !default;
 
 $bzg-overlay-bg: rgba(255,255,255,.8) !default;
 
-@@import 'blazorgrid.scss';</code></pre>
+@@import '../Content/blazorgrid.scss';</code></pre>
 
 <h5 class="mt-4">Step 3</h5>
-<p>Build your CSS using your SCSS/Sass processor of choice and you're done! Keep in mind that you only need to include your own CSS file for BlazorGrid at this point and you should not also reference any of the included CSS files.</p>
+<p>Run your Scss/Sass processor of choice (for example, WebCompiler for Visual Studio) and you're done! Keep in mind that you only need to include your own CSS file for BlazorGrid at this point and you should not also reference any of the bundled CSS files in your <code>&lt;head&gt;</code>.</p>
 @code
 {
     protected override string Title => "Build your own CSS";
