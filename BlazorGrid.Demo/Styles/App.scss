@@ -1,6 +1,7 @@
 $light: #f9f9f9;
 $primary: #613ccd;
 $warning: #f1a500;
+$info: #07bc94;
 $font-family-monospace: monospace;
 
 @import 'bootstrap/scss/_functions.scss';
@@ -101,7 +102,7 @@ pre code {
     display: flex;
     min-height: 100vh;
     background: rgb(23,162,184);
-    background: linear-gradient(132deg, darken($primary, 30%) 0%, $primary 30%, $info 85%, darken($info, 5%) 100%);
+    background: linear-gradient(132deg, darken($primary, 30%) 0%, $primary 30%, $info 85%, lighten($info, 5%) 100%);
     color: $light;
     font-size: $font-size-lg;
     text-shadow: 0 0 5px rgba(0,0,0,.3);
