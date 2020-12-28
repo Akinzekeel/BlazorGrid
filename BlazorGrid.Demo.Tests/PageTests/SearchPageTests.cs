@@ -3,6 +3,7 @@ using BlazorGrid.Abstractions.Filters;
 using BlazorGrid.Components;
 using BlazorGrid.Config;
 using BlazorGrid.Config.Styles;
+using BlazorGrid.Demo.Interfaces;
 using BlazorGrid.Demo.Models;
 using BlazorGrid.Demo.Pages.Examples;
 using BlazorGrid.Demo.Tests.Mock;
@@ -26,6 +27,9 @@ namespace BlazorGrid.Tests.Demo
         [TestInitialize]
         public void Initialize()
         {
+            var ts = new Mock<ITitleService>();
+            Services.AddSingleton(ts.Object);
+
             var provider = new Mock<IGridProvider>();
 
             provider.Setup(x => x.GetAsync<Employee>(

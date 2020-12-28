@@ -1,5 +1,7 @@
 using BlazorGrid.Config.Styles;
+using BlazorGrid.Demo.Interfaces;
 using BlazorGrid.Demo.Providers;
+using BlazorGrid.Demo.Services;
 using BlazorGrid.Extensions;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,10 +19,13 @@ namespace BlazorGrid.Demo
             builder.RootComponents.Add<App>("app");
 
             builder.Services.AddTransient(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+
             builder.Services.AddBlazorGrid<CustomProvider>(o =>
             {
                 o.Styles = new BootstrapStyles();
             });
+
+            builder.Services.AddSingleton<ITitleService, TitleService>();
 
             await builder.Build().RunAsync();
         }

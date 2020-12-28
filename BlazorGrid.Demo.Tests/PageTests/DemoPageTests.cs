@@ -2,6 +2,7 @@
 using BlazorGrid.Abstractions.Filters;
 using BlazorGrid.Config;
 using BlazorGrid.Config.Styles;
+using BlazorGrid.Demo.Interfaces;
 using BlazorGrid.Demo.Models;
 using BlazorGrid.Demo.Pages.Examples;
 using BlazorGrid.Demo.Tests.Mock;
@@ -18,6 +19,13 @@ namespace BlazorGrid.Tests.Demo
     [TestClass]
     public class ExamplesPageTests : Bunit.TestContext
     {
+        [TestInitialize]
+        public void Initialize()
+        {
+            var ts = new Mock<ITitleService>();
+            Services.AddSingleton(ts.Object);
+        }
+
         [TestMethod]
         public void Can_Render_Page()
         {

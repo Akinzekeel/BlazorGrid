@@ -1,6 +1,7 @@
 ﻿using BlazorGrid.Abstractions;
 using BlazorGrid.Config;
 using BlazorGrid.Config.Styles;
+using BlazorGrid.Demo.Interfaces;
 using BlazorGrid.Demo.Pages.Examples;
 using BlazorGrid.Demo.Tests.Mock;
 using BlazorGrid.Interfaces;
@@ -14,6 +15,13 @@ namespace BlazorGrid.Tests.Demo
     [TestClass]
     public class PreLoadedPageTests : Bunit.TestContext
     {
+        [TestInitialize]
+        public void Initialize()
+        {
+            var ts = new Mock<ITitleService>();
+            Services.AddSingleton(ts.Object);
+        }
+
         [TestMethod]
         public void Can_Render_Page()
         {

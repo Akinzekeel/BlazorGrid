@@ -2,6 +2,7 @@
 using BlazorGrid.Abstractions.Filters;
 using BlazorGrid.Config;
 using BlazorGrid.Config.Styles;
+using BlazorGrid.Demo.Interfaces;
 using BlazorGrid.Demo.Models;
 using BlazorGrid.Demo.Pages.Examples;
 using BlazorGrid.Demo.Tests.Mock;
@@ -29,6 +30,9 @@ namespace BlazorGrid.Tests.Demo
             Services.AddSingleton<NavigationManager>(nav);
 
             Services.AddSingleton<IBlazorGridConfig>(_ => new DefaultConfig { Styles = new SpectreStyles() });
+
+            var ts = new Mock<ITitleService>();
+            Services.AddSingleton(ts.Object);
         }
 
         [TestMethod]
