@@ -3,10 +3,16 @@ $primary: #613ccd;
 $warning: #f1a500;
 $font-family-monospace: monospace;
 
+@import 'bootstrap/scss/_functions.scss';
+@import 'bootstrap/scss/_variables.scss';
+
+$list-group-hover-bg: rgba($gray-500, .1);
+$list-group-action-hover-color: inherit;
+$list-group-active-color: inherit;
+
 @import "bootstrap/scss/bootstrap.scss";
 @import "../../BlazorGrid/Styles/blazorgrid-bootstrap.scss";
 @import "font-awesome/css/font-awesome.css";
-@import "menu.scss";
 
 body,
 app {
@@ -113,8 +119,24 @@ pre code {
 .sidebar {
     min-width: 200px;
     max-width: 250px;
-    background: $modal-content-bg;
-    box-shadow: $box-shadow-lg;
+    background: $white;
+
+    &.sidebar-dark {
+        background: $dark;
+        color: $light;
+        box-shadow: $box-shadow inset;
+
+        .menu {
+            .menu-item, .nav-link {
+                &.active {
+                    &::before {
+                        background: lighten($primary, 35%);
+                        box-shadow: 0 0 10px 5px rgba($primary, .6);
+                    }
+                }
+            }
+        }
+    }
 
     &.sidebar-left, &.sidebar-right {
         z-index: $zindex-modal;
@@ -123,6 +145,7 @@ pre code {
         top: 0;
         bottom: 0;
         overflow-y: scroll;
+        box-shadow: $box-shadow-lg;
 
         &.active {
             display: block;
@@ -137,6 +160,59 @@ pre code {
     &.sidebar-right {
         right: 0;
         animation: slideInRight ease-out 200ms;
+    }
+
+    .menu {
+        @extend .list-group;
+        @extend .list-group-flush;
+
+        h5 {
+            color: inherit;
+            opacity: .5;
+            @extend .px-1;
+            @extend .mx-3;
+
+            &:not(:first-child) {
+                @extend .mt-4;
+            }
+        }
+
+        .menu-item, .nav-link {
+            @extend .list-group-item;
+            @extend .list-group-item-action;
+            border: none !important;
+            padding: map-get($spacers, 2) $list-group-item-padding-x;
+            white-space: nowrap;
+            position: relative;
+            background: none;
+            color: inherit;
+
+            &:active {
+                background: rgba($gray-500, .15);
+                color: $list-group-action-hover-color;
+            }
+
+            &.active {
+                background: none;
+                color: inherit;
+                font-weight: $font-weight-bold;
+
+                &:hover {
+                    background: $list-group-hover-bg;
+                }
+
+                &::before {
+                    display: block;
+                    width: $border-width * 3;
+                    content: ' ';
+                    height: $line-height-base * 1rem;
+                    background: $primary;
+                    position: absolute;
+                    left: 0;
+                    box-shadow: 0 0 10px 1px rgba($primary, .2);
+                }
+            }
+        }
     }
 }
 

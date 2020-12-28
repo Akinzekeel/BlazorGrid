@@ -1,10 +1,10 @@
 @inherits LayoutComponentBase
 <div class="min-vh-100 d-flex flex-column">
-    <TopNav FullWidth="true" SidebarSubmenu="Menu" />
+    <TopNav FullWidth="true" SidebarSubmenu="Menu(true)" />
     <div class="flex-grow-1 d-flex">
         <!-- Demo navigation -->
-        <div class="pt-4 sidebar d-none d-md-block">
-            @Menu
+        <div class="py-2 py-md-3 py-lg-4 py-xl-5 mr-4 sidebar sidebar-dark d-none d-md-block">
+            @Menu(false)
         </div>
         <!-- Content -->
         <div class="container-fluid py-2 py-md-3 py-lg-4 py-xl-5 flex-grow-1 overflow-auto">
@@ -15,9 +15,13 @@
 </div>
 @code
 {
-    private RenderFragment Menu => __builder =>
+    private RenderFragment Menu(bool caption) => __builder =>
     {
     <div class="menu">
+        @if (caption)
+        {
+            <h5>Examples</h5>
+        }
         <NavLink class="menu-item" href="/examples" Match="NavLinkMatch.All">
             Basic grid
         </NavLink>
