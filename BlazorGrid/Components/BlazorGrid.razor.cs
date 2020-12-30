@@ -29,15 +29,23 @@ namespace BlazorGrid.Components
         private static readonly string[] ReloadTriggerParameterNames = new string[]
         {
             nameof(SourceUrl),
+            nameof(Provider),
             nameof(Query)
         };
 
-        [Inject] private IGridProvider Provider { get; set; }
         [Inject] private IBlazorGridConfig Config { get; set; }
         [Inject] private NavigationManager Nav { get; set; }
 
+        [Obsolete]
+        [Inject] private IGridProvider LegacyProvider { get; set; }
+
+        [Parameter] public ProviderDelegate<TRow> Provider { get; set; }
         [Parameter] public int VirtualItemSize { get; set; } = 50;
+
+        [Obsolete("This parameter will be removed in a future release. If you wish to provide static data you can provide them through the provider delegate.")]
         [Parameter] public List<TRow> Rows { get; set; }
+
+        [Obsolete("This parameter will be removed in a future release. If you wish to provide static data you can provide them through the provider delegate.")]
         [Parameter] public string SourceUrl { get; set; }
         [Parameter] public RenderFragment<TRow> ChildContent { get; set; }
         [Parameter] public TRow EmptyRow { get; set; }
@@ -98,23 +106,47 @@ namespace BlazorGrid.Components
                     return new ItemsProviderResult<TRow>(rows, Rows.Count);
                 }
 
-                var result = await Provider.GetAsync<TRow>
-                (
-                    SourceUrl,
-                    request.StartIndex,
-                    len,
-                    OrderByPropertyName,
-                    OrderByDescending,
-                    Query,
-                    Filter,
-                    request.CancellationToken
-                );
-
-                TotalRowCount = result?.TotalCount ?? 0;
-
-                if (TotalRowCount != 0)
+                if (Provider != null)
                 {
-                    return new ItemsProviderResult<TRow>(result.Data, result.TotalCount);
+                    var providerRequest = new BlazorGridRequest
+                    {
+                        Query = Query,
+                        OrderBy = OrderByPropertyName,
+                        OrderByDescending = OrderByDescending,
+                        Offset = request.StartIndex,
+                        Length = len,
+                        Filter = Filter
+                    };
+
+                    var result = await Provider(providerRequest, request.CancellationToken);
+
+                    TotalRowCount = result?.TotalCount ?? 0;
+
+                    if (TotalRowCount != 0)
+                    {
+                        return new ItemsProviderResult<TRow>(result.Data, result.TotalCount);
+                    }
+                }
+                else
+                {
+                    var result = await LegacyProvider.GetAsync<TRow>
+                    (
+                        SourceUrl,
+                        request.StartIndex,
+                        len,
+                        OrderByPropertyName,
+                        OrderByDescending,
+                        Query,
+                        Filter,
+                        request.CancellationToken
+                    );
+
+                    TotalRowCount = result?.TotalCount ?? 0;
+
+                    if (TotalRowCount != 0)
+                    {
+                        return new ItemsProviderResult<TRow>(result.Data, result.TotalCount);
+                    }
                 }
             }
             catch (TaskCanceledException)
@@ -341,8 +373,9 @@ namespace BlazorGrid.Components
             {
                 if (p.ContainsKey(k))
                 {
-                    var newVal = p[k] as string ?? "";
-                    var oldVal = typeInfo.GetProperty(k).GetValue(this) as string ?? "";
+                    var newVal = p[k]?.GetHashCode();
+                    var oldVal = typeInfo.GetProperty(k).GetValue(this)?.GetHashCode();
+
                     mustReload = newVal != oldVal;
                 }
 

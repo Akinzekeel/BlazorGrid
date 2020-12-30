@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace BlazorGrid.Providers
 {
+    [Obsolete]
     public class DefaultHttpProvider : IGridProvider
     {
         private readonly HttpClient http;
