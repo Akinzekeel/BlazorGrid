@@ -7,7 +7,7 @@
     <Version>1.0.1</Version>
     <Authors>Majid Iqbal</Authors>
     <Company />
-    <Description>Common models &amp; interfaces for BlazorGrid</Description>
+    <Description>Common models, interfaces &amp; extension methods for BlazorGrid</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://blazorgrid.z6.web.core.windows.net/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Akinzekeel/BlazorGrid</RepositoryUrl>
@@ -16,6 +16,10 @@
 
   <ItemGroup>
     <PackageReference Include="System.Text.Json" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Protos/blazorgrid.proto"></Content>
   </ItemGroup>
 
 </Project>
