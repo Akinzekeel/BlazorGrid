@@ -35,7 +35,7 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(Configuration)' == 'Release'">
-    <PackageReference Include="Akinzekeel.BlazorGrid.Abstractions" Version="0.9.2-preview" />
+    <PackageReference Include="Akinzekeel.BlazorGrid.Abstractions" Version="1.0.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -52,6 +52,12 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <CustomToolNamespace>BlazorGrid</CustomToolNamespace>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <!-- Remove the libman.json, package.json and package-lock.json from the ContentFiles -->
+  <ItemGroup>
+    <Content Remove="*.json"></Content>
+    <None Include="*.json"></None>
   </ItemGroup>
 
 </Project>
