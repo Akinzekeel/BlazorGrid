@@ -2,7 +2,7 @@
 @inherits CommonPageBase
 <div class="container py-2 py-md-3 py-lg-4 py-xl-5 ">
     <h1>@Title</h1>
-    <p class="lead">Follow this quick guide to get started with BlazorGrid in just a few minutes. After you finished setting it up and got the basic grid working, you can head over to the <a href="/examples">examples</a> or the <a href="/docs">documentation</a> to learn more about customization.</p>
+    <p class="lead">Follow this quick guide to get started with BlazorGrid in just a few minutes. After you finished setting it up and got the basic grid working, you can head over to the <a href="/examples">examples</a> or the <a href="/docs">documentation</a> to learn more about additional features and customization.</p>
 
     <h3 class="mt-5">Part A: Setting up your backend</h3>
     <Tabs class="mt-3" Style="Tabs.TabsStyle.Buttons">
@@ -12,8 +12,6 @@
             }
             <h5 class="mt-4">@(ol++). Install the NuGet package</h5>
             <p>In your Web Api project, you are recommended (although not required) to install the <code>Akinzekeel.BlazorGrid.Abstractions</code> package. This package contains models and helpers to make it much easier to query and serialize data for the grid.</p>
-            <p>Alternatively, you can use the dotnet CLI:</p>
-            <pre class="pre-scrollable"><code>dotnet add package Akinzekeel.BlazorGrid</code></pre>
 
             <h5 class="mt-4">@(ol++). Add a function to query data</h5>
             <p>Create a controller named <code>WeatherForecastController.cs</code> and add the following code to it:</p>
@@ -128,7 +126,7 @@ namespace MyApi.Controllers
 }</code></pre>
 
             <h5 class="mt-4">@(ol++). Adjust Json serialization settings</h5>
-            <p>This step is recommended if you are using Blazor WebAssembly. By default, Web Api projects will use lowercase for Json property names when serializing objects. This can be problematic because by default, Blazor WebAssembly is not configured to handle this and will fail to deserialize the objects correctly, causing the Grid to display a "No data" error message.</p>
+            <p>This step is recommended only if you are using Blazor WebAssembly and if you use the JSON data format. By default, Web Api projects will use lowercase for Json property names when serializing objects. This can be problematic because by default, Blazor WebAssembly is not configured to handle this and will fail to deserialize the objects correctly, causing the Grid to display a "No data" error message.</p>
             <p>Disabling the renaming of Json properties is easy. Just go to <code>Startup.cs</code> and change this line:</p>
             <pre class="pre-scrollable"><code>services.AddControllers();</code></pre>
             <p>To this:</p>

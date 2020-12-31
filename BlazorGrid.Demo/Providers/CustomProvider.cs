@@ -2,40 +2,63 @@ using BlazorGrid.Abstractions;
 using BlazorGrid.Abstractions.Extensions;
 using BlazorGrid.Abstractions.Filters;
 using BlazorGrid.Demo.Models;
-using BlazorGrid.Providers;
 using System;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace BlazorGrid.Demo.Providers
 {
-    public class CustomProvider : DefaultHttpProvider
+    public class CustomProvider
     {
-        private readonly HttpClient http;
+        private readonly string Url;
+        private readonly HttpClient Http;
         internal static int ArtificialDelayMs { get; set; }
 
-        public CustomProvider(HttpClient http) : base(http)
+        public CustomProvider(HttpClient http, string url)
         {
-            this.http = http;
+            Url = url;
+            Http = http;
         }
 
-        public override async Task<BlazorGridResult<T>> GetAsync<T>(
-            string baseUrl,
-            int offset,
-            int length,
-            string orderBy,
-            bool orderByDescending,
-            string searchQuery,
-            FilterDescriptor filter,
+        protected static async Task<T> DeserializeJsonAsync<T>(HttpResponseMessage response)
+        {
+            if (!response.IsSuccessStatusCode)
+            {
+                if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return default;
+                }
+                else
+                {
+                    response.EnsureSuccessStatusCode();
+                }
+            }
+
+            var content = await response.Content.ReadAsStringAsync();
+            return System.Text.Json.JsonSerializer.Deserialize<T>(content);
+        }
+
+        public async ValueTask<BlazorGridResult<T>> GetAsync<T>(
+            BlazorGridRequest request,
             CancellationToken cancellationToken
         )
         {
-            var url = GetRequestUrl(baseUrl, offset, length, orderBy, orderByDescending, searchQuery, filter);
+            var url = GetRequestUrl(
+                Url,
+                request.Offset,
+                request.Length,
+                request.OrderBy,
+                request.OrderByDescending,
+                request.Query,
+                request.Filter
+            );
 
             var httpCancellationToken = new CancellationTokenSource();
-            var httpTask = http.GetAsync(url, httpCancellationToken.Token);
+            var httpTask = Http.GetAsync(url, httpCancellationToken.Token);
 
             Task delay;
 
@@ -45,7 +68,7 @@ namespace BlazorGrid.Demo.Providers
             }
             else
             {
-                delay = Task.Delay(ArtificialDelayMs);
+                delay = Task.Delay(ArtificialDelayMs, cancellationToken);
             }
 
             while (!httpTask.IsCompleted)
@@ -66,25 +89,25 @@ namespace BlazorGrid.Demo.Providers
 
             var data = result.Data.AsQueryable();
 
-            if (orderBy != null)
+            if (request.OrderBy != null)
             {
-                if (orderByDescending)
+                if (request.OrderByDescending)
                 {
-                    data = data.OrderByDescending(orderBy);
+                    data = data.OrderByDescending(request.OrderBy);
                 }
                 else
                 {
-                    data = data.OrderBy(orderBy);
+                    data = data.OrderBy(request.OrderBy);
                 }
             }
 
-            if (!string.IsNullOrEmpty(searchQuery) && data is IQueryable<Employee> employees)
+            if (!string.IsNullOrEmpty(request.Query) && data is IQueryable<Employee> employees)
             {
                 data = employees.Where(x =>
-                    x.Email.IndexOf(searchQuery, StringComparison.CurrentCultureIgnoreCase) > -1
-                    || x.FirstName.IndexOf(searchQuery, StringComparison.CurrentCultureIgnoreCase) == 0
-                    || x.LastName.IndexOf(searchQuery, StringComparison.CurrentCultureIgnoreCase) == 0
-                    || x.Id.ToString() == searchQuery
+                    x.Email.IndexOf(request.Query, StringComparison.CurrentCultureIgnoreCase) > -1
+                    || x.FirstName.IndexOf(request.Query, StringComparison.CurrentCultureIgnoreCase) == 0
+                    || x.LastName.IndexOf(request.Query, StringComparison.CurrentCultureIgnoreCase) == 0
+                    || x.Id.ToString() == request.Query
                 ).Cast<T>();
 
                 totalCount = data.Count();
@@ -101,10 +124,36 @@ namespace BlazorGrid.Demo.Providers
             var finalResult = new BlazorGridResult<T>
             {
                 TotalCount = totalCount,
-                Data = data.Skip(offset).Take(length).ToList()
+                Data = data.Skip(request.Offset).Take(request.Length).ToList()
             };
 
             return finalResult;
+        }
+
+        protected string GetRequestUrl(string BaseUrl, int Offset, int Length, string OrderBy, bool OrderByDescending, string SearchQuery, FilterDescriptor Filter)
+        {
+            var b = Http.BaseAddress;
+
+            var uri = new UriBuilder(
+                b.Scheme,
+                b.Host,
+                b.Port,
+                Path.Combine(b.LocalPath, BaseUrl)
+            );
+
+            var parameters = new BlazorGridRequest
+            {
+                Offset = Offset,
+                Length = Length,
+                OrderBy = OrderBy,
+                OrderByDescending = OrderByDescending,
+                Query = SearchQuery,
+                Filter = Filter
+            };
+
+            uri.Query = parameters.ToQueryString();
+
+            return uri.Uri.ToString();
         }
     }
 }

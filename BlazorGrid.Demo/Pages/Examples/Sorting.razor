@@ -13,7 +13,7 @@
 
 <Tabs>
     <Tab Caption="Result" class="p-3">
-        <BlazorGrid TRow="Employee" SourceUrl="data/employees.json"
+        <BlazorGrid TRow="Employee" Provider="Provider.GetAsync<Employee>"
                     style="max-height: 340px;"
                     DefaultOrderBy="x => x.FirstName">
             <StaticGridCol FitToContent="true">
@@ -31,7 +31,7 @@
     </Tab>
     <Tab Caption="Code" class="p-3">
         <h6>Razor</h6>
-        <pre class="code"><code>&lt;BlazorGrid TRow=&quot;Employee&quot; SourceUrl=&quot;data/employees.json&quot;&gt;
+        <pre class="code"><code>&lt;BlazorGrid TRow=&quot;Employee&quot; Provider=&quot;Provider.GetAsync&lt;Employee&gt;&gt;
     &lt;StaticGridCol FitToContent=&quot;true&quot;&gt;
         &lt;img src=&quot;@@context.Avatar&quot; style=&quot;width: 20px; height: 20px;&quot; /&gt;
     &lt;/StaticGridCol&gt;

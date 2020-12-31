@@ -3,6 +3,7 @@ using BlazorGrid.Demo.Interfaces;
 using BlazorGrid.Demo.Providers;
 using BlazorGrid.Demo.Services;
 using BlazorGrid.Extensions;
+using BlazorGrid.Providers;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -20,9 +21,15 @@ namespace BlazorGrid.Demo
 
             builder.Services.AddTransient(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
-            builder.Services.AddBlazorGrid<CustomProvider>(o =>
+            builder.Services.AddBlazorGrid<DefaultHttpProvider>(o =>
             {
                 o.Styles = new BootstrapStyles();
+            });
+
+            builder.Services.AddScoped(x =>
+            {
+                var http = x.GetService<HttpClient>();
+                return new CustomProvider(http, "/data/employees.json");
             });
 
             builder.Services.AddSingleton<ITitleService, TitleService>();

@@ -18,7 +18,7 @@
 
 <Tabs>
     <Tab Caption="Result" class="p-3 overflow-auto">
-        <BlazorGrid QueryUserInput="@FilterInput" TRow="Employee" SourceUrl="data/employees.json" style="max-height: 340px;">
+        <BlazorGrid QueryUserInput="@FilterInput" TRow="Employee" Provider="Provider.GetAsync<Employee>" style="max-height: 340px;">
             <StaticGridCol FitToContent="true">
                 <img src="@context.Avatar" style="width: 20px; height: 20px;" />
             </StaticGridCol>
@@ -35,7 +35,7 @@
         <pre class="pre-scrollable"><code>&lt;input type=&quot;text&quot; class=&quot;form-input input-lg&quot; placeholder=&quot;Filter&quot;
         @@bind-value=&quot;FilterInput&quot; @@bind-value:event=&quot;oninput&quot; /&gt;
 
-&lt;BlazorGrid QueryUserInput="@@FilterInput" TRow=&quot;Employee&quot; SourceUrl=&quot;data/employees.json&quot;&gt;
+&lt;BlazorGrid QueryUserInput="@@FilterInput" TRow=&quot;Employee&quot; Provider=&quot;Provider.GetAsync&lt;Employee&gt;&gt;
     &lt;StaticGridCol FitToContent=&quot;true&quot;&gt;
         &lt;img src=&quot;@@context.Avatar&quot; style=&quot;width: 20px; height: 20px;&quot; /&gt;
     &lt;/StaticGridCol&gt;

@@ -3,7 +3,7 @@
 @layout ExampleLayout
 @using BlazorGrid.Abstractions.Filters
 <h1>@Title</h1>
-<pre class="code" data-lang="Razor"><code class="bg-dark text-light">&lt;BlazorGrid @@ref="Grid" Filter="MyFilter" Query="@@FilterInput" TRow="Employee" SourceUrl="data/employees.json"&gt;
+<pre class="code" data-lang="Razor"><code class="bg-dark text-light">&lt;BlazorGrid @@ref="Grid" Filter="MyFilter" Query="@@FilterInput" TRow="Employee" Provider="Provider.GetAsync<Employee>"&gt;
         &lt;StaticGridCol FitToContent="true"&gt;
             &lt;img src="@@context.Avatar" style="width: 20px; height: 20px;" /&gt;
         &lt;/StaticGridCol&gt;
@@ -135,7 +135,7 @@
 
 <Tabs>
     <Tab Caption="Result" class="p-3 overflow-auto" style="max-height: 500px;">
-        <BlazorGrid @ref="Grid" Filter="MyFilter" Query="@FilterInput" TRow="Employee" SourceUrl="data/employees.json">
+        <BlazorGrid @ref="Grid" Filter="MyFilter" Query="@FilterInput" TRow="Employee" Provider="Provider.GetAsync<Employee>">
             <StaticGridCol FitToContent="true">
                 <img src="@context.Avatar" style="width: 20px; height: 20px;" />
             </StaticGridCol>

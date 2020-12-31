@@ -14,7 +14,7 @@
     <Tab Caption="Result" class="p-3">
         <div class="row">
             <div class="col-9 align-self-start">
-                <BlazorGrid TRow="Employee" SourceUrl="data/employees.json" OnClick="row => ShowDetails(row)" style="max-height: 340px;">
+                <BlazorGrid TRow="Employee" Provider="Provider.GetAsync<Employee>" OnClick="row => ShowDetails(row)" style="max-height: 340px;">
                     <StaticGridCol FitToContent="true">
                         <img src="@context.Avatar" style="width: 20px; height: 20px;" />
                     </StaticGridCol>
@@ -58,7 +58,7 @@
         <h6>Razor</h6>
         <pre class="pre-scrollable"><code>&lt;div class=&quot;row&quot;&gt;
     &lt;div class=&quot;col-9&quot;&gt;
-        &lt;BlazorGrid TRow=&quot;Employee&quot; SourceUrl=&quot;data/employees.json&quot; OnClick=&quot;row =&gt; ShowDetails(row)&quot;&gt;
+        &lt;BlazorGrid TRow=&quot;Employee&quot; Provider=&quot;Provider.GetAsync&lt;Employee&gt; OnClick=&quot;row =&gt; ShowDetails(row)&quot;&gt;
             &lt;StaticGridCol FitToContent=&quot;true&quot;&gt;
                 &lt;img src=&quot;@@context.Avatar&quot; style=&quot;width: 20px; height: 20px;&quot; /&gt;
             &lt;/StaticGridCol&gt;
