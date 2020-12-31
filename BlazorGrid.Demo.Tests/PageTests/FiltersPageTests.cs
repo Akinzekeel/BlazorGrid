@@ -9,7 +9,7 @@ namespace BlazorGrid.Tests.Demo
         //[Ignore]
         //public void Can_Select_Filter_Property()
         //{
-        //    var provider = new Mock<IGridProvider>();
+        //    var provider = new Mock<ICustomProvider>();
         //    Services.AddSingleton(provider.Object);
 
         //    var nav = new MockNav();

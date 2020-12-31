@@ -29,17 +29,11 @@ namespace BlazorGrid.Tests.Demo
         [TestMethod]
         public void Can_Render_Page()
         {
-            var provider = new Mock<IGridProvider>();
+            var provider = new Mock<ICustomProvider>();
             Services.AddSingleton(provider.Object);
 
             provider.Setup(x => x.GetAsync<Employee>(
-                It.IsAny<string>(),
-                It.IsAny<int>(),
-                It.IsAny<int>(),
-                It.IsAny<string>(),
-                It.IsAny<bool>(),
-                It.IsAny<string>(),
-                It.IsAny<FilterDescriptor>(),
+                It.IsAny<BlazorGridRequest>(),
                 It.IsAny<CancellationToken>()
             )).ReturnsAsync(new BlazorGridResult<Employee>
             {

@@ -37,7 +37,7 @@ namespace BlazorGrid.Components
         [Inject] private NavigationManager Nav { get; set; }
 
         [Obsolete]
-        [Inject] private IGridProvider LegacyProvider { get; set; }
+        [Inject] private IEnumerable<IGridProvider> LegacyProvider { get; set; }
 
         [Parameter] public ProviderDelegate<TRow> Provider { get; set; }
         [Parameter] public int VirtualItemSize { get; set; } = 50;
@@ -127,9 +127,9 @@ namespace BlazorGrid.Components
                         return new ItemsProviderResult<TRow>(result.Data, result.TotalCount);
                     }
                 }
-                else
+                else if (LegacyProvider.Any())
                 {
-                    var result = await LegacyProvider.GetAsync<TRow>
+                    var result = await LegacyProvider.First().GetAsync<TRow>
                     (
                         SourceUrl,
                         request.StartIndex,

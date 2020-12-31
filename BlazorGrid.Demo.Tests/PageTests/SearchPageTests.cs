@@ -30,16 +30,10 @@ namespace BlazorGrid.Tests.Demo
             var ts = new Mock<ITitleService>();
             Services.AddSingleton(ts.Object);
 
-            var provider = new Mock<IGridProvider>();
+            var provider = new Mock<ICustomProvider>();
 
             provider.Setup(x => x.GetAsync<Employee>(
-                It.IsAny<string>(),
-                It.IsAny<int>(),
-                It.IsAny<int>(),
-                It.IsAny<string>(),
-                It.IsAny<bool>(),
-                It.IsAny<string>(),
-                It.IsAny<FilterDescriptor>(),
+                It.IsAny<BlazorGridRequest>(),
                 It.IsAny<CancellationToken>()
             )).ReturnsAsync(new BlazorGridResult<Employee>
             {
@@ -59,16 +53,10 @@ namespace BlazorGrid.Tests.Demo
         [TestMethod]
         public async Task Search_Input_Triggers_Provider_Call_Delayed()
         {
-            var provider = Services.GetRequiredService<Mock<IGridProvider>>();
+            var provider = Services.GetRequiredService<Mock<ICustomProvider>>();
 
             provider.Setup(x => x.GetAsync<Employee>(
-                It.IsAny<string>(),
-                It.IsAny<int>(),
-                It.IsAny<int>(),
-                It.IsAny<string>(),
-                It.IsAny<bool>(),
-                It.IsAny<string>(),
-                It.IsAny<FilterDescriptor>(),
+                It.IsAny<BlazorGridRequest>(),
                 It.IsAny<CancellationToken>()
             )).ReturnsAsync(new BlazorGridResult<Employee>
             {
@@ -79,7 +67,7 @@ namespace BlazorGrid.Tests.Demo
             var page = RenderComponent<Search>();
             var input = page.Find("input[type=search]");
 
-            provider.Verify((Expression<Func<IGridProvider, Task<BlazorGridResult<Employee>>>>)provider.Setups.First().OriginalExpression, Times.Once());
+            provider.Verify((Expression<Func<ICustomProvider, ValueTask<BlazorGridResult<Employee>>>>)provider.Setups.First().OriginalExpression, Times.Once());
             Assert.AreEqual(1, provider.Invocations.Count);
 
             await page.InvokeAsync(() => input.Input("test"));

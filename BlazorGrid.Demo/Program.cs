@@ -21,12 +21,12 @@ namespace BlazorGrid.Demo
 
             builder.Services.AddTransient(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
-            builder.Services.AddBlazorGrid<DefaultHttpProvider>(o =>
+            builder.Services.AddBlazorGrid(o =>
             {
                 o.Styles = new BootstrapStyles();
             });
 
-            builder.Services.AddScoped(x =>
+            builder.Services.AddScoped<ICustomProvider>(x =>
             {
                 var http = x.GetService<HttpClient>();
                 return new CustomProvider(http, "/data/employees.json");

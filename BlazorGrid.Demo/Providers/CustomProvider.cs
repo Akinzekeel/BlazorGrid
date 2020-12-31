@@ -1,6 +1,7 @@
 using BlazorGrid.Abstractions;
 using BlazorGrid.Abstractions.Extensions;
 using BlazorGrid.Abstractions.Filters;
+using BlazorGrid.Demo.Interfaces;
 using BlazorGrid.Demo.Models;
 using System;
 using System.IO;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace BlazorGrid.Demo.Providers
 {
-    public class CustomProvider
+    public class CustomProvider : ICustomProvider
     {
         private readonly string Url;
         private readonly HttpClient Http;
