@@ -264,6 +264,9 @@ namespace BlazorGrid.Components
 
         public async Task ReloadAsync()
         {
+            // Clear error
+            LoadingError = default;
+
             if (VirtualizeRef != null)
             {
                 ShowLoadingOverlay = null;

@@ -305,5 +305,75 @@ namespace BlazorGrid.Tests
                 "</div>"
             );
         }
+
+        [TestMethod]
+        public async Task Retry_After_Error_Clears_Error()
+        {
+            var styles = Services.GetRequiredService<IBlazorGridConfig>();
+
+            var provider = Services.GetRequiredService<Mock<IGridProvider>>();
+            provider.Reset();
+
+            provider.Setup(x => x.GetAsync<MyDto>(
+                It.IsAny<string>(),
+                It.IsAny<int>(),
+                It.IsAny<int>(),
+                It.IsAny<string>(),
+                It.IsAny<bool>(),
+                It.IsAny<string>(),
+                It.IsAny<FilterDescriptor>(),
+                It.IsAny<CancellationToken>()
+            )).ThrowsAsync(new Exception("unit test"))
+            .Verifiable();
+
+            var grid = RenderComponent<BlazorGrid<MyDto>>(
+                Template<MyDto>(nameof(ChildContent), (context) => (RenderTreeBuilder b) =>
+                {
+                    Expression<Func<string>> colFor = () => context.Name;
+
+                    b.OpenComponent<GridCol<string>>(0);
+                    b.AddAttribute(1, "For", colFor);
+                    b.CloseComponent();
+                })
+            );
+
+            provider.Verify();
+            provider.Reset();
+
+            provider.Setup(x => x.GetAsync<MyDto>(
+                It.IsAny<string>(),
+                It.IsAny<int>(),
+                It.IsAny<int>(),
+                It.IsAny<string>(),
+                It.IsAny<bool>(),
+                It.IsAny<string>(),
+                It.IsAny<FilterDescriptor>(),
+                It.IsAny<CancellationToken>()
+            )).ReturnsAsync(new BlazorGridResult<MyDto>
+            {
+                TotalCount = 1,
+                Data = new List<MyDto> { new MyDto { Name = "Mike" } }
+            })
+            .Verifiable();
+
+            // Verify that there is an error overlay
+            var errorHeading = grid.Find(".grid-overlay ." + styles.Styles.ErrorHeadingClass.Replace(' ', '.'));
+            Assert.IsNotNull(errorHeading);
+
+            // Find the retry button
+            var retryBtn = grid.Find(".grid-overlay ." + styles.Styles.ErrorFooterBtnClass.Replace(' ', '.'));
+            Assert.IsNotNull(retryBtn);
+
+            await grid.InvokeAsync(() => retryBtn.Click());
+
+            provider.Verify();
+
+            try
+            {
+                grid.Find(".grid-overlay");
+                Assert.Fail();
+            }
+            catch (ElementNotFoundException) { }
+        }
     }
 }
