@@ -29,6 +29,7 @@
             height: 100%;
             align-content: start;
             background-color: inherit;
+            min-width: 0;
 
             > *:not(.grid-row), .grid-row-span-all {
                 grid-column: 1/-1;
@@ -70,6 +71,8 @@
                 // This border will balance out the bottom border to make sure
                 // the content is perfectly centered vertically
                 border-top: $bzg-cell-border-bottom-width solid transparent;
+                white-space: nowrap;
+                min-width: 0;
             }
 
             &.grid-header {

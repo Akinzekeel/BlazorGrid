@@ -1,0 +1,39 @@
+﻿@inherits CommonPageBase
+@page "/examples/long-content"
+@layout ExampleLayout
+<h1>@Title</h1>
+<p>In this example you can see what happens when you provide too much content for the grid to display. To demonstrate this, we repeat the e-mail address 10 times.</p>
+<p>By default, grid cells will prevent the containing text from wrapping in order to prevent the Virtualize component from glitching (this is due to the vertical size becoming unpredictable in these scenarios). Any excess content is therefore truncated automatically. If you wish to make it look a bit more elegant, you can wrap the cell content inside a block element and set the CSS property <code>text-overflow: ellipsis;</code> (or use the Bootstrap shorthand class <code>text-truncate</code>).</p>
+<Tabs>
+    <Tab Caption="Result" class="p-3">
+        <BlazorGrid TRow="Employee" Provider="Provider.GetAsync<Employee>" style="max-height: 340px;">
+            <StaticGridCol FitToContent="true">
+                <img src="@context.Avatar" style="width: 20px; height: 20px;" />
+            </StaticGridCol>
+            <GridCol For="() => context.Id" FitToContent="true" />
+            <GridCol For="() => context.FirstName" />
+            <GridCol For="() => context.LastName" />
+            <GridCol For="() => context.Email">
+                <div class="text-truncate">@string.Join(", ", Enumerable.Repeat(context.Email, 10))</div>
+            </GridCol>
+        </BlazorGrid>
+    </Tab>
+    <Tab Caption="Code" class="p-3">
+        <h6>Razor</h6>
+        <pre class="pre-scrollable"><code>&lt;BlazorGrid TRow=&quot;Employee&quot; Provider=&quot;Provider.GetAsync&lt;Employee&gt;&gt;
+    &lt;StaticGridCol FitToContent=&quot;true&quot;&gt;
+        &lt;img src=&quot;@@context.Avatar&quot; style=&quot;width: 20px; height: 20px;&quot; /&gt;
+    &lt;/StaticGridCol&gt;
+    &lt;GridCol For=&quot;() => context.Id&quot; FitToContent=&quot;true&quot; /&gt;
+    &lt;GridCol For=&quot;() => context.FirstName&quot; /&gt;
+    &lt;GridCol For=&quot;() => context.LastName&quot; /&gt;
+    &lt;GridCol For=&quot;() => context.Email&quot;&gt;
+        &lt;div class=&quot;text-truncate&quot;&gt;@@string.Join(&quot;, &quot;, Enumerable.Repeat(context.Email, 10))&lt;/div&gt;
+    &lt;/GridCol&gt;
+&lt;/BlazorGrid&gt;</code></pre>
+    </Tab>
+</Tabs>
+@code
+{
+    protected override string Title => "Long content";
+}
