@@ -70,7 +70,7 @@ namespace BlazorGrid.Components
 
             try
             {
-                if (Provider != null)
+                if (Provider != null && !request.CancellationToken.IsCancellationRequested)
                 {
                     var providerRequest = new BlazorGridRequest
                     {
@@ -98,12 +98,13 @@ namespace BlazorGrid.Components
             }
             catch (OperationCanceledException)
             {
-                throw; // Let the Virtualize component handle this 
+                // This can happen when the user scrolls the grid rapidly
+                return default;
             }
             catch (ObjectDisposedException)
             {
                 // This can happen when the user scrolls the grid rapidly
-                throw; // Let the Virtualize component handle this 
+                return default;
             }
             catch (Exception x)
             {
@@ -119,7 +120,7 @@ namespace BlazorGrid.Components
             }
 
             // Return empty result set (fallback)
-            return new ItemsProviderResult<TRow>();
+            return default;
         }
 
         private IDictionary<string, object> FinalAttributes
