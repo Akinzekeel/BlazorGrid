@@ -22,7 +22,6 @@ namespace BlazorGrid.Components
         private bool DetectColumns = true;
         private readonly Type typeInfo = typeof(BlazorGrid<TRow>);
 
-        public const int DefaultPageSize = 25;
         public const int SearchQueryInputDebounceMs = 400;
 
         // Setting these parameters will not immediately cause a re-render, but a reload
