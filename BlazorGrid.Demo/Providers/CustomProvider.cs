@@ -58,8 +58,7 @@ namespace BlazorGrid.Demo.Providers
                 request.Filter
             );
 
-            var httpCancellationToken = new CancellationTokenSource();
-            var httpTask = Http.GetAsync(url, httpCancellationToken.Token);
+            var httpTask = Http.GetAsync(url, cancellationToken);
 
             Task delay;
 
@@ -72,18 +71,14 @@ namespace BlazorGrid.Demo.Providers
                 delay = Task.Delay(ArtificialDelayMs, cancellationToken);
             }
 
-            while (!httpTask.IsCompleted)
+            if (delay != null)
             {
-                if (cancellationToken.IsCancellationRequested)
-                {
-                    httpCancellationToken.Cancel();
-                    return null;
-                }
-
-                await Task.Delay(150);
+                await Task.WhenAll(delay, httpTask);
             }
-
-            await delay;
+            else
+            {
+                await httpTask;
+            }
 
             var result = await DeserializeJsonAsync<BlazorGridResult<T>>(httpTask.Result);
             var totalCount = result.TotalCount;
