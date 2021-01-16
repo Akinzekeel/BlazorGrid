@@ -1,5 +1,4 @@
 using BlazorGrid.Abstractions;
-using BlazorGrid.Abstractions.Filters;
 using BlazorGrid.Components;
 using BlazorGrid.Interfaces;
 using BlazorGrid.Tests.Mock;
@@ -10,12 +9,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
+using System.Threading.Tasks;
 using static Bunit.ComponentParameterFactory;
 
 namespace BlazorGrid.Tests
@@ -55,30 +54,27 @@ namespace BlazorGrid.Tests
         [TestMethod]
         public void Can_Merge_Css_Classes()
         {
-            var row = new MyDto { Name = "Unit test" };
-            var provider = new Mock<IGridProvider>();
-            provider.Setup(x => x.GetAsync<MyDto>(
-                It.IsAny<string>(),
-                It.IsAny<int>(),
-                It.IsAny<int>(),
-                It.IsAny<string>(),
-                It.IsAny<bool>(),
-                It.IsAny<string>(),
-                It.IsAny<FilterDescriptor>(),
-                It.IsAny<CancellationToken>()
-            )).ReturnsAsync(new BlazorGridResult<MyDto>
-            {
-                TotalCount = 1,
-                Data = new List<MyDto> { row }
-            }).Verifiable();
+            int providerCallCount = 0;
 
-            Services.AddSingleton(provider.Object);
+            ProviderDelegate<MyDto> provider = (BlazorGridRequest r, CancellationToken c) =>
+            {
+                providerCallCount++;
+
+                return ValueTask.FromResult(new BlazorGridResult<MyDto>
+                {
+                    Data = Enumerable.Repeat(new MyDto(), 3).ToList(),
+                    TotalCount = 3
+                });
+            };
+
             Services.AddSingleton<IBlazorGridConfig>(new Config.DefaultConfig());
             Services.AddSingleton<NavigationManager>(new MockNav());
 
+            var row = new MyDto { Name = "Unit test" };
             Expression<Func<string>> colFor = () => row.Name;
 
             var grid = RenderComponent<BlazorGrid<MyDto>>(
+                Parameter(nameof(BlazorGrid<MyDto>.Provider), provider),
                 Template<MyDto>(nameof(ChildContent), (context) => (RenderTreeBuilder builder) =>
                 {
                     builder.OpenComponent<GridCol<string>>(0);
@@ -89,7 +85,7 @@ namespace BlazorGrid.Tests
                 })
             );
 
-            provider.VerifyAll();
+            Assert.AreEqual(1, providerCallCount);
 
             var rowElement = grid.FindAll(".grid-row").Last();
             rowElement.MarkupMatches("<div class=\"grid-row\"><div class=\"text-right my-custom-class\">Unit test</div></div>");

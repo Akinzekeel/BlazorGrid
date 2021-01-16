@@ -1,5 +1,4 @@
 ﻿using BlazorGrid.Abstractions;
-using BlazorGrid.Abstractions.Filters;
 using BlazorGrid.Components;
 using BlazorGrid.Config;
 using BlazorGrid.Interfaces;
@@ -10,11 +9,9 @@ using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.AspNetCore.Components.Web.Virtualization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Threading;
 using System.Threading.Tasks;
 using static Bunit.ComponentParameterFactory;
 
@@ -39,35 +36,24 @@ namespace BlazorGrid.Tests
             Services.AddSingleton(mockNav);
             Services.AddSingleton<NavigationManager>(mockNav);
             Services.AddSingleton<IBlazorGridConfig>(new DefaultConfig());
-
-            var provider = new Mock<IGridProvider>();
-            Services.AddSingleton(provider);
-            Services.AddSingleton(provider.Object);
         }
 
         [TestMethod]
         public void Does_Initial_Rendering()
         {
-            var provider = Services.GetRequiredService<Mock<IGridProvider>>();
-
-            provider.Setup(x => x.GetAsync<MyDto>(
-                It.IsAny<string>(),
-                It.IsAny<int>(),
-                It.IsAny<int>(),
-                It.IsAny<string>(),
-                It.IsAny<bool>(),
-                It.IsAny<string>(),
-                It.IsAny<FilterDescriptor>(),
-                It.IsAny<CancellationToken>()
-            )).ReturnsAsync(new BlazorGridResult<MyDto>
+            ProviderDelegate<MyDto> provider = (r, _) =>
             {
-                TotalCount = 1,
-                Data = new List<MyDto> {
-                    new MyDto { Name = "Unit test" }
-                }
-            });
+                return ValueTask.FromResult(new BlazorGridResult<MyDto>
+                {
+                    TotalCount = 1,
+                    Data = new List<MyDto> {
+                        new MyDto { Name = "Unit test" }
+                    }
+                });
+            };
 
             var grid = RenderComponent<BlazorGrid<MyDto>>(
+                Parameter(nameof(BlazorGrid<MyDto>.Provider), provider),
                 Template<MyDto>(nameof(ChildContent), (context) => (RenderTreeBuilder b) =>
                 {
                     Expression<Func<string>> colFor = () => context.Name;
@@ -87,26 +73,19 @@ namespace BlazorGrid.Tests
         [TestMethod]
         public async Task Sorting_Triggers_Rerender()
         {
-            var provider = Services.GetRequiredService<Mock<IGridProvider>>();
-
-            provider.Setup(x => x.GetAsync<MyDto>(
-                It.IsAny<string>(),
-                It.IsAny<int>(),
-                It.IsAny<int>(),
-                It.IsAny<string>(),
-                It.IsAny<bool>(),
-                It.IsAny<string>(),
-                It.IsAny<FilterDescriptor>(),
-                It.IsAny<CancellationToken>()
-            )).ReturnsAsync(new BlazorGridResult<MyDto>
+            ProviderDelegate<MyDto> provider = (r, _) =>
             {
-                TotalCount = 1,
-                Data = new List<MyDto> {
-                    new MyDto { Name = "Unit test" }
-                }
-            });
+                return ValueTask.FromResult(new BlazorGridResult<MyDto>
+                {
+                    TotalCount = 1,
+                    Data = new List<MyDto> {
+                        new MyDto { Name = "Unit test" }
+                    }
+                });
+            };
 
             var grid = RenderComponent<BlazorGrid<MyDto>>(
+                Parameter(nameof(BlazorGrid<MyDto>.Provider), provider),
                 Template<MyDto>(nameof(ChildContent), (context) => (RenderTreeBuilder b) =>
                 {
                     Expression<Func<string>> colFor = () => context.Name;
@@ -127,26 +106,19 @@ namespace BlazorGrid.Tests
         [TestMethod]
         public void Query_Triggers_Rerender()
         {
-            var provider = Services.GetRequiredService<Mock<IGridProvider>>();
-
-            provider.Setup(x => x.GetAsync<MyDto>(
-                It.IsAny<string>(),
-                It.IsAny<int>(),
-                It.IsAny<int>(),
-                It.IsAny<string>(),
-                It.IsAny<bool>(),
-                It.IsAny<string>(),
-                It.IsAny<FilterDescriptor>(),
-                It.IsAny<CancellationToken>()
-            )).ReturnsAsync(new BlazorGridResult<MyDto>
+            ProviderDelegate<MyDto> provider = (r, _) =>
             {
-                TotalCount = 1,
-                Data = new List<MyDto> {
-                    new MyDto { Name = "Unit test" }
-                }
-            });
+                return ValueTask.FromResult(new BlazorGridResult<MyDto>
+                {
+                    TotalCount = 1,
+                    Data = new List<MyDto> {
+                        new MyDto { Name = "Unit test" }
+                    }
+                });
+            };
 
             var grid = RenderComponent<BlazorGrid<MyDto>>(
+                Parameter(nameof(BlazorGrid<MyDto>.Provider), provider),
                 Template<MyDto>(nameof(ChildContent), (context) => (RenderTreeBuilder b) =>
                 {
                     Expression<Func<string>> colFor = () => context.Name;
@@ -175,26 +147,19 @@ namespace BlazorGrid.Tests
         [TestMethod]
         public void ChildContent_Triggers_Rerender()
         {
-            var provider = Services.GetRequiredService<Mock<IGridProvider>>();
-
-            provider.Setup(x => x.GetAsync<MyDto>(
-                It.IsAny<string>(),
-                It.IsAny<int>(),
-                It.IsAny<int>(),
-                It.IsAny<string>(),
-                It.IsAny<bool>(),
-                It.IsAny<string>(),
-                It.IsAny<FilterDescriptor>(),
-                It.IsAny<CancellationToken>()
-            )).ReturnsAsync(new BlazorGridResult<MyDto>
+            ProviderDelegate<MyDto> provider = (r, _) =>
             {
-                TotalCount = 1,
-                Data = new List<MyDto> {
-                    new MyDto { Name = "Unit test" }
-                }
-            });
+                return ValueTask.FromResult(new BlazorGridResult<MyDto>
+                {
+                    TotalCount = 1,
+                    Data = new List<MyDto> {
+                        new MyDto { Name = "Unit test" }
+                    }
+                });
+            };
 
             var grid = RenderComponent<BlazorGrid<MyDto>>(
+                Parameter(nameof(BlazorGrid<MyDto>.Provider), provider),
                 Template<MyDto>(nameof(ChildContent), (context) => (RenderTreeBuilder b) =>
                 {
                     Expression<Func<string>> colFor = () => context.Name;
@@ -219,27 +184,20 @@ namespace BlazorGrid.Tests
         [TestMethod]
         public async Task OnClick_Does_Not_Trigger_Rerender()
         {
-            var provider = Services.GetRequiredService<Mock<IGridProvider>>();
-
-            provider.Setup(x => x.GetAsync<MyDto>(
-                It.IsAny<string>(),
-                It.IsAny<int>(),
-                It.IsAny<int>(),
-                It.IsAny<string>(),
-                It.IsAny<bool>(),
-                It.IsAny<string>(),
-                It.IsAny<FilterDescriptor>(),
-                It.IsAny<CancellationToken>()
-            )).ReturnsAsync(new BlazorGridResult<MyDto>
+            ProviderDelegate<MyDto> provider = (r, _) =>
             {
-                TotalCount = 1,
-                Data = new List<MyDto> {
-                    new MyDto { Name = "Unit test" }
-                }
-            });
+                return ValueTask.FromResult(new BlazorGridResult<MyDto>
+                {
+                    TotalCount = 1,
+                    Data = new List<MyDto> {
+                        new MyDto { Name = "Unit test" }
+                    }
+                });
+            };
 
             var clickCount = 0;
             var grid = RenderComponent<BlazorGrid<MyDto>>(
+                Parameter(nameof(BlazorGrid<MyDto>.Provider), provider),
                 EventCallback<MyDto>(nameof(BlazorGrid<MyDto>.OnClick), _ => clickCount++),
                 Template<MyDto>(nameof(ChildContent), (context) => (RenderTreeBuilder b) =>
                 {
@@ -263,24 +221,6 @@ namespace BlazorGrid.Tests
         [TestMethod]
         public void No_Data_Shows_Empty_Message()
         {
-            var provider = Services.GetRequiredService<Mock<IGridProvider>>();
-            provider.Reset();
-
-            provider.Setup(x => x.GetAsync<MyDto>(
-                It.IsAny<string>(),
-                It.IsAny<int>(),
-                It.IsAny<int>(),
-                It.IsAny<string>(),
-                It.IsAny<bool>(),
-                It.IsAny<string>(),
-                It.IsAny<FilterDescriptor>(),
-                It.IsAny<CancellationToken>()
-            )).ReturnsAsync(new BlazorGridResult<MyDto>
-            {
-                TotalCount = 0,
-                Data = new List<MyDto> { }
-            }).Verifiable();
-
             var grid = RenderComponent<BlazorGrid<MyDto>>(
                 Template<MyDto>(nameof(ChildContent), (context) => (RenderTreeBuilder b) =>
                 {
@@ -291,8 +231,6 @@ namespace BlazorGrid.Tests
                     b.CloseComponent();
                 })
             );
-
-            provider.Verify();
 
             var conf = Services.GetRequiredService<IBlazorGridConfig>();
             var messageContainer = grid.Find("." + string.Join('.', conf.Styles.PlaceholderWrapperClass.Split(' ')));
@@ -309,24 +247,17 @@ namespace BlazorGrid.Tests
         [TestMethod]
         public async Task Retry_After_Error_Clears_Error()
         {
+            int providerCallCount = 0;
             var styles = Services.GetRequiredService<IBlazorGridConfig>();
 
-            var provider = Services.GetRequiredService<Mock<IGridProvider>>();
-            provider.Reset();
-
-            provider.Setup(x => x.GetAsync<MyDto>(
-                It.IsAny<string>(),
-                It.IsAny<int>(),
-                It.IsAny<int>(),
-                It.IsAny<string>(),
-                It.IsAny<bool>(),
-                It.IsAny<string>(),
-                It.IsAny<FilterDescriptor>(),
-                It.IsAny<CancellationToken>()
-            )).ThrowsAsync(new Exception("unit test"))
-            .Verifiable();
+            ProviderDelegate<MyDto> provider = (r, _) =>
+            {
+                providerCallCount++;
+                throw new Exception("unit test");
+            };
 
             var grid = RenderComponent<BlazorGrid<MyDto>>(
+                Parameter(nameof(BlazorGrid<MyDto>.Provider), provider),
                 Template<MyDto>(nameof(ChildContent), (context) => (RenderTreeBuilder b) =>
                 {
                     Expression<Func<string>> colFor = () => context.Name;
@@ -337,24 +268,22 @@ namespace BlazorGrid.Tests
                 })
             );
 
-            provider.Verify();
-            provider.Reset();
+            Assert.AreEqual(1, providerCallCount);
 
-            provider.Setup(x => x.GetAsync<MyDto>(
-                It.IsAny<string>(),
-                It.IsAny<int>(),
-                It.IsAny<int>(),
-                It.IsAny<string>(),
-                It.IsAny<bool>(),
-                It.IsAny<string>(),
-                It.IsAny<FilterDescriptor>(),
-                It.IsAny<CancellationToken>()
-            )).ReturnsAsync(new BlazorGridResult<MyDto>
+            provider = (r, _) =>
             {
-                TotalCount = 1,
-                Data = new List<MyDto> { new MyDto { Name = "Mike" } }
-            })
-            .Verifiable();
+                providerCallCount++;
+
+                return ValueTask.FromResult(new BlazorGridResult<MyDto>
+                {
+                    TotalCount = 1,
+                    Data = new List<MyDto> { new MyDto { Name = "Mike" } }
+                });
+            };
+
+            grid.SetParametersAndRender(
+                Parameter(nameof(BlazorGrid<MyDto>.Provider), provider)
+            );
 
             // Verify that there is an error overlay
             var errorHeading = grid.Find(".grid-overlay ." + styles.Styles.ErrorHeadingClass.Replace(' ', '.'));
@@ -366,7 +295,7 @@ namespace BlazorGrid.Tests
 
             await grid.InvokeAsync(() => retryBtn.Click());
 
-            provider.Verify();
+            Assert.AreEqual(2, providerCallCount);
 
             try
             {

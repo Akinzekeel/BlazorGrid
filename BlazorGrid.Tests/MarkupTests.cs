@@ -1,6 +1,5 @@
 using AngleSharp.Css.Dom;
 using BlazorGrid.Abstractions;
-using BlazorGrid.Abstractions.Filters;
 using BlazorGrid.Components;
 using BlazorGrid.Config;
 using BlazorGrid.Config.Styles;
@@ -11,12 +10,11 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Threading;
+using System.Threading.Tasks;
 using static Bunit.ComponentParameterFactory;
 
 namespace BlazorGrid.Tests
@@ -32,27 +30,6 @@ namespace BlazorGrid.Tests
         [TestInitialize]
         public void Initialize()
         {
-            var row = new MyDto { Name = "Unit Test" };
-
-            var provider = new Mock<IGridProvider>();
-
-            provider.Setup(x => x.GetAsync<MyDto>(
-                It.IsAny<string>(),
-                It.IsAny<int>(),
-                It.IsAny<int>(),
-                It.IsAny<string>(),
-                It.IsAny<bool>(),
-                It.IsAny<string>(),
-                It.IsAny<FilterDescriptor>(),
-                It.IsAny<CancellationToken>()
-            )).ReturnsAsync(new BlazorGridResult<MyDto>
-            {
-                TotalCount = 1,
-                Data = new List<MyDto> { row }
-            }).Verifiable();
-
-            Services.AddSingleton(provider);
-            Services.AddSingleton(provider.Object);
             Services.AddSingleton<IBlazorGridConfig>(new DefaultConfig { Styles = new SpectreStyles() });
             Services.AddSingleton<NavigationManager>(new MockNav());
         }
@@ -188,10 +165,7 @@ namespace BlazorGrid.Tests
         [TestMethod]
         public void Sortable_Column_Header_Has_Class()
         {
-            var noData = new List<MyDto>();
-
             var grid = RenderComponent<BlazorGrid<MyDto>>(
-                Parameter(nameof(BlazorGrid<MyDto>.Rows), noData),
                 Template<MyDto>(nameof(ChildContent), (dto) => (b) =>
                 {
                     b.OpenComponent<GridCol<string>>(0);
@@ -207,10 +181,7 @@ namespace BlazorGrid.Tests
         [TestMethod]
         public void Non_Sortable_Column_Header_Has_Class()
         {
-            var noData = new List<MyDto>();
-
             var grid = RenderComponent<BlazorGrid<MyDto>>(
-                Parameter(nameof(BlazorGrid<MyDto>.Rows), noData),
                 Template<MyDto>(nameof(ChildContent), (dto) => (b) =>
                 {
                     b.OpenComponent<StaticGridCol>(0);
@@ -315,7 +286,17 @@ namespace BlazorGrid.Tests
             var row = new MyDto { Name = "Unit test" };
             Expression<Func<string>> colFor = () => row.Name;
 
+            ProviderDelegate<MyDto> provider = (r, _) =>
+            {
+                return ValueTask.FromResult(new BlazorGridResult<MyDto>
+                {
+                    TotalCount = 1,
+                    Data = new List<MyDto> { row }
+                });
+            };
+
             var grid = RenderComponent<BlazorGrid<MyDto>>(
+                Parameter(nameof(BlazorGrid<MyDto>.Provider), provider),
                 Template<MyDto>(nameof(ChildContent), (context) => (RenderTreeBuilder builder) =>
                 {
                     builder.OpenComponent<GridCol<string>>(0);

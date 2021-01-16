@@ -8,11 +8,10 @@ using BlazorGrid.Tests.Mock;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Threading;
 using System.Threading.Tasks;
 using static Bunit.ComponentParameterFactory;
 
@@ -33,35 +32,27 @@ namespace BlazorGrid.Tests
             Services.AddTransient<NavigationManager>(_ => new MockNav());
         }
 
-        private TaskCompletionSource<BlazorGridResult<MyDto>> SetupMockProvider()
-        {
-            var promise = new TaskCompletionSource<BlazorGridResult<MyDto>>();
-
-            var provider = new Mock<IGridProvider>();
-            provider.Setup(x => x.GetAsync<MyDto>(
-                It.IsAny<string>(),
-                It.IsAny<int>(),
-                It.IsAny<int>(),
-                It.IsAny<string>(),
-                It.IsAny<bool>(),
-                It.IsAny<string>(),
-                It.IsAny<FilterDescriptor>(),
-                It.IsAny<CancellationToken>()
-            )).Returns(promise.Task);
-
-            Services.AddSingleton(provider.Object);
-            Services.AddSingleton(provider);
-
-            return promise;
-        }
-
         [Ignore]
         [TestMethod]
         public void Filter_Descriptor_Property_Change_Triggers_Provider_Call()
         {
-            var promise = SetupMockProvider();
+            int providerCallCount = 0;
+            FilterDescriptor callFilterDescriptor = null;
+
+            ProviderDelegate<MyDto> provider = (r, c) =>
+            {
+                providerCallCount++;
+                callFilterDescriptor = r.Filter;
+
+                return ValueTask.FromResult(new BlazorGridResult<MyDto>
+                {
+                    Data = new List<MyDto>(),
+                    TotalCount = 0
+                });
+            };
 
             var grid = RenderComponent<BlazorGrid<MyDto>>(
+                Parameter(nameof(BlazorGrid<MyDto>.Provider), provider),
                 Template<MyDto>(nameof(ChildContent), (dto) => (b) =>
                 {
                     Expression<Func<string>> colFor = () => dto.Name;
@@ -72,46 +63,34 @@ namespace BlazorGrid.Tests
                 })
             );
 
-            var mockProvider = Services.GetRequiredService<Mock<IGridProvider>>();
-
             // The initial request to the provider must have happened
-            mockProvider.Verify(x => x.GetAsync<MyDto>(
-                It.IsAny<string>(),
-                0,
-                It.IsAny<int>(),
-                null,
-                false,
-                null,
-                It.IsAny<FilterDescriptor>(),
-                It.IsAny<CancellationToken>()
-            ), Times.Once());
-
-            // No other requests must have happened at this point
-            mockProvider.VerifyNoOtherCalls();
+            Assert.AreEqual(1, providerCallCount);
 
             grid.Instance.Filter.Connector = ConnectorType.Any;
 
-            mockProvider.Verify(x => x.GetAsync<MyDto>(
-                It.IsAny<string>(),
-                0,
-                It.IsAny<int>(),
-                null,
-                false,
-                null,
-                It.Is<FilterDescriptor>(f => f.Connector == ConnectorType.Any),
-                It.IsAny<CancellationToken>()
-            ), Times.Once());
-
-            // Those must be the only 2 requests
-            mockProvider.VerifyNoOtherCalls();
+            Assert.AreEqual(2, providerCallCount);
+            Assert.IsNotNull(callFilterDescriptor);
+            Assert.AreEqual(ConnectorType.Any, callFilterDescriptor.Connector);
         }
 
         [Ignore]
         [TestMethod]
         public void Filter_Descriptor_Collection_Change_Triggers_Provider_Call()
         {
-            var promise = SetupMockProvider();
+            int providerCallCount = 0;
+            FilterDescriptor callFilterDescriptor = null;
 
+            ProviderDelegate<MyDto> provider = (r, c) =>
+            {
+                providerCallCount++;
+                callFilterDescriptor = r.Filter;
+
+                return ValueTask.FromResult(new BlazorGridResult<MyDto>
+                {
+                    Data = new List<MyDto>(),
+                    TotalCount = 0
+                });
+            };
             var grid = RenderComponent<BlazorGrid<MyDto>>(
                 Template<MyDto>(nameof(ChildContent), (dto) => (b) =>
                 {
@@ -123,22 +102,7 @@ namespace BlazorGrid.Tests
                 })
             );
 
-            var mockProvider = Services.GetRequiredService<Mock<IGridProvider>>();
-
-            // The initial request to the provider must have happened
-            mockProvider.Verify(x => x.GetAsync<MyDto>(
-                It.IsAny<string>(),
-                0,
-                It.IsAny<int>(),
-                null,
-                false,
-                null,
-                It.IsAny<FilterDescriptor>(),
-                It.IsAny<CancellationToken>()
-            ), Times.Once(), "The provider was not called once before setting the filter");
-
-            // No other requests must have happened at this point
-            mockProvider.VerifyNoOtherCalls();
+            Assert.AreEqual(1, providerCallCount);
 
             // Set a filter 
             grid.Instance.Filter.Filters.Add(new PropertyFilter
@@ -148,19 +112,9 @@ namespace BlazorGrid.Tests
                 Value = "Bar"
             });
 
-            mockProvider.Verify(x => x.GetAsync<MyDto>(
-                It.IsAny<string>(),
-                0,
-                It.IsAny<int>(),
-                null,
-                false,
-                null,
-                It.Is<FilterDescriptor>(f => f.Filters.Any(p => p.Value == "Bar")),
-                It.IsAny<CancellationToken>()
-            ), Times.Once(), "The provider was not called once after setting the filter");
-
-            // Those must be the only 2 requests
-            mockProvider.VerifyNoOtherCalls();
+            Assert.AreEqual(2, providerCallCount);
+            Assert.IsNotNull(callFilterDescriptor);
+            Assert.IsTrue(callFilterDescriptor.Filters.Any(x => x.Value == "Bar"));
         }
     }
 }

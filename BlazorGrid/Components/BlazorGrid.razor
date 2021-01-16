@@ -77,7 +77,7 @@
                         </div>
                     }
                 </header>
-                @if (TotalRowCount == 0)
+                @if (TotalRowCount == 0 || Provider is null)
                 {
                     <div class="grid-row-span-all">
                         <div class="@Config.Styles.PlaceholderWrapperClass">

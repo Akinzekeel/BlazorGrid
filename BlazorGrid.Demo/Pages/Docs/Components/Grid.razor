@@ -35,16 +35,6 @@
             <td>This value will be relayed to the inner <code>Virtualize</code> component to calculate the height of unrendered items. Default value is <code>50</code>.</td>
         </tr>
         <tr>
-            <td><span class="text-monospace">Rows</span> <span class="badge badge-warning" title="This parameter will be removed in a future release">Deprecated</span></td>
-            <td class="text-monospace">List&lt;TRow&gt;</td>
-            <td>If you wish to manually set data on the table you can set this parameter. Note that provider calls are disabled in this mode and that filtering &amp; search will not work.</td>
-        </tr>
-        <tr>
-            <td><span class="text-monospace">SourceUrl</span> <span class="badge badge-warning" title="This parameter will be removed in a future release">Deprecated</span></td>
-            <td class="text-monospace">string</td>
-            <td>This is the path that is relayed to any calls to the <code>Provider</code> delegate. In a typical scenario, the final request Url would be the <code>HttpClient</code>'s <code>BaseAddress</code> + <code>SourceUrl</code> + a query string containing additional arguments such as the requested number of items and a search query.</td>
-        </tr>
-        <tr>
             <td class="text-monospace">EmptyRow</td>
             <td class="text-monospace">TRow</td>
             <td>The grid will perform an initial render simply to detect the column definitions. During this initial render, an empty row object is provided to the <code>ChildContent</code>. In some scenarios, BlazorGrid may not be able to instantiate a <code>TRow</code> object by itself. For those rare cases, you may provide a your own object reference here.</td>

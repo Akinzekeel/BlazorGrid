@@ -1,5 +1,4 @@
 using BlazorGrid.Abstractions;
-using BlazorGrid.Abstractions.Extensions;
 using BlazorGrid.Abstractions.Filters;
 using BlazorGrid.Abstractions.Helpers;
 using BlazorGrid.Interfaces;
@@ -28,7 +27,6 @@ namespace BlazorGrid.Components
         // Setting these parameters will not immediately cause a re-render, but a reload
         private static readonly string[] ReloadTriggerParameterNames = new string[]
         {
-            nameof(SourceUrl),
             nameof(Provider),
             nameof(Query)
         };
@@ -36,17 +34,8 @@ namespace BlazorGrid.Components
         [Inject] private IBlazorGridConfig Config { get; set; }
         [Inject] private NavigationManager Nav { get; set; }
 
-        [Obsolete]
-        [Inject] private IEnumerable<IGridProvider> LegacyProvider { get; set; }
-
         [Parameter] public ProviderDelegate<TRow> Provider { get; set; }
         [Parameter] public int VirtualItemSize { get; set; } = 50;
-
-        [Obsolete("This parameter will be removed in a future release. If you wish to provide static data you can provide them through the provider delegate.")]
-        [Parameter] public List<TRow> Rows { get; set; }
-
-        [Obsolete("This parameter will be removed in a future release. If you wish to provide static data you can provide them through the provider delegate.")]
-        [Parameter] public string SourceUrl { get; set; }
         [Parameter] public RenderFragment<TRow> ChildContent { get; set; }
         [Parameter] public TRow EmptyRow { get; set; }
         [Parameter] public string Query { get; set; }
@@ -80,32 +69,6 @@ namespace BlazorGrid.Components
 
             try
             {
-                var len = Math.Max(request.Count, DefaultPageSize);
-
-                if (Rows != null)
-                {
-                    var rows = Rows.AsQueryable();
-
-                    if (OrderByPropertyName != null)
-                    {
-                        // Apply client-side sorting
-                        if (OrderByDescending)
-                        {
-                            rows = rows.OrderByDescending(OrderByPropertyName);
-                        }
-                        else
-                        {
-                            rows = rows.OrderBy(OrderByPropertyName);
-                        }
-                    }
-
-                    rows = rows
-                        .Skip(request.StartIndex)
-                        .Take(len);
-
-                    return new ItemsProviderResult<TRow>(rows, Rows.Count);
-                }
-
                 if (Provider != null)
                 {
                     var providerRequest = new BlazorGridRequest
@@ -114,32 +77,11 @@ namespace BlazorGrid.Components
                         OrderBy = OrderByPropertyName,
                         OrderByDescending = OrderByDescending,
                         Offset = request.StartIndex,
-                        Length = len,
+                        Length = request.Count,
                         Filter = Filter
                     };
 
                     var result = await Provider(providerRequest, request.CancellationToken);
-
-                    TotalRowCount = result?.TotalCount ?? 0;
-
-                    if (TotalRowCount != 0)
-                    {
-                        return new ItemsProviderResult<TRow>(result.Data, result.TotalCount);
-                    }
-                }
-                else if (LegacyProvider.Any())
-                {
-                    var result = await LegacyProvider.First().GetAsync<TRow>
-                    (
-                        SourceUrl,
-                        request.StartIndex,
-                        len,
-                        OrderByPropertyName,
-                        OrderByDescending,
-                        Query,
-                        Filter,
-                        request.CancellationToken
-                    );
 
                     TotalRowCount = result?.TotalCount ?? 0;
 

@@ -1,5 +1,4 @@
 using BlazorGrid.Abstractions;
-using BlazorGrid.Abstractions.Filters;
 using BlazorGrid.Components;
 using BlazorGrid.Config;
 using BlazorGrid.Config.Styles;
@@ -9,7 +8,6 @@ using Bunit;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,13 +23,9 @@ namespace BlazorGrid.Tests
             public string Name { get; set; }
         }
 
-        private Mock<IGridProvider> mockProvider;
-
         [TestInitialize]
         public void Initialize()
         {
-            mockProvider = new Mock<IGridProvider>();
-            Services.AddTransient(_ => mockProvider.Object);
             Services.AddSingleton<IBlazorGridConfig>(_ => new DefaultConfig { Styles = new SpectreStyles() });
             Services.AddTransient<NavigationManager>(_ => new MockNav());
         }
@@ -39,22 +33,23 @@ namespace BlazorGrid.Tests
         [TestMethod]
         public async Task Query_Set_Triggers_Provider_Call()
         {
-            mockProvider.Setup(x => x.GetAsync<Model>(
-                It.IsAny<string>(),
-                0,
-                It.IsAny<int>(),
-                null,
-                false,
-                null,
-                It.IsAny<FilterDescriptor>(),
-                It.IsAny<CancellationToken>()
-            )).ReturnsAsync(new BlazorGridResult<Model>
+            int providerCallCount = 0;
+            string providerCallQuery = null;
+
+            ProviderDelegate<Model> provider = (BlazorGridRequest r, CancellationToken c) =>
             {
-                Data = Enumerable.Repeat(new Model(), 3).ToList(),
-                TotalCount = 3
-            });
+                providerCallCount++;
+                providerCallQuery = r.Query;
+
+                return ValueTask.FromResult(new BlazorGridResult<Model>
+                {
+                    Data = Enumerable.Repeat(new Model(), 3).ToList(),
+                    TotalCount = 3
+                });
+            };
 
             var grid = RenderComponent<BlazorGrid<Model>>(
+                Parameter(nameof(BlazorGrid<Model>.Provider), provider),
                 Template<Model>(nameof(ChildContent), (dto) => (b) =>
                 {
                     b.OpenComponent(0, typeof(GridCol<string>));
@@ -64,19 +59,8 @@ namespace BlazorGrid.Tests
             );
 
             // The initial request to the provider must have happened
-            mockProvider.Verify(x => x.GetAsync<Model>(
-                It.IsAny<string>(),
-                0,
-                It.IsAny<int>(),
-                null,
-                false,
-                null,
-                It.IsAny<FilterDescriptor>(),
-                It.IsAny<CancellationToken>()
-            ), Times.Once());
-
-            // No other requests must have happened at this point
-            mockProvider.VerifyNoOtherCalls();
+            Assert.AreEqual(1, providerCallCount);
+            Assert.IsNull(providerCallQuery);
 
             // Set a filter query
             grid.SetParametersAndRender(
@@ -85,46 +69,30 @@ namespace BlazorGrid.Tests
 
             // The Query property has a debounce, so no
             // request must happen immediately
-            mockProvider.VerifyNoOtherCalls();
+            Assert.AreEqual(1, providerCallCount);
 
             // Wait for the debounce
             await Task.Delay(500);
 
             // Verify the request which must include the filter
-            mockProvider.Verify(x => x.GetAsync<Model>(
-                It.IsAny<string>(),
-                0,
-                It.IsAny<int>(),
-                null,
-                false,
-                "unit-test",
-                It.IsAny<FilterDescriptor>(),
-                It.IsAny<CancellationToken>()
-            ), Times.Once());
-
-            // Those must be the only 2 requests
-            mockProvider.VerifyNoOtherCalls();
+            Assert.AreEqual(2, providerCallCount);
+            Assert.AreEqual("unit-test", providerCallQuery);
         }
 
         [TestMethod]
         public async Task Query_Set_Triggers_Render()
         {
-            mockProvider.Setup(x => x.GetAsync<Model>(
-                It.IsAny<string>(),
-                0,
-                It.IsAny<int>(),
-                null,
-                false,
-                null,
-                It.IsAny<FilterDescriptor>(),
-                It.IsAny<CancellationToken>()
-            )).ReturnsAsync(new BlazorGridResult<Model>
+            ProviderDelegate<Model> provider = (BlazorGridRequest r, CancellationToken c) =>
             {
-                Data = Enumerable.Repeat(new Model(), 3).ToList(),
-                TotalCount = 3
-            });
+                return ValueTask.FromResult(new BlazorGridResult<Model>
+                {
+                    Data = Enumerable.Repeat(new Model(), 3).ToList(),
+                    TotalCount = 3
+                });
+            };
 
             var grid = RenderComponent<BlazorGrid<Model>>(
+                Parameter(nameof(BlazorGrid<Model>.Provider), provider),
                 Template<Model>(nameof(ChildContent), (dto) => (b) =>
                 {
                     b.OpenComponent(0, typeof(GridCol<string>));

@@ -1,5 +1,4 @@
 ﻿using BlazorGrid.Abstractions;
-using BlazorGrid.Abstractions.Filters;
 using BlazorGrid.Config;
 using BlazorGrid.Config.Styles;
 using BlazorGrid.Demo.Interfaces;

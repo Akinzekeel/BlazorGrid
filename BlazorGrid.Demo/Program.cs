@@ -3,7 +3,6 @@ using BlazorGrid.Demo.Interfaces;
 using BlazorGrid.Demo.Providers;
 using BlazorGrid.Demo.Services;
 using BlazorGrid.Extensions;
-using BlazorGrid.Providers;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using System;
