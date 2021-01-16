@@ -11,6 +11,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace BlazorGrid.Components
@@ -97,6 +98,11 @@ namespace BlazorGrid.Components
             }
             catch (OperationCanceledException)
             {
+                throw; // Let the Virtualize component handle this 
+            }
+            catch (ObjectDisposedException)
+            {
+                // This can happen when the user scrolls the grid rapidly
                 throw; // Let the Virtualize component handle this 
             }
             catch (Exception x)
