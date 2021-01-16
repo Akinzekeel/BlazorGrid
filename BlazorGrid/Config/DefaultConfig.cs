@@ -11,5 +11,6 @@ namespace BlazorGrid.Config
         }
 
         public IBlazorGridConfigStyles Styles { get; set; }
+        public int SearchQueryInputDebounceMs { get; set; } = 400;
     }
 }

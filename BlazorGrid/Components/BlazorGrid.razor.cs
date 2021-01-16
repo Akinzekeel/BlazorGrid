@@ -22,8 +22,6 @@ namespace BlazorGrid.Components
         private bool DetectColumns = true;
         private readonly Type typeInfo = typeof(BlazorGrid<TRow>);
 
-        public const int SearchQueryInputDebounceMs = 400;
-
         // Setting these parameters will not immediately cause a re-render, but a reload
         private static readonly string[] ReloadTriggerParameterNames = new string[]
         {
@@ -156,7 +154,7 @@ namespace BlazorGrid.Components
 
             QueryDebounceValue = userInput;
 
-            await Task.Delay(SearchQueryInputDebounceMs);
+            await Task.Delay(Config.SearchQueryInputDebounceMs);
 
             if (QueryDebounceValue == userInput)
             {
