@@ -5,7 +5,7 @@
     <RazorLangVersion>3.0</RazorLangVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>Akinzekeel.BlazorGrid</PackageId>
-    <Version>1.0.2</Version>
+    <Version>1.0.3</Version>
     <Preview></Preview>
     <Authors>Majid Iqbal</Authors>
     <Company />
@@ -35,7 +35,7 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(Configuration)' == 'Release'">
-    <PackageReference Include="Akinzekeel.BlazorGrid.Abstractions" Version="1.0.1" />
+    <PackageReference Include="Akinzekeel.BlazorGrid.Abstractions" Version="1.0.3" />
   </ItemGroup>
 
   <ItemGroup>
