@@ -66,7 +66,11 @@ namespace BlazorGrid.Tests.Demo
             var page = RenderComponent<Search>();
             var input = page.Find("input[type=search]");
 
-            provider.Verify((Expression<Func<ICustomProvider, ValueTask<BlazorGridResult<Employee>>>>)provider.Setups.First().OriginalExpression, Times.Once());
+            provider.Verify(
+                (Expression<Func<ICustomProvider, ValueTask<BlazorGridResult<Employee>>>>)provider.Setups[0].OriginalExpression,
+                Times.Once()
+            );
+
             Assert.AreEqual(1, provider.Invocations.Count);
 
             await page.InvokeAsync(() => input.Input("test"));
@@ -74,7 +78,7 @@ namespace BlazorGrid.Tests.Demo
             Assert.AreEqual(1, provider.Invocations.Count);
 
             var conf = Services.GetRequiredService<IBlazorGridConfig>();
-            await Task.Delay(conf.SearchQueryInputDebounceMs + 200);
+            await Task.Delay(conf.SearchQueryInputDebounceMs + 500);
 
             Assert.AreEqual(2, provider.Invocations.Count);
         }
