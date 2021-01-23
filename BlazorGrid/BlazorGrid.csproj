@@ -18,11 +18,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Styles\BlazorGrid.scss" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Content\BlazorGrid.scss" />
+    <Content Include="Content\**\*" />
   </ItemGroup>
 
   <ItemGroup>
