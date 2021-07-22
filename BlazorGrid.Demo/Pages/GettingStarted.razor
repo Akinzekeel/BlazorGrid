@@ -163,8 +163,7 @@ namespace MyApi.Controllers
 
             <h5 class="mt-4">@(ol++). Set up dependency injection</h5>
             <p>Open your <code>Program.cs</code> file and add the following:</p>
-            <pre class="pre-scrollable"><code><mark>using BlazorGrid.Providers;</mark>
-<mark>using BlazorGrid.Extensions;</mark>
+            <pre class="pre-scrollable"><code><mark>using BlazorGrid.Extensions;</mark>
 ...
 
 namespace MyBlazorProject
@@ -177,7 +176,7 @@ namespace MyBlazorProject
             builder.RootComponents.Add&lt;App&gt;("app");
 
             builder.Services.AddTransient(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
-            <mark>builder.Services.AddBlazorGrid&lt;DefaultHttpProvider&gt;();</mark>
+            <mark>builder.Services.AddBlazorGrid();</mark>
 
             await builder.Build().RunAsync();
         }
