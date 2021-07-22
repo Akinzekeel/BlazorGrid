@@ -62,11 +62,7 @@
                             {
                                 @col.GetCaptionOrDefault()
                             }
-                            @if (IsFilteredBy(col))
-                            {
-                                <span class="blazor-grid-filter-icon active"></span>
-                            }
-                            else if (sortable)
+                            @if (sortable)
                             {
                                 <span class="@ColHeaderSortIconCssClass(col)"></span>
                             }

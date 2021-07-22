@@ -1,9 +1,9 @@
-using BlazorGrid.Abstractions.Filters;
+using System.Threading.Tasks;
 
 namespace BlazorGrid.Interfaces
 {
     public interface IBlazorGrid
     {
-        FilterDescriptor Filter { get; }
+        Task ReloadAsync();
     }
 }

@@ -1,13 +1,10 @@
 using BlazorGrid.Abstractions;
-using BlazorGrid.Abstractions.Filters;
 using BlazorGrid.Abstractions.Helpers;
 using BlazorGrid.Interfaces;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web.Virtualization;
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
@@ -16,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace BlazorGrid.Components
 {
-    public partial class BlazorGrid<TRow> : ComponentBase, IDisposable, IBlazorGrid where TRow : class
+    public partial class BlazorGrid<TRow> : ComponentBase, IBlazorGrid where TRow : class
     {
         private bool SkipNextRender;
         private bool DetectColumns = true;
@@ -49,7 +46,6 @@ namespace BlazorGrid.Components
         private bool OrderByDescending;
 
         public int? TotalRowCount { get; private set; }
-        public FilterDescriptor Filter { get; private set; } = new FilterDescriptor();
 
         internal ICollection<IGridCol> Columns = new List<IGridCol>();
         private Exception LoadingError { get; set; }
@@ -75,8 +71,7 @@ namespace BlazorGrid.Components
                         OrderBy = OrderByPropertyName,
                         OrderByDescending = OrderByDescending,
                         Offset = request.StartIndex,
-                        Length = request.Count,
-                        Filter = Filter
+                        Length = request.Count
                     };
 
                     var result = await Provider(providerRequest, request.CancellationToken);
@@ -198,15 +193,8 @@ namespace BlazorGrid.Components
                     OrderByPropertyName = ExpressionHelper.GetPropertyName(DefaultOrderBy);
                     OrderByDescending = DefaultOrderByDescending;
                 }
-
-                // Subscribe to Filter object changes
-                Filter.PropertyChanged += OnFilterChanged;
-                Filter.Filters.CollectionChanged += OnFilterCollectionChanged;
             }
         }
-
-        private async void OnFilterCollectionChanged(object sender, NotifyCollectionChangedEventArgs e) => await ReloadAsync();
-        private async void OnFilterChanged(object sender, PropertyChangedEventArgs e) => await ReloadAsync();
 
         public async Task ReloadAsync()
         {
@@ -265,16 +253,6 @@ namespace BlazorGrid.Components
                 SkipNextRender = true;
                 await OnClick.InvokeAsync(row);
             }
-        }
-
-        private bool IsFilteredBy(IGridCol column)
-        {
-            if (column.PropertyName == null)
-            {
-                return false;
-            }
-
-            return Filter?.Filters.Any(x => x.Property == column.PropertyName) == true;
         }
 
         private bool IsSortedBy(IGridCol column)
@@ -353,21 +331,6 @@ namespace BlazorGrid.Components
             var ret = !SkipNextRender;
             SkipNextRender = false;
             return ret;
-        }
-
-        public void Dispose()
-        {
-            if (Filter != null)
-            {
-                Filter.PropertyChanged -= OnFilterChanged;
-
-                if (Filter.Filters != null)
-                {
-                    Filter.Filters.CollectionChanged -= OnFilterCollectionChanged;
-                }
-            }
-
-            GC.SuppressFinalize(this);
         }
 
         private string ColHeaderSortIconCssClass(IGridCol col)

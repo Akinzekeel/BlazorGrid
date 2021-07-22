@@ -11,8 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorGrid.Demo", "BlazorGr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorGrid.Abstractions", "BlazorGrid.Abstractions\BlazorGrid.Abstractions.csproj", "{1BFCE679-AB22-4242-926F-4ED84D143AC0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorGrid.Filters", "BlazorGrid.Filters\BlazorGrid.Filters.csproj", "{EA0453F9-6D45-40B2-A406-BE3D59EB0CF6}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{103BF348-4979-4074-B2C2-B702990A4F74}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
@@ -85,18 +83,6 @@ Global
 		{1BFCE679-AB22-4242-926F-4ED84D143AC0}.Release|x64.Build.0 = Release|Any CPU
 		{1BFCE679-AB22-4242-926F-4ED84D143AC0}.Release|x86.ActiveCfg = Release|Any CPU
 		{1BFCE679-AB22-4242-926F-4ED84D143AC0}.Release|x86.Build.0 = Release|Any CPU
-		{EA0453F9-6D45-40B2-A406-BE3D59EB0CF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EA0453F9-6D45-40B2-A406-BE3D59EB0CF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EA0453F9-6D45-40B2-A406-BE3D59EB0CF6}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{EA0453F9-6D45-40B2-A406-BE3D59EB0CF6}.Debug|x64.Build.0 = Debug|Any CPU
-		{EA0453F9-6D45-40B2-A406-BE3D59EB0CF6}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{EA0453F9-6D45-40B2-A406-BE3D59EB0CF6}.Debug|x86.Build.0 = Debug|Any CPU
-		{EA0453F9-6D45-40B2-A406-BE3D59EB0CF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EA0453F9-6D45-40B2-A406-BE3D59EB0CF6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EA0453F9-6D45-40B2-A406-BE3D59EB0CF6}.Release|x64.ActiveCfg = Release|Any CPU
-		{EA0453F9-6D45-40B2-A406-BE3D59EB0CF6}.Release|x64.Build.0 = Release|Any CPU
-		{EA0453F9-6D45-40B2-A406-BE3D59EB0CF6}.Release|x86.ActiveCfg = Release|Any CPU
-		{EA0453F9-6D45-40B2-A406-BE3D59EB0CF6}.Release|x86.Build.0 = Release|Any CPU
 		{3327D42B-B6E0-42DD-878C-E06D12F2E922}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3327D42B-B6E0-42DD-878C-E06D12F2E922}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3327D42B-B6E0-42DD-878C-E06D12F2E922}.Debug|x64.ActiveCfg = Debug|Any CPU

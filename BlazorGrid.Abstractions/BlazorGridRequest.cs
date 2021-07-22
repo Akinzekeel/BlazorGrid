@@ -1,8 +1,6 @@
-﻿using BlazorGrid.Abstractions.Filters;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json;
 
 namespace BlazorGrid.Abstractions
 {
@@ -14,36 +12,16 @@ namespace BlazorGrid.Abstractions
         public bool OrderByDescending { get; set; }
         public string Query { get; set; }
 
-        public FilterDescriptor Filter { get; set; }
-
-        public string FilterJson
-        {
-            get
-            {
-                return JsonSerializer.Serialize(Filter);
-            }
-            set
-            {
-                if (string.IsNullOrEmpty(value))
-                {
-                    Filter = default;
-                }
-                else
-                {
-                    Filter = JsonSerializer.Deserialize<FilterDescriptor>(value);
-                }
-            }
-        }
-
         public virtual IDictionary<string, object> ToDictionary()
-            => new Dictionary<string, object> {
+        {
+            return new Dictionary<string, object> {
                 { nameof(Query), Query },
                 { nameof(Offset), Offset },
                 { nameof(Length), Length },
                 { nameof(OrderBy), OrderBy },
                 { nameof(OrderByDescending), OrderByDescending },
-                { nameof(FilterJson), FilterJson }
             };
+        }
 
         /// <summary>
         /// If you added any custom properties, override the ToDictionary
