@@ -18,5 +18,6 @@ namespace BlazorGrid.Config.Styles
         public string FooterWrapperClass => "m-5 text-center";
         public string FooterTextClass => "text-muted mb-3";
         public string RowClickableClass => "clickable";
+        public string RowHighlightedClass => "highlighted";
     }
 }

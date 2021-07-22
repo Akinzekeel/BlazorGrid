@@ -10,7 +10,7 @@ $font-family-monospace: monospace;
 $bzg-cell-hover-bg: $gray-100;
 $list-group-hover-bg: rgba($gray-500, .1);
 $list-group-action-hover-color: inherit;
-$list-group-active-color: inherit;
+/*$list-group-active-color: inherit;*/
 
 @import "bootstrap/scss/bootstrap.scss";
 @import "../../BlazorGrid/Styles/blazorgrid-bootstrap.scss";
@@ -24,6 +24,11 @@ app {
     background-color: $body-bg;
     user-select: none;
     overflow-y: scroll;
+}
+
+.grid-row.highlighted > * a[href]
+{
+    color: inherit;
 }
 
 code {

@@ -16,5 +16,6 @@
         public string FooterWrapperClass { get; }
         public string FooterTextClass { get; }
         public string RowClickableClass { get; }
+        public string RowHighlightedClass { get; }
     }
 }

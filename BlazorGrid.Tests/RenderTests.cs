@@ -1,6 +1,7 @@
 ﻿using BlazorGrid.Abstractions;
 using BlazorGrid.Components;
 using BlazorGrid.Config;
+using BlazorGrid.Infrastructure;
 using BlazorGrid.Interfaces;
 using BlazorGrid.Tests.Mock;
 using Bunit;
@@ -66,7 +67,7 @@ namespace BlazorGrid.Tests
 
             Assert.AreEqual(1, grid.RenderCount);
 
-            var virtualize = grid.FindComponent<Virtualize<MyDto>>();
+            var virtualize = grid.FindComponent<Virtualize<RowWrapper<MyDto>>>();
             Assert.AreEqual(1, virtualize.RenderCount);
         }
 
@@ -303,6 +304,45 @@ namespace BlazorGrid.Tests
                 Assert.Fail();
             }
             catch (ElementNotFoundException) { }
+        }
+
+        [TestMethod]
+        public async Task OnClick_With_Highlighting_Adds_Row_Class()
+        {
+            ProviderDelegate<MyDto> provider = (r, _) =>
+            {
+                return ValueTask.FromResult(new BlazorGridResult<MyDto>
+                {
+                    TotalCount = 1,
+                    Data = new List<MyDto> {
+                        new MyDto { Name = "Unit test" }
+                    }
+                });
+            };
+
+            int clickCount = 0;
+            var grid = RenderComponent<BlazorGrid<MyDto>>(
+                Parameter(nameof(BlazorGrid<MyDto>.Provider), provider),
+                Parameter(nameof(BlazorGrid<MyDto>.RowHighlighting), true),
+                EventCallback<MyDto>(nameof(BlazorGrid<MyDto>.OnClick), _ => clickCount++),
+                Template<MyDto>(nameof(ChildContent), (context) => (RenderTreeBuilder b) =>
+                {
+                    Expression<Func<string>> colFor = () => context.Name;
+
+                    b.OpenComponent<GridCol<string>>(0);
+                    b.AddAttribute(1, "For", colFor);
+                    b.CloseComponent();
+                })
+            );
+
+            // Try clicking on a row
+            var row = grid.Find(".grid-row:not(.grid-header)");
+            await grid.InvokeAsync(() => row.Click());
+
+            Task.Delay(100).Wait();
+
+            row = grid.Find(".grid-row:not(.grid-header)");
+            Assert.IsTrue(row.Matches(".highlighted"), row.ToMarkup());
         }
     }
 }

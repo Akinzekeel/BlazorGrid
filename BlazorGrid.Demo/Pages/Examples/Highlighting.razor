@@ -1,0 +1,122 @@
+﻿@page "/examples/highlighting"
+@layout ExampleLayout
+@inject NavigationManager nav
+@inherits CommonPageBase
+<h1>@Title</h1>
+<p>If you want selection-like visuals on the Grid, you can set the <code>RowHighlighting</code> parameter to <code>true</code>. This will add an additional class to the row which was last clicked on, regardless of whether it has an <code>OnClick</code> or <code>Href</code> delegate.</p>
+<p>Note that reloading the grid and changing the sorting will clear out this effect.</p>
+
+<Tabs>
+    <Tab Caption="Result" class="p-3">
+        <div class="row">
+            <div class="col-9 align-self-start">
+                <BlazorGrid TRow="Employee"
+                            RowHighlighting="true"
+                            Provider="Provider.GetAsync<Employee>"
+                            OnClick="row => ShowDetails(row)"
+                            style="max-height: 340px;">
+                    <StaticGridCol FitToContent="true">
+                        <img src="@context.Avatar" style="width: 20px; height: 20px;" />
+                    </StaticGridCol>
+                    <GridCol For="() => context.Id" FitToContent="true">
+                        @context.Id
+                    </GridCol>
+                    <GridCol For="() => context.FirstName">
+                        @context.FirstName
+                    </GridCol>
+                    <GridCol For="() => context.LastName">
+                        @context.LastName
+                    </GridCol>
+                    <GridCol For="() => context.Email">
+                        <a href="mailto:@context.Email">@context.Email</a>
+                    </GridCol>
+                </BlazorGrid>
+            </div>
+            <div class="col-3">
+                @if (ClickedRow != null)
+                {
+                    <dl>
+                        <dt>Id</dt>
+                        <dd>@ClickedRow.Id</dd>
+                        <dt>First name</dt>
+                        <dd>@ClickedRow.FirstName</dd>
+                        <dt>Last name</dt>
+                        <dd>@ClickedRow.LastName</dd>
+                        <dt>Email address</dt>
+                        <dd>@ClickedRow.Email</dd>
+                    </dl>
+                }
+                else
+                {
+                    <p>Click on a row to see the details here.</p>
+                }
+            </div>
+        </div>
+
+    </Tab>
+    <Tab Caption="Code" class="p-3">
+        <h6>Razor</h6>
+        <pre class="pre-scrollable"><code>&lt;div class=&quot;row&quot;&gt;
+    &lt;div class=&quot;col-9&quot;&gt;
+        &lt;BlazorGrid TRow=&quot;Employee&quot; RowHighlighting=&quot;true&quot; Provider=&quot;Provider.GetAsync&lt;Employee&gt; OnClick=&quot;row =&gt; ShowDetails(row)&quot;&gt;
+            &lt;StaticGridCol FitToContent=&quot;true&quot;&gt;
+                &lt;img src=&quot;@@context.Avatar&quot; style=&quot;width: 20px; height: 20px;&quot; /&gt;
+            &lt;/StaticGridCol&gt;
+            &lt;GridCol For=&quot;() => context.Id&quot; FitToContent=&quot;true&quot; /&gt;
+            &lt;GridCol For=&quot;() => context.FirstName&quot; /&gt;
+            &lt;GridCol For=&quot;() => context.LastName&quot; /&gt;
+            &lt;GridCol For=&quot;() => context.Email&quot;&gt;
+                &lt;a href=&quot;mailto:@@context.Email&quot;&gt;@@context.Email&lt;/a&gt;
+            &lt;/GridCol&gt;
+        &lt;/BlazorGrid&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;col-3&quot;&gt;
+        @@if (ClickedRow != null)
+        {
+            &lt;dl&gt;
+                &lt;dt&gt;Id&lt;/dt&gt;
+                &lt;dd&gt;@@ClickedRow.Id&lt;/dd&gt;
+                &lt;dt&gt;First name&lt;/dt&gt;
+                &lt;dd&gt;@@ClickedRow.FirstName&lt;/dd&gt;
+                &lt;dt&gt;Last name&lt;/dt&gt;
+                &lt;dd&gt;@@ClickedRow.LastName&lt;/dd&gt;
+                &lt;dt&gt;Email address&lt;/dt&gt;
+                &lt;dd&gt;@@ClickedRow.Email&lt;/dd&gt;
+            &lt;/dl&gt;
+        }
+        else
+        {
+            &lt;p&gt;Click on a row to see the details here.&lt;/p&gt;
+        }
+    &lt;/div&gt;
+&lt;/div&gt;
+
+@@code
+{
+    private Employee ClickedRow;
+
+    private void ShowDetails(Employee row)
+    {
+        if(row != null)
+        {
+            ClickedRow = row;
+        }
+    }
+}</code></pre>
+    </Tab>
+</Tabs>
+
+@code
+{
+    protected override string Title => "Row highlighting";
+
+    private Employee ClickedRow;
+
+    private void ShowDetails(Employee row)
+    {
+        if (row != null)
+        {
+            ClickedRow = row;
+        }
+    }
+}

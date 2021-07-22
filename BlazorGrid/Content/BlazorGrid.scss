@@ -144,6 +144,13 @@
                 }
             }
 
+            &.highlighted, &.highlighted.clickable {
+                > *, &:hover > * {
+                    background: $bzg-cell-highlighted-bg;
+                    color: $bzg-cell-highlighted-color;
+                }
+            }
+
             &.clickable {
                 cursor: pointer;
 

@@ -1,5 +1,6 @@
 using BlazorGrid.Abstractions;
 using BlazorGrid.Abstractions.Helpers;
+using BlazorGrid.Infrastructure;
 using BlazorGrid.Interfaces;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web.Virtualization;
@@ -39,6 +40,7 @@ namespace BlazorGrid.Components
         [Parameter] public Func<TRow, string> Href { get; set; }
         [Parameter] public Expression<Func<TRow, object>> DefaultOrderBy { get; set; }
         [Parameter] public bool DefaultOrderByDescending { get; set; }
+        [Parameter] public bool RowHighlighting { get; set; }
         [Parameter(CaptureUnmatchedValues = true)] public IDictionary<string, object> Attributes { get; set; }
 
         private bool? ShowLoadingOverlay;
@@ -51,9 +53,9 @@ namespace BlazorGrid.Components
         private Exception LoadingError { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Modifizierer \"readonly\" hinzufügen", Justification = "<Ausstehend>")]
-        private Virtualize<TRow> VirtualizeRef;
+        private Virtualize<RowWrapper<TRow>> VirtualizeRef;
 
-        private async ValueTask<ItemsProviderResult<TRow>> GetItemsVirtualized(ItemsProviderRequest request)
+        private async ValueTask<ItemsProviderResult<RowWrapper<TRow>>> GetItemsVirtualized(ItemsProviderRequest request)
         {
             if (ShowLoadingOverlay is null)
             {
@@ -80,7 +82,12 @@ namespace BlazorGrid.Components
 
                     if (TotalRowCount != 0)
                     {
-                        return new ItemsProviderResult<TRow>(result.Data, result.TotalCount);
+                        return new ItemsProviderResult<RowWrapper<TRow>>(
+                            result.Data
+                                .Select((x, i) => new RowWrapper<TRow>(x, i + request.StartIndex))
+                                .ToList(),
+                            result.TotalCount
+                        );
                     }
                 }
             }
@@ -200,6 +207,7 @@ namespace BlazorGrid.Components
         {
             // Clear error
             LoadingError = default;
+            HighlightedRowIndex = default;
 
             if (VirtualizeRef != null)
             {
@@ -239,9 +247,10 @@ namespace BlazorGrid.Components
             return string.Join(' ', widths);
         }
 
-        private async Task OnRowClicked(TRow row)
+        private int? HighlightedRowIndex;
+        private async Task OnRowClicked(RowWrapper<TRow> row)
         {
-            var onClickUrl = Href?.Invoke(row);
+            var onClickUrl = Href?.Invoke(row.Row);
 
             if (onClickUrl != null)
             {
@@ -251,7 +260,13 @@ namespace BlazorGrid.Components
             else if (OnClick.HasDelegate)
             {
                 SkipNextRender = true;
-                await OnClick.InvokeAsync(row);
+                await OnClick.InvokeAsync(row.Row);
+            }
+
+            if (RowHighlighting)
+            {
+                HighlightedRowIndex = row.Index;
+                StateHasChanged();
             }
         }
 

@@ -104,16 +104,21 @@
                         </Placeholder>
                         <ItemContent>
                             @{
-                                        var cls = "grid-row";
+                                var cls = "grid-row";
 
-                                        if (OnClick.HasDelegate || Href != null)
-                                        {
-                                            cls += " " + Config.Styles.RowClickableClass;
-                                        }
+                                if (OnClick.HasDelegate || Href != null)
+                                {
+                                    cls += " " + Config.Styles.RowClickableClass;
+                                }
+
+                                if(HighlightedRowIndex == context.Index)
+                                {
+                                    cls += " " + Config.Styles.RowHighlightedClass;
+                                }
                             }
                             <div class="@cls"
                                  @onclick="_ => OnRowClicked(context)">
-                                @ChildContent(context)
+                                @ChildContent(context.Row)
                             </div>
                         </ItemContent>
                     </Virtualize>

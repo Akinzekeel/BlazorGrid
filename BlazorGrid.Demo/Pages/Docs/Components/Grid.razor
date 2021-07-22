@@ -58,6 +58,11 @@
             <td>A callback which is invoked when clicking on a row. If a non-empty EventCallback is provided or if the <code>Href</code> parameter is not null, all rows in the grid will have a <code>clickable</code> CSS class applied to them.</td>
         </tr>
         <tr>
+            <td class="text-monospace">RowHighlighting</td>
+            <td class="text-monospace">bool</td>
+            <td>Set this to true, to add the <code>highlighted</code> class (or a custom class) to the row which was last clicked.</td>
+        </tr>
+        <tr>
             <td class="text-monospace">Href</td>
             <td class="text-monospace">System.Func&lt;TRow&gt;</td>
             <td>Similar to the <code>OnClick</code> parameter, however the returned string (if it is not empty) will be navigated to using the <code>NavigationManager</code>. If this parameter is not null or if a non-empty EventCallback is set for the <code>OnClick</code> parameter, all rows in the grid will have a <code>clickable</code> CSS class applied to them.</td>

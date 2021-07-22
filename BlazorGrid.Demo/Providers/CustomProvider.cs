@@ -1,6 +1,5 @@
 using BlazorGrid.Abstractions;
 using BlazorGrid.Abstractions.Extensions;
-using BlazorGrid.Abstractions.Filters;
 using BlazorGrid.Demo.Interfaces;
 using BlazorGrid.Demo.Models;
 using System;
@@ -54,8 +53,7 @@ namespace BlazorGrid.Demo.Providers
                 request.Length,
                 request.OrderBy,
                 request.OrderByDescending,
-                request.Query,
-                request.Filter
+                request.Query
             );
 
             var httpTask = Http.GetAsync(url, cancellationToken);
@@ -126,7 +124,7 @@ namespace BlazorGrid.Demo.Providers
             return finalResult;
         }
 
-        protected string GetRequestUrl(string BaseUrl, int Offset, int Length, string OrderBy, bool OrderByDescending, string SearchQuery, FilterDescriptor Filter)
+        protected string GetRequestUrl(string BaseUrl, int Offset, int Length, string OrderBy, bool OrderByDescending, string SearchQuery)
         {
             var b = Http.BaseAddress;
 
@@ -143,8 +141,7 @@ namespace BlazorGrid.Demo.Providers
                 Length = Length,
                 OrderBy = OrderBy,
                 OrderByDescending = OrderByDescending,
-                Query = SearchQuery,
-                Filter = Filter
+                Query = SearchQuery
             };
 
             uri.Query = parameters.ToQueryString();

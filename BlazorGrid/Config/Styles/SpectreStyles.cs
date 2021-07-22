@@ -18,5 +18,6 @@ namespace BlazorGrid.Config.Styles
         public string FooterWrapperClass => "empty pt-3";
         public string FooterTextClass => "empty-subtitle";
         public string RowClickableClass => "clickable";
+        public string RowHighlightedClass => "highlighted";
     }
 }

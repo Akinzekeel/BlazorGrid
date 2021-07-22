@@ -17,38 +17,38 @@
 {
     private RenderFragment Menu(bool caption) => __builder =>
     {
-    <div class="menu">
-        @if (caption)
-            {
-            <h5>Examples</h5>
-            }
-        <NavLink class="menu-item" href="/examples" Match="NavLinkMatch.All">
-            Basic grid
-        </NavLink>
-        <NavLink class="menu-item" href="/examples/sorting">
-            Sorting
-        </NavLink>
-        <NavLink class="menu-item" href="/examples/on-click">
-            OnClick action
-        </NavLink>
-        <NavLink class="menu-item" href="/examples/search">
-            Search
-        </NavLink>
-        @*<NavLink class="menu-item" href="/examples/filters">
-                Filters
-            </NavLink>*@
-        <NavLink class="menu-item" href="/examples/attributes">
-            Attributes
-        </NavLink>
-        <NavLink class="menu-item" href="/examples/dynamic-layout">
-            Dynamic layout
-        </NavLink>
-        <NavLink class="menu-item" href="/examples/virtualization">
-            Virtualization
-        </NavLink>
-        <NavLink class="menu-item" href="/examples/long-content">
-            Long content
-        </NavLink>
-    </div>
+<div class="menu">
+    @if (caption)
+        {
+        <h5>Examples</h5>
+        }
+    <NavLink class="menu-item" href="/examples" Match="NavLinkMatch.All">
+        Basic grid
+    </NavLink>
+    <NavLink class="menu-item" href="/examples/sorting">
+        Sorting
+    </NavLink>
+    <NavLink class="menu-item" href="/examples/on-click">
+        OnClick action
+    </NavLink>
+    <NavLink class="menu-item" href="/examples/highlighting">
+        Row highlighting
+    </NavLink>
+    <NavLink class="menu-item" href="/examples/search">
+        Search
+    </NavLink>
+    <NavLink class="menu-item" href="/examples/attributes">
+        Attributes
+    </NavLink>
+    <NavLink class="menu-item" href="/examples/dynamic-layout">
+        Dynamic layout
+    </NavLink>
+    <NavLink class="menu-item" href="/examples/virtualization">
+        Virtualization
+    </NavLink>
+    <NavLink class="menu-item" href="/examples/long-content">
+        Long content
+    </NavLink>
+</div>
     };
 }
