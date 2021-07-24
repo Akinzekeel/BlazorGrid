@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace BlazorGrid.Components
@@ -207,14 +206,17 @@ namespace BlazorGrid.Components
         {
             // Clear error
             LoadingError = default;
-            HighlightedRowIndex = default;
 
-            if (VirtualizeRef != null)
+            if (VirtualizeRef is not null)
             {
                 ShowLoadingOverlay = null;
                 TotalRowCount = null;
-                StateHasChanged();
+            }
 
+            ClearHighlight();
+
+            if (VirtualizeRef is not null)
+            {
                 await VirtualizeRef.RefreshDataAsync();
                 StateHasChanged();
             }
@@ -265,8 +267,7 @@ namespace BlazorGrid.Components
 
             if (RowHighlighting)
             {
-                HighlightedRowIndex = row.Index;
-                StateHasChanged();
+                SetHighlight(row.Index);
             }
         }
 
@@ -367,6 +368,29 @@ namespace BlazorGrid.Components
             }
 
             return cls;
+        }
+
+        public void SetHighlight(int index)
+        {
+            if (HighlightedRowIndex != index && RowHighlighting)
+            {
+                if (index < 0 || index >= TotalRowCount)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(index));
+                }
+
+                HighlightedRowIndex = index;
+                StateHasChanged();
+            }
+        }
+
+        public void ClearHighlight()
+        {
+            if (HighlightedRowIndex.HasValue)
+            {
+                HighlightedRowIndex = default;
+                StateHasChanged();
+            }
         }
     }
 }

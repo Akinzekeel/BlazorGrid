@@ -118,6 +118,16 @@
             <td class="text-monospace">Task</td>
             <td>Force the grid to reload the data.</td>
         </tr>
+        <tr>
+            <td class="text-monospace">SetHighlight(int index)</td>
+            <td class="text-monospace">void</td>
+            <td>Set the highlighted row to a specific index (0-based). This will cause a re-render if the index is different from the current highlight index. If the index is lower than 0 or higher than or equal to the total count then an <code>ArgumentOutOfRangeException</code> will be thrown.</td>
+        </tr>
+        <tr>
+            <td class="text-monospace">ClearHighlight()</td>
+            <td class="text-monospace">void</td>
+            <td>Resets the highlighted row index so that no row will be highlighted. This will cause a re-render if necessary.</td>
+        </tr>
     </tbody>
 </table>
 
