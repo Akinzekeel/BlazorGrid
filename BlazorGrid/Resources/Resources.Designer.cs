@@ -22,7 +22,7 @@ namespace BlazorGrid {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class Resources {
+    internal class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace BlazorGrid {
         ///   Gibt die zwischengespeicherte ResourceManager-Instanz zurück, die von dieser Klasse verwendet wird.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
+        internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("BlazorGrid.Resources.Resources", typeof(Resources).Assembly);
@@ -51,7 +51,7 @@ namespace BlazorGrid {
         ///   Ressourcenzuordnungen, die diese stark typisierte Ressourcenklasse verwenden.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
+        internal static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace BlazorGrid {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die There is no data to display ähnelt.
         /// </summary>
-        public static string Empty_Text {
+        internal static string Empty_Text {
             get {
                 return ResourceManager.GetString("Empty_Text", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace BlazorGrid {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die The search yielded no results ähnelt.
         /// </summary>
-        public static string Empty_Text_Filtered {
+        internal static string Empty_Text_Filtered {
             get {
                 return ResourceManager.GetString("Empty_Text_Filtered", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace BlazorGrid {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die No data ähnelt.
         /// </summary>
-        public static string Empty_Title {
+        internal static string Empty_Title {
             get {
                 return ResourceManager.GetString("Empty_Title", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace BlazorGrid {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Showing {0} out of {1} rows ähnelt.
         /// </summary>
-        public static string Footer_FilteredRowCount {
+        internal static string Footer_FilteredRowCount {
             get {
                 return ResourceManager.GetString("Footer_FilteredRowCount", resourceCulture);
             }
@@ -99,7 +99,7 @@ namespace BlazorGrid {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die {0} rows total ähnelt.
         /// </summary>
-        public static string Footer_RowCount {
+        internal static string Footer_RowCount {
             get {
                 return ResourceManager.GetString("Footer_RowCount", resourceCulture);
             }
@@ -108,7 +108,7 @@ namespace BlazorGrid {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Loading ähnelt.
         /// </summary>
-        public static string Loading_Text {
+        internal static string Loading_Text {
             get {
                 return ResourceManager.GetString("Loading_Text", resourceCulture);
             }
@@ -117,7 +117,7 @@ namespace BlazorGrid {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Retry ähnelt.
         /// </summary>
-        public static string LoadingError_ReloadBtnText {
+        internal static string LoadingError_ReloadBtnText {
             get {
                 return ResourceManager.GetString("LoadingError_ReloadBtnText", resourceCulture);
             }
@@ -126,7 +126,7 @@ namespace BlazorGrid {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Failed to load data ähnelt.
         /// </summary>
-        public static string LoadingError_Text {
+        internal static string LoadingError_Text {
             get {
                 return ResourceManager.GetString("LoadingError_Text", resourceCulture);
             }
@@ -135,7 +135,7 @@ namespace BlazorGrid {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Error ähnelt.
         /// </summary>
-        public static string LoadingError_Title {
+        internal static string LoadingError_Title {
             get {
                 return ResourceManager.GetString("LoadingError_Title", resourceCulture);
             }
