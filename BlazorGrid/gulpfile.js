@@ -2,10 +2,8 @@
 const gulp = require("gulp"),
     rimraf = require("rimraf"),
     minify = require('gulp-clean-css'),
-    sass = require("gulp-sass"),
+    sass = require('gulp-sass')(require('sass')),
     ren = require("gulp-rename");
-
-sass.compiler = require('node-sass');
 
 var files = {
     css: {
