@@ -2,27 +2,38 @@
 @inherits CommonPageBase
 <div class="container py-2 py-md-3 py-lg-4 py-xl-5 ">
     <h1>@Title</h1>
-    <p class="lead">Follow this quick guide to get started with BlazorGrid in just a few minutes. After you finished setting it up and got the basic grid working, you can head over to the <a href="/examples">examples</a> or the <a href="/docs">documentation</a> to learn more about additional features and customization.</p>
+    <p class="lead mb-5">Follow this quick guide to get started with BlazorGrid in just a few minutes. After you finished setting it up and got the basic grid working, you can head over to the <a href="/examples">examples</a> or the <a href="/docs">documentation</a> to learn more about additional features and customization.</p>
 
-    <h3 class="mt-5">Part A: Setting up your backend</h3>
-    <Tabs class="mt-3" Style="Tabs.TabsStyle.Buttons">
-        <Tab Caption="Web Api">
+    <Tabs Style="Tabs.TabsStyle.Buttons">
+
+        <Tab Caption="WebAssembly">
+
             @{
                 int ol = 1;
             }
-            <h5 class="mt-4">@(ol++). Install the NuGet package</h5>
-            <p>In your Web Api project, you are recommended (although not required) to install the <code>Akinzekeel.BlazorGrid.Abstractions</code> package. This package contains models and helpers to make it much easier to query and serialize data for the grid.</p>
 
-            <h5 class="mt-4">@(ol++). Add a function to query data</h5>
-            <p>Create a controller named <code>WeatherForecastController.cs</code> and add the following code to it:</p>
+            <h5 class="mt-5">@(ol++). Create your project</h5>
+            <p>In Visual Studio, create a new Blazor WebAssembly project. During the project creation wizard, check the <em>Asp.Net Core hosted</em> option. This will create a .Net Core backend project which will also serve the static files for the frontend.</p>
+            <p>Alternatively, you can use the following <em>dotnet</em> command: <code>dotnet new wasm --hosted -n GettingStarted</code></p>
+
+            <Tip Heading="Why Asp.Net Core hosted?">
+                BlazorGrid also works without the <em>Asp.Net Core hosted</em> option, of course. However, in that scenario you would need to configure your solution to start multiple projects on different ports which goes beyond the scope of this tutorial.
+            </Tip>
+
+            <h5 class="mt-5">@(ol++). Install the NuGet packages</h5>
+            <p>In your <em>Client</em> project, install the <code>Akinzekeel.BlazorGrid</code> package. In the <em>Shared</em> project, install <code>Akinzekeel.BlazorGrid.Abstractions</code> (this is an optional package which contains some extension methods).</p>
+
+            <h5 class="mt-5">@(ol++). Update the WeatherForecastController</h5>
+            <p>In the <em>Server</em> project, open the <code>Controllers/WeatherForecastController.cs</code> file and replace the contents with the following code:</p>
             <pre class="pre-scrollable"><code>using System;
 using System.Collections.Generic;
 using System.Linq;
-using BlazorGrid.Abstractions;
 using Microsoft.AspNetCore.Mvc;
+using GettingStarted.Shared;
+using BlazorGrid.Abstractions;
 using BlazorGrid.Abstractions.Extensions;
 
-namespace MyApi.Controllers
+namespace GettingStarted.Server.Controllers
 {
     [ApiController]
     [Route("[controller]")]
@@ -49,9 +60,8 @@ namespace MyApi.Controllers
             .AsQueryable();
         }
 
-        [HttpGet]
-        [Route("")]
-        public IActionResult Index([FromQuery] BlazorGridRequest request)
+        [HttpPost]
+        public IActionResult Index(BlazorGridRequest request)
         {
             if (request.Offset &lt; 0)
             {
@@ -69,11 +79,11 @@ namespace MyApi.Controllers
 
             var q = WeatherData;
 
-            if (request.Query != null)
+            if (!string.IsNullOrEmpty(request.Query))
             {
                 // Apply filtering based on the search query from the
                 // data grid's search input box
-                q = q.Where(x =&gt; x.Summary.IndexOf(request.Query) &gt; -1);
+                q = q.Where(x =&gt; x.Summary.StartsWith(request.Query));
             }
 
             var totalCount = q.Count();
@@ -92,7 +102,11 @@ namespace MyApi.Controllers
             if (request.OrderBy != null)
             {
                 // These are extension methods to apply sorting
-                // with Linq based only on the property name
+                // with Linq based only on the property name.
+                //
+                // You need either the BlazorGrid or the
+                // BlazorGrid.Abstractions Nuget package to use these.
+
                 if (request.OrderByDescending)
                 {
                     q = q.OrderByDescending(request.OrderBy);
@@ -125,48 +139,18 @@ namespace MyApi.Controllers
     }
 }</code></pre>
 
-            <h5 class="mt-4">@(ol++). Adjust Json serialization settings</h5>
-            <p>This step is recommended only if you are using Blazor WebAssembly and if you use the JSON data format. By default, Web Api projects will use lowercase for Json property names when serializing objects. This can be problematic because by default, Blazor WebAssembly is not configured to handle this and will fail to deserialize the objects correctly, causing the Grid to display a "No data" error message.</p>
-            <p>Disabling the renaming of Json properties is easy. Just go to <code>Startup.cs</code> and change this line:</p>
-            <pre class="pre-scrollable"><code>services.AddControllers();</code></pre>
-            <p>To this:</p>
-            <pre class="pre-scrollable"><code>services.AddControllers()
-    .AddJsonOptions(o =>
-    {
-        o.JsonSerializerOptions.PropertyNamingPolicy = null;
-    });</code></pre>
-
-            <p>That's all we need in the backend for now! Continue with part B below to set up your frontend.</p>
-        </Tab>
-        <Tab Caption="Azure Functions">
-            <Caution class="my-4">Sorry, this part of the documentation isn't finished yet. Please refer to Web Api for now and make amendments where needed.</Caution>
-        </Tab>
-        <Tab Caption="Blazor server-side">
-            <Caution class="my-4">Sorry, this part of the documentation isn't finished yet. Please refer to Web Api for now and make amendments where needed.</Caution>
-        </Tab>
-    </Tabs>
-    <hr class="my-5" />
-    <h3>Part B: Setting up your Blazor frontend</h3>
-    <Tabs class="mt-3" Style="Tabs.TabsStyle.Buttons">
-        <Tab Caption="Blazor WebAssembly">
-            @{
-                int ol = 1;
-            }
-            <h5 class="mt-4">@(ol++). Install the NuGet package</h5>
-            <p>In Visual Studio, open up the NuGet package manager, then find and install <code>Akinzekeel.BlazorGrid</code>. Note that you may have to enable listing preview version.</p>
-            <p>Alternatively, you can use the dotnet command:</p>
-            <code>dotnet add package Akinzekeel.BlazorGrid</code>
-
-            <h5 class="mt-4">@(ol++). Add a reference to the CSS file</h5>
-            <p>BlazorGrid comes with builtin support for <em>Bootstrap</em> and <em>Spectre</em>. Open your <code>wwwroot/index.html</code> file (or <code>Pages/_Host.cshtml</code> for Blazor server-side) and add the following line in the <code>&lt;head&gt;</code>:</p>
+            <h5 class="mt-5">@(ol++). Add a reference to the BlazorGrid stylesheet</h5>
+            <p>In the <em>Client</em> project, go to <code>wwwroot/index.html</code> and add the following line to the <code>head</code> section:</p>
             <pre class="pre-scrollable"><code>&lt;link href="_content/Akinzekeel.BlazorGrid/dist/blazorgrid-bootstrap.min.css" rel="stylesheet" /&gt;</code></pre>
 
-            <h5 class="mt-4">@(ol++). Set up dependency injection</h5>
-            <p>Open your <code>Program.cs</code> file and add the following:</p>
+            <h5 class="mt-5">@(ol++). Set up the BlazorGrid configuration</h5>
+            <p>Every instance of the BlazorGrid uses a common configuration object. This can be used to customize CSS class names among other things. To set up the default configuration for Bootstrap, go to <code>Program.cs</code> in your <em>Client</em> project and make the following modifications:</p>
+
+
             <pre class="pre-scrollable"><code><mark>using BlazorGrid.Extensions;</mark>
 ...
 
-namespace MyBlazorProject
+namespace GettingStarted.Client
 {
     public class Program
     {
@@ -183,38 +167,56 @@ namespace MyBlazorProject
     }
 }</code></pre>
 
-            <Caution>If you are not fetching the data from this same project (Asp.Net Core hosted), then you have to change <code>builder.HostEnvironment.BaseAddress</code> with the base Uri of your backend (Api / Azure Functions / etc)., for example <code>new Uri("https://localhost:44375/")</code>.</Caution>
-
-            <h5 class="mt-4">@(ol++). Make your first BlazorGrid</h5>
-            <p>Continuing with the weather forecast example from the Web Api, go to <code>Pages/FetchData.razor</code> and change the code as following:</p>
+            <h5 class="mt-5">@(ol++). Replace the default table with a BlazorGrid component</h5>
+            <p>Open the <code>Pages/FetchData.razor</code> file in the <em>Client</em> project and replace the contents with the following code:</p>
             <pre class="pre-scrollable"><code>@@page "/fetchdata"
-@@inject HttpClient Http
+@@using blazorgrid_guide_test.Shared
+@@using BlazorGrid.Abstractions
 @@using BlazorGrid.Components
+@@using System.Text.Json
+@@using System.Threading
+@@inject HttpClient Http
+
 &lt;h1&gt;Weather forecast&lt;/h1&gt;
 
 &lt;p&gt;This component demonstrates fetching data from the server.&lt;/p&gt;
 
-&lt;BlazorGrid TRow="WeatherForecast" DefaultOrderBy="x =&gt; x.Date" SourceUrl="weatherforecast"&gt;
-    &lt;GridCol Caption="Date" For="() =&gt; context.Date"&gt;@@context.Date.ToShortDateString()&lt;/GridCol&gt;
-    &lt;GridCol Caption="Celsius" For="() =&gt; context.TemperatureC" /&gt;
-    &lt;GridCol Caption="Fahrenheit" For="() =&gt; context.TemperatureF" /&gt;
-    &lt;GridCol Caption="Summary" For="() =&gt; context.Summary" /&gt;
-&lt;/BlazorGrid&gt;
+&lt;div style="height: 400px;"&gt;
+    &lt;BlazorGrid TRow="WeatherForecast" DefaultOrderBy="x =&gt; x.Date" Provider="LoadData"&gt;
+        &lt;GridCol For="() =&gt; context.Date" Caption="Date" /&gt;
+        &lt;GridCol For="() =&gt; context.TemperatureC" Caption="Temp. (C)" /&gt;
+        &lt;GridCol For="() =&gt; context.TemperatureF" Caption="Temp. (F)" /&gt;
+        &lt;GridCol For="() =&gt; context.Summary" Caption="Summary" /&gt;
+    &lt;/BlazorGrid&gt;
+&lt;/div&gt;
 
 @@code
 {
-    public class WeatherForecast
+    private async ValueTask&lt;BlazorGridResult&lt;WeatherForecast&gt;&gt; LoadData(BlazorGridRequest request, CancellationToken cancellationToken)
     {
-        public DateTime Date { get; set; }
-        public int TemperatureC { get; set; }
-        public string Summary { get; set; }
-        public int TemperatureF { get; set; }
+        var response = await Http.PostAsJsonAsync("WeatherForecast", request, cancellationToken);
+
+        // Deserialize the Json response
+        var json = await response.Content.ReadAsStringAsync();
+        var result = JsonSerializer.Deserialize&lt;BlazorGridResult&lt;WeatherForecast&gt;&gt;(json);
+
+        return result;
     }
 }</code></pre>
-            <p>That's it! Start your project(s) and head over to the FetchData page to see the grid in action.</p>
-        </Tab>
-        <Tab Caption="Blazor server side">
-            <Caution class="my-4">Sorry, this part of the documentation isn't finished yet. Please refer to Blazor WebAssembly for now and make amendments where needed.</Caution>
+
+            <h5 class="mt-5">@(ol++). Adjust Json serialization settings</h5>
+            <p>Lastly, you will need to use lowercase for Json property names when deserializing objects with the model binder, since this is the default setting for Blazor WebAssembly.</p>
+            <p>Navigate to <code>Startup.cs</code> in your <em>Server</em> project and change this line:</p>
+            <pre class="pre-scrollable"><code>services.AddControllersWithViews();</code></pre>
+            <p>To this:</p>
+            <pre class="pre-scrollable"><code>services.AddControllersWithViews()
+    .AddJsonOptions(o =>
+    {
+        o.JsonSerializerOptions.PropertyNamingPolicy = null;
+    });</code></pre>
+
+            <p class="lead mt-5">That's all! If you run the project and you did everything correctly, the fetch data page should look like this:</p>
+            <img class="img-fluid img-thumbnail" src="/img/GettingStartedSampleScreenshot.jpg" alt="Screenshot of the resulting grid" />
         </Tab>
     </Tabs>
 
