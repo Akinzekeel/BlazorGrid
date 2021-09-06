@@ -4,14 +4,10 @@
   "private": true,
   "devDependencies": {
     "gulp": "4.0.2",
-    "gulp-clean-css": "4.2.0",
-    "gulp-sass": "4.0.2",
-    "gulp-rename": "1.4.0",
-    "rimraf": "2.6.3",
-    "lodash": ">=4.17.21",
-    "yargs-parser": ">=13.1.2"
-  },
-  "scripts": {
-    "build": "gulp default & dotnet publish -c Release"
+    "gulp-clean-css": "4.3.0",
+    "gulp-rename": "2.0.0",
+    "gulp-sass": "5.0.0",
+    "rimraf": "3.0.2",
+    "sass": "1.39.0"
   }
 }
