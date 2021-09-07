@@ -3,7 +3,7 @@
 @layout ExampleLayout
 <h1>@Title</h1>
 <p>In this example you can see what happens when you provide too much content for the grid to display. To demonstrate this, we repeat the e-mail address 10 times.</p>
-<p>By default, grid cells will prevent the containing text from wrapping in order to prevent the Virtualize component from glitching (this is due to the vertical size becoming unpredictable in these scenarios). Any excess content is therefore truncated automatically. If you wish to make it look a bit more elegant, you can wrap the cell content inside a block element and set the CSS property <code>text-overflow: ellipsis;</code> (or use the Bootstrap shorthand class <code>text-truncate</code>).</p>
+<p>By default, grid cells will prevent the containing text from wrapping in order to prevent the Virtualize component from glitching (this is due to the vertical size becoming unpredictable in these scenarios). However, any excess content will therefore overflow into the next cell. If you wish to make this look more elegant, you can wrap the cell content inside a block element and set the CSS property <code>text-overflow: ellipsis;</code> (or use the Bootstrap shorthand class <code>text-truncate</code>).</p>
 <Tabs>
     <Tab Caption="Result" class="p-3">
         <BlazorGrid TRow="Employee" Provider="Provider.GetAsync<Employee>" style="max-height: 340px;">
