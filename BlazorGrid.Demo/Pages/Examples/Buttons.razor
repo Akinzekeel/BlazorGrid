@@ -1,0 +1,83 @@
+﻿@inherits CommonPageBase
+@page "/examples/buttons"
+@layout ExampleLayout
+<h1>@Title</h1>
+<p>In this example we will add some buttons into the last column. These buttons could be used for deleting rows or any other kind of custom action. By passing the <code>context</code> variable to the EventCallback, we can determine which row the user clicked on.</p>
+<Caution>
+    It is possible to use interactive elements such as buttons and anchors inside grid columns. However, if you also make the rows clickable by using <code>OnClick</code> or <code>Href</code>, you may find that a click triggers multiple events which is probably not intended to happen. In those cases, you should use <code>@@onclick:stopPropagation="true"</code> on the button / anchor / etc.
+</Caution>
+
+<Tabs>
+    <Tab Caption="Result" class="p-3">
+        <div class="row">
+            <div class="col-8 align-self-start">
+                <BlazorGrid TRow="Employee" Provider="Provider.GetAsync<Employee>" style="max-height: 340px;">
+                    <StaticGridCol FitToContent="true">
+                        <img src="@context.Avatar" style="width: 20px; height: 20px;" />
+                    </StaticGridCol>
+                    <GridCol For="() => context.Id" FitToContent="true" />
+                    <GridCol For="() => context.FirstName" />
+                    <GridCol For="() => context.LastName" />
+                    <StaticGridCol FitToContent="true">
+                        <button @onclick="() => Edit(context)" class="btn btn-sm btn-secondary mr-1">Edit</button>
+                        <button @onclick="() => Delete(context)" class="btn btn-sm btn-danger">Delete</button>
+                    </StaticGridCol>
+                </BlazorGrid>
+            </div>
+            <div class="col-4">
+                <div class="overflow-auto" style="max-height: 340px;">
+                    @foreach (var action in PerformedActions.Reverse().Take(100))
+                    {
+                        <div class="text-truncate">@action</div>
+                    }
+                </div>
+            </div>
+        </div>
+    </Tab>
+    <Tab Caption="Code" class="p-3">
+        <h6>Razor</h6>
+        <pre class="pre-scrollable"><code>&lt;BlazorGrid TRow="Employee" Provider="Provider.GetAsync&lt;Employee&gt;" style="max-height: 340px;"&gt;
+    &lt;StaticGridCol FitToContent="true"&gt;
+        &lt;img src="@@context.Avatar" style="width: 20px; height: 20px;" /&gt;
+    &lt;/StaticGridCol&gt;
+    &lt;GridCol For="() =&gt; context.Id" FitToContent="true" /&gt;
+    &lt;GridCol For="() =&gt; context.FirstName" /&gt;
+    &lt;GridCol For="() =&gt; context.LastName" /&gt;
+    &lt;StaticGridCol FitToContent="true"&gt;
+        &lt;button @@onclick="() =&gt; Edit(context)" class="btn btn-sm btn-secondary mr-1"&gt;Edit&lt;/button&gt;
+        &lt;button @@onclick="() =&gt; Delete(context)" class="btn btn-sm btn-danger"&gt;Delete&lt;/button&gt;
+    &lt;/StaticGridCol&gt;
+&lt;/BlazorGrid&gt;
+
+@@code
+{
+    private IList&lt;string&gt; PerformedActions = new List&lt;string&gt;();
+
+    private void Delete(Employee row)
+    {
+        PerformedActions.Add("You clicked on delete " + row.FirstName + " " + row.LastName);
+    }
+
+    private void Edit(Employee row)
+    {
+        PerformedActions.Add("You clicked on edit " + row.FirstName + " " + row.LastName);
+    }
+}</code></pre>
+    </Tab>
+</Tabs>
+@code
+{
+    protected override string Title => "Buttons";
+
+    private IList<string> PerformedActions = new List<string>();
+
+    private void Delete(Employee row)
+    {
+        PerformedActions.Add("You clicked on delete " + row.FirstName + " " + row.LastName);
+    }
+
+    private void Edit(Employee row)
+    {
+        PerformedActions.Add("You clicked on edit " + row.FirstName + " " + row.LastName);
+    }
+}
