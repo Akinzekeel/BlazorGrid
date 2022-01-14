@@ -29,13 +29,9 @@ steps:
 
 - task: UseDotNet@2
   inputs:
-    version: 5.0.100
+    version: 6.0.x
 
 - task: NuGetToolInstaller@1
-
-- task: NuGetAuthenticate@0
-  inputs:
-    nuGetServiceConnections: 'Bunit nightly builds'
 
 - task: DotNetCoreCLI@2
   displayName: 'Build BlazorGrid'
