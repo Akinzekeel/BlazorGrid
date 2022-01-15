@@ -1,59 +1,78 @@
 <Project Sdk="Microsoft.NET.Sdk.Razor">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <RazorLangVersion>3.0</RazorLangVersion>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageId>Akinzekeel.BlazorGrid</PackageId>
-    <Version>1.0.8</Version>
-    <Preview></Preview>
-    <Authors>Majid Iqbal</Authors>
-    <Company />
-    <Description>A light weight data grid component for Blazor, focused on remote data. Supports sorting, virtualization, row-highlighting, JSON, gRPC and custom providers.</Description>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://blazorgrid.z6.web.core.windows.net/</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/Akinzekeel/BlazorGrid</RepositoryUrl>
-    <PackageReleaseNotes></PackageReleaseNotes>
-    <PackageTags>Blazor, data grid</PackageTags>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<RazorLangVersion>3.0</RazorLangVersion>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<PackageId>Akinzekeel.BlazorGrid</PackageId>
+		<Version>1.0.8</Version>
+		<Preview></Preview>
+		<Authors>Majid Iqbal</Authors>
+		<Company />
+		<Description>A light weight data grid component for Blazor, focused on remote data. Supports sorting, virtualization, row-highlighting, JSON, gRPC and custom providers.</Description>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageProjectUrl>https://blazorgrid.z6.web.core.windows.net/</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/Akinzekeel/BlazorGrid</RepositoryUrl>
+		<PackageReleaseNotes></PackageReleaseNotes>
+		<PackageTags>Blazor, data grid</PackageTags>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <Content Include="Content\**\*" />
-  </ItemGroup>
+	<ItemGroup>
+		<Content Include="Content\**\*" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Components" Version="6.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.1" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Components" Version="6.0.1" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.1" />
+		<PackageReference Include="LibSassBuilder" Version="2.0.1" />
+	</ItemGroup>
 
-  <ItemGroup Condition="'$(Configuration)' != 'Release'">
-    <ProjectReference Include="..\BlazorGrid.Abstractions\BlazorGrid.Abstractions.csproj" />
-  </ItemGroup>
+	<ItemGroup Condition="'$(Configuration)' != 'Release'">
+		<ProjectReference Include="..\BlazorGrid.Abstractions\BlazorGrid.Abstractions.csproj" />
+	</ItemGroup>
 
-  <ItemGroup Condition="'$(Configuration)' == 'Release'">
-    <PackageReference Include="Akinzekeel.BlazorGrid.Abstractions" Version="1.0.7" />
-  </ItemGroup>
+	<ItemGroup Condition="'$(Configuration)' == 'Release'">
+		<PackageReference Include="Akinzekeel.BlazorGrid.Abstractions" Version="1.0.7" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Compile Update="Resources\Resources.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Update="Resources\Resources.Designer.cs">
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>Resources.resx</DependentUpon>
+		</Compile>
+	</ItemGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Update="Resources\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>BlazorGrid</CustomToolNamespace>
-    </EmbeddedResource>
-  </ItemGroup>
+	<ItemGroup>
+		<EmbeddedResource Update="Resources\Resources.resx">
+			<Generator>ResXFileCodeGenerator</Generator>
+			<LastGenOutput>Resources.Designer.cs</LastGenOutput>
+			<CustomToolNamespace>BlazorGrid</CustomToolNamespace>
+		</EmbeddedResource>
+	</ItemGroup>
 
-  <!-- Remove the libman.json, package.json and package-lock.json from the ContentFiles -->
-  <ItemGroup>
-    <Content Remove="*.json"></Content>
-    <None Include="*.json"></None>
-  </ItemGroup>
+	<ItemGroup>
+		<!-- Remove libman.json from the ContentFiles -->
+		<Content Remove="libman.json"></Content>
+		<None Include="libman.json"></None>
+
+		<!-- The LibSassBuilder options above will hide SCSS from solution explorer -->
+		<!-- This will get them back -->
+		<None Include="**/*.scss" />
+	</ItemGroup>
+
+	<Target Name="MoveSassOutput" AfterTargets="LibSass_Build">
+		<Move SourceFiles="Styles/blazorgrid-bootstrap.css" DestinationFiles="wwwroot/dist/blazorgrid-bootstrap.min.css" Condition="Exists('Styles/blazorgrid-bootstrap.css')" />
+		<Move SourceFiles="Styles/blazorgrid-spectre.css" DestinationFiles="wwwroot/dist/blazorgrid-spectre.min.css" Condition="Exists('Styles/blazorgrid-spectre.css')" />
+	</Target>
+
+	<PropertyGroup>
+		<EnableDefaultSassItems>false</EnableDefaultSassItems>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<SassFile Include="Styles/blazorgrid-bootstrap.scss" />
+		<SassFile Include="Styles/blazorgrid-spectre.scss" />
+	</ItemGroup>
 
 </Project>
