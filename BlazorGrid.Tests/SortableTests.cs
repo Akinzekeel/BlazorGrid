@@ -60,16 +60,16 @@ namespace BlazorGrid.Tests
                 })
             );
 
-            Assert.AreEqual(1, providerCallCount);
-            Assert.IsNull(providerCallOrderBy);
+            providerCallCount.Should().Be(1);
+            providerCallOrderBy.Should().BeNull();
 
-            var th = grid.Find(".grid-header > *");
-            Assert.IsNotNull(th, "Failed to find the column header element");
+            var headerCell = grid.Find(".grid-header-cell");
+            headerCell.Should().NotBeNull();
 
-            await grid.InvokeAsync(() => th.Click());
+            await grid.InvokeAsync(() => headerCell.Click());
 
-            Assert.AreEqual(2, providerCallCount);
-            Assert.AreEqual(nameof(MyDto.Name), providerCallOrderBy);
+            providerCallCount.Should().Be(2);
+            providerCallOrderBy.Should().Be(nameof(MyDto.Name));
         }
 
         [DataTestMethod]
@@ -106,12 +106,12 @@ namespace BlazorGrid.Tests
                 })
             );
 
-            Assert.AreEqual(1, providerCallCount);
-            Assert.AreEqual(nameof(MyDto.Name), providerCallOrderBy);
-            Assert.AreEqual(desc, providerCallOrderByDescending.Value);
+            providerCallCount.Should().Be(1);
+            providerCallOrderBy.Should().Be(nameof(MyDto.Name));
+            providerCallOrderByDescending.Value.Should().Be(desc);
 
-            var th = grid.Find(".grid-header > *");
-            th.MarkupMatches("<div class=\"sorted sortable\"><span class=\"blazor-grid-sort-icon active " + (desc ? "sorted-desc" : "sorted-asc") + "\"></span></div>");
+            var headerCells = grid.Find(".grid-header-cell");
+            headerCells.MarkupMatches("<div class=\"grid-cell grid-header-cell sorted sortable\"><span class=\"blazor-grid-sort-icon active " + (desc ? "sorted-desc" : "sorted-asc") + "\"></span></div>");
         }
     }
 }

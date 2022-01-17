@@ -15,7 +15,6 @@ namespace BlazorGrid.Components
 {
     public partial class BlazorGrid<TRow> : ComponentBase, IBlazorGrid where TRow : class
     {
-        private bool SkipNextRender;
         private bool DetectColumns = true;
         private readonly Type typeInfo = typeof(BlazorGrid<TRow>);
 
@@ -51,7 +50,6 @@ namespace BlazorGrid.Components
         internal ICollection<IGridCol> Columns = new List<IGridCol>();
         private Exception LoadingError { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Modifizierer \"readonly\" hinzufügen", Justification = "<Ausstehend>")]
         private Virtualize<RowWrapper<TRow>> VirtualizeRef;
 
         private async ValueTask<ItemsProviderResult<RowWrapper<TRow>>> GetItemsVirtualized(ItemsProviderRequest request)
@@ -256,12 +254,10 @@ namespace BlazorGrid.Components
 
             if (onClickUrl != null)
             {
-                SkipNextRender = true;
                 Nav.NavigateTo(onClickUrl);
             }
             else if (OnClick.HasDelegate)
             {
-                SkipNextRender = true;
                 await OnClick.InvokeAsync(row.Row);
             }
 
@@ -342,13 +338,6 @@ namespace BlazorGrid.Components
             Columns = cols;
         }
 
-        protected override bool ShouldRender()
-        {
-            var ret = !SkipNextRender;
-            SkipNextRender = false;
-            return ret;
-        }
-
         private string ColHeaderSortIconCssClass(IGridCol col)
         {
             var cls = "blazor-grid-sort-icon";
@@ -391,6 +380,18 @@ namespace BlazorGrid.Components
                 HighlightedRowIndex = default;
                 StateHasChanged();
             }
+        }
+
+        private string RowClass()
+        {
+            var cls = string.Empty;
+
+            if (OnClick.HasDelegate || Href != null)
+            {
+                cls += " " + Config.Styles.RowClickableClass;
+            }
+
+            return cls.Trim();
         }
     }
 }

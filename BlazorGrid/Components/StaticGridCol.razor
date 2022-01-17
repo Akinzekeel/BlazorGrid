@@ -2,5 +2,7 @@
 @inherits ColBase
 @if (Register == null)
 {
-    <div @attributes="FinalAttributes">@ChildContent</div>
+    <div @attributes="FinalAttributes" @onclick="OnClickBinder">
+        @ChildContent
+    </div>
 }

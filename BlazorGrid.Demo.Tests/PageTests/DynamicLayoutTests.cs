@@ -51,18 +51,22 @@ namespace BlazorGrid.Tests.Demo
             return RenderComponent<DynamicLayout>();
         }
 
-        private void VerifyGridColumnCount<T>(IRenderedComponent<BlazorGrid<T>> grid, int expectedColumnCount)
+        private static void VerifyGridColumnCount<T>(IRenderedComponent<BlazorGrid<T>> grid, int expectedColumnCount)
             where T : class
         {
-            Assert.AreEqual(expectedColumnCount, grid.Instance.Columns.Count());
+            grid.Instance.Columns.Should().HaveCount(expectedColumnCount);
 
             // Verify number of th's
-            var header = grid.Find(".grid-row.grid-header");
-            Assert.AreEqual(expectedColumnCount, header.Children.Count());
+            var headerCells = grid.FindAll(".grid-cell.grid-header-cell");
+            headerCells.Should().HaveCount(expectedColumnCount);
 
             // Verify number of td's per row
-            var row = grid.Find(".grid-row:not(.grid-header)");
-            Assert.AreEqual(expectedColumnCount, row.Children.Count());
+            // (it must be a multiple of the expected column count)
+            var cells = grid.FindAll(".grid-cell:not(.grid-header-cell):not(.grid-cell-row-anchor)");
+            cells.Should().NotBeEmpty();
+
+            var rem = cells.Count % expectedColumnCount;
+            rem.Should().Be(0);
         }
 
         [TestMethod]

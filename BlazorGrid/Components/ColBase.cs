@@ -1,32 +1,42 @@
 ﻿using BlazorGrid.Interfaces;
 using Microsoft.AspNetCore.Components;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace BlazorGrid.Components
 {
     public abstract class ColBase : ComponentBase
     {
-        [Parameter] public string Caption { get; set; }
-        [Parameter] public RenderFragment ChildContent { get; set; }
+        [Parameter] public string? Caption { get; set; }
+        [Parameter] public RenderFragment? ChildContent { get; set; }
         [Parameter] public bool FitToContent { get; set; }
         [Parameter] public bool AlignRight { get; set; }
-        [Parameter(CaptureUnmatchedValues = true)] public IDictionary<string, object> Attributes { get; set; }
-        [CascadingParameter] internal IColumnRegister Register { get; set; }
+        [CascadingParameter] internal IColumnRegister? Register { get; set; }
+        [CascadingParameter(Name = "RowClass")] internal string? RowClass { get; set; }
+        [CascadingParameter(Name = "RowClickCallback")] internal Func<Task>? RowClickCallback { get; set; }
+        [Parameter(CaptureUnmatchedValues = true)] public IDictionary<string, object>? Attributes { get; set; }
+
+        public abstract bool IsFilterable { get; }
+        public abstract string? PropertyName { get; }
+        public abstract string GetCaptionOrDefault();
 
         public string CssClass
         {
             get
             {
-                var cls = new List<string>
+                var cls = new List<string?>
                 {
+                    "grid-cell",
+                    RowClass,
                     AlignRight ? "text-right" : ""
                 };
 
                 // Merge custom CSS classes if necessary
                 if (Attributes != null)
                 {
-                    string customClasses = Attributes
+                    var customClasses = Attributes?
                         .Where(x => x.Key == "class")
                         .Select(x => x.Value?.ToString())
                         .FirstOrDefault();
@@ -67,8 +77,9 @@ namespace BlazorGrid.Components
             }
         }
 
-        public abstract bool IsFilterable { get; }
-        public abstract string PropertyName { get; }
-        public abstract string GetCaptionOrDefault();
+        protected Task OnClickBinder()
+        {
+            return RowClickCallback?.Invoke() ?? Task.CompletedTask;
+        }
     }
 }

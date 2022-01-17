@@ -8,11 +8,11 @@ namespace BlazorGrid.Components
 {
     public partial class GridCol<T> : ColBase, IGridCol<T>, IDisposable
     {
-        private IColumnRegister RegisterCache;
+        private IColumnRegister? RegisterCache;
         private bool IsPropertyNameQueried;
-        private string PropertyNameCached;
+        private string? PropertyNameCached;
 
-        public override string PropertyName
+        public override string? PropertyName
         {
             get
             {
@@ -22,7 +22,7 @@ namespace BlazorGrid.Components
 
                     if (For != null)
                     {
-                        PropertyNameCached = RegisterCache.GetPropertyName(For);
+                        PropertyNameCached = RegisterCache?.GetPropertyName(For);
                     }
                 }
 
@@ -30,11 +30,11 @@ namespace BlazorGrid.Components
             }
         }
 
-        private Expression<Func<T>> _For;
-        private Func<T> _ForCompiled;
+        private Expression<Func<T>>? _For;
+        private Func<T>? _ForCompiled;
 
         [Parameter]
-        public Expression<Func<T>> For
+        public Expression<Func<T>>? For
         {
             get => _For; set
             {
@@ -46,9 +46,9 @@ namespace BlazorGrid.Components
             }
         }
 
-        Expression IGridCol.For => For;
+        Expression? IGridCol.For => For;
 
-        private T GetAutoValue()
+        private T? GetAutoValue()
         {
             return _For == null ? default : (_ForCompiled ??= _For.Compile()).Invoke();
         }
@@ -66,13 +66,13 @@ namespace BlazorGrid.Components
 
         public override string GetCaptionOrDefault()
         {
-            if (string.IsNullOrEmpty(Caption))
+            if (string.IsNullOrEmpty(Caption) && For != null)
             {
                 // Attempt to get the DisplayName from the property
                 return DisplayNameHelper.GetDisplayName(For);
             }
 
-            return Caption;
+            return Caption ?? string.Empty;
         }
 
         public void Dispose()

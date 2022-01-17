@@ -98,10 +98,10 @@ namespace BlazorGrid.Tests
             );
 
             // Now let's try changing the sorting
-            var headerCell = grid.Find(".grid-header .sortable");
+            var headerCell = grid.Find(".grid-header-cell.sortable");
             await grid.InvokeAsync(() => headerCell.Click());
 
-            Assert.AreEqual(2, grid.RenderCount);
+            grid.RenderCount.Should().Be(2);
         }
 
         [TestMethod]
@@ -183,7 +183,7 @@ namespace BlazorGrid.Tests
         }
 
         [TestMethod]
-        public async Task OnClick_Does_Not_Trigger_Rerender()
+        public async Task OnClick_Does_Trigger_Rerender()
         {
             ProviderDelegate<MyDto> provider = (r, _) =>
             {
@@ -211,12 +211,13 @@ namespace BlazorGrid.Tests
             );
 
             // Try clicking on a row
-            var row = grid.Find(".grid-row:not(.grid-header)");
-            await grid.InvokeAsync(() => row.Click());
+            grid.RenderCount.Should().Be(1);
+            var cell = grid.Find(".grid-cell:not(.grid-header-cell):not(.grid-cell-row-anchor)");
+            await grid.InvokeAsync(() => cell.Click());
 
-            Task.Delay(100).Wait();
+            await Task.Delay(100);
 
-            Assert.AreEqual(1, grid.RenderCount);
+            grid.RenderCount.Should().Be(2);
         }
 
         [TestMethod]
@@ -309,6 +310,9 @@ namespace BlazorGrid.Tests
         [TestMethod]
         public async Task OnClick_With_Highlighting_Adds_Row_Class()
         {
+            var conf = Services.GetService<IBlazorGridConfig>();
+            conf.Styles.RowHighlightedClass.Should().NotBeNullOrWhiteSpace();
+
             ProviderDelegate<MyDto> provider = (r, _) =>
             {
                 return ValueTask.FromResult(new BlazorGridResult<MyDto>
@@ -336,13 +340,18 @@ namespace BlazorGrid.Tests
             );
 
             // Try clicking on a row
-            var row = grid.Find(".grid-row:not(.grid-header)");
-            await grid.InvokeAsync(() => row.Click());
+            grid.RenderCount.Should().Be(1);
+            var cell = grid.Find(".grid-cell:not(.grid-header-cell):not(.grid-cell-row-anchor)");
+            await grid.InvokeAsync(() => cell.Click());
 
-            Task.Delay(100).Wait();
+            await Task.Delay(1000);
 
-            row = grid.Find(".grid-row:not(.grid-header)");
-            Assert.IsTrue(row.Matches(".highlighted"), row.ToMarkup());
+            grid.RenderCount.Should().Be(2);
+            grid.Markup.Should().Contain(conf.Styles.RowHighlightedClass);
+
+            var rowAnchor = cell.NextElementSibling;
+            rowAnchor.ClassList.Should().Contain("grid-cell-row-anchor")
+                .And.Contain(conf.Styles.RowHighlightedClass);
         }
     }
 }

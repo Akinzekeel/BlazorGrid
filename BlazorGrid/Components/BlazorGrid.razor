@@ -1,10 +1,11 @@
 @typeparam TRow
+@using BlazorGrid.Infrastructure
 @using Microsoft.AspNetCore.Components.Web.Virtualization
 @if (DetectColumns)
 {
-    <BlazorGrid.Infrastructure.ColumnBuffer TRow="TRow" OnColumnsChanged="OnColumnsChanged">
+    <ColumnBuffer TRow="TRow" OnColumnsChanged="OnColumnsChanged">
         @ChildContent(GetEmptyRow())
-    </BlazorGrid.Infrastructure.ColumnBuffer>
+    </ColumnBuffer>
 }
 @if (Columns.Any())
 {
@@ -40,42 +41,41 @@
             </div>
         }
         <div class="blazor-grid">
-            <div class="grid-scrollview" style="grid-template-columns: @GridTemplateColumns();">
-                <header class="grid-row grid-header">
-                    @foreach (var col in Columns)
+            <div class="grid-scrollview" style="grid-template-columns: @GridTemplateColumns() 0;">
+                @foreach (var col in Columns)
+                {
+                    var isSorted = IsSortedBy(col);
+                    var sortable = col.For != null;
+                    var cls = col.CssClass + " grid-cell grid-header-cell";
+
+                    if (sortable)
                     {
-                        var isSorted = IsSortedBy(col);
-                        var sortable = col.For != null;
-                        var cls = col.CssClass;
+                        cls += " sortable";
 
-                        if (sortable)
+                        if (isSorted)
                         {
-                            cls += " sortable";
-
-                            if (isSorted)
-                            {
-                                cls += " sorted";
-                            }
+                            cls += " sorted";
                         }
-                        <div @onclick="() => TryApplySortingAsync(col)" class="@cls">
-                            @if (!col.AlignRight)
-                            {
-                                @col.GetCaptionOrDefault()
-                            }
-                            @if (sortable)
-                            {
-                                <span class="@ColHeaderSortIconCssClass(col)"></span>
-                            }
-                            @if (col.AlignRight)
-                            {
-                                @col.GetCaptionOrDefault()
-                            }
-                        </div>
                     }
-                </header>
+                    <div @onclick="() => TryApplySortingAsync(col)" class="@cls">
+                        @if (!col.AlignRight)
+                        {
+                            @col.GetCaptionOrDefault()
+                        }
+                        @if (sortable)
+                        {
+                            <span class="@ColHeaderSortIconCssClass(col)"></span>
+                        }
+                        @if (col.AlignRight)
+                        {
+                            @col.GetCaptionOrDefault()
+                        }
+                    </div>
+                }
+                <div class="grid-cell grid-cell-row-anchor"></div>
                 @if (TotalRowCount == 0 || Provider is null)
                 {
-                    <div class="grid-row-span-all">
+                    <div>
                         <div class="@Config.Styles.PlaceholderWrapperClass">
                             <h5 class="@Config.Styles.NoDataHeadingClass">@Resources.Empty_Title</h5>
                             @if (string.IsNullOrEmpty(Query))
@@ -93,38 +93,26 @@
                 {
                     <Virtualize ItemsProvider="GetItemsVirtualized" @ref="VirtualizeRef" ItemSize="VirtualItemSize">
                         <Placeholder>
-                            <div class="grid-row grid-row-placeholder" aria-label="@Resources.Loading_Text">
-                                @foreach (var col in Columns)
-                                {
-                                    <div>
-                                        <div class="grid-cell-placeholder">&#8203;<span></span></div>
-                                    </div>
-                                }
-                            </div>
+                            @foreach (var col in Columns)
+                            {
+                                <div class="grid-cell grid-cell-placeholder">
+                                    <div>&#8203;<span></span></div>
+                                </div>
+                            }
+                            <div class="grid-cell grid-cell-row-anchor"></div>
                         </Placeholder>
                         <ItemContent>
-                            @{
-                                var cls = "grid-row";
-
-                                if (OnClick.HasDelegate || Href != null)
-                                {
-                                    cls += " " + Config.Styles.RowClickableClass;
-                                }
-
-                                if(HighlightedRowIndex == context.Index)
-                                {
-                                    cls += " " + Config.Styles.RowHighlightedClass;
-                                }
-                            }
-                            <div class="@cls"
-                                 @onclick="_ => OnRowClicked(context)">
-                                @ChildContent(context.Row)
-                            </div>
+                            <CascadingValue TValue="Func<Task>" Value="() => OnRowClicked(context)" IsFixed="true" Name="RowClickCallback">
+                                <CascadingValue TValue="string" Value="RowClass()" IsFixed="true" Name="RowClass">
+                                    @ChildContent(context.Row)
+                                </CascadingValue>
+                            </CascadingValue>
+                            <div class="grid-cell grid-cell-row-anchor @(HighlightedRowIndex == context.Index ? Config.Styles.RowHighlightedClass : "")"></div>
                         </ItemContent>
                     </Virtualize>
                     @if (TotalRowCount.HasValue)
                     {
-                        <footer class="grid-row-span-all">
+                        <footer>
                             <div class="@Config.Styles.FooterWrapperClass">
                                 <div class="@Config.Styles.FooterTextClass">@string.Format(Resources.Footer_RowCount, TotalRowCount ?? 0)</div>
                             </div>
