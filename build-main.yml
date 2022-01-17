@@ -15,18 +15,6 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
-- task: Npm@1
-  displayName: 'npm restore'
-  inputs:
-    command: 'install'
-    workingDir: 'BlazorGrid'
-
-- task: gulp@1
-  displayName: 'gulp default'
-  inputs:
-    gulpFile: 'BlazorGrid/gulpfile.js'
-    targets: 'default'
-
 - task: UseDotNet@2
   inputs:
     version: 6.0.x
