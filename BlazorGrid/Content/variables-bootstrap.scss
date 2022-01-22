@@ -1,13 +1,13 @@
 ﻿$bzg-cell-padding-x: $table-cell-padding !default;
 $bzg-cell-padding-y: $table-cell-padding !default;
 $bzg-cell-hover-bg: $list-group-hover-bg !default;
-/*$bzg-cell-hover-color: $list-group-action-hover-color !default;*/
+$bzg-cell-hover-color: $list-group-action-hover-color !default;
 $bzg-cell-active-bg: $list-group-action-active-bg !default;
-/*$bzg-cell-active-color: $list-group-action-active-color !default;*/
+$bzg-cell-active-color: $list-group-action-active-color !default;
 $bzg-cell-border-bottom-width: $list-group-border-width !default;
 $bzg-cell-border-color: $list-group-border-color !default;
-$bzg-cell-highlighted-bg: rgba($list-group-active-bg, .1) !default;
-/*$bzg-cell-highlighted-color: $list-group-active-color !default;*/
+$bzg-cell-highlighted-bg: $list-group-active-bg !default;
+$bzg-cell-highlighted-color: $list-group-active-color !default;
 
 $bzg-header-bg-color: $list-group-bg !default;
 $bzg-header-sort-icon-content: '↑↓' !default;

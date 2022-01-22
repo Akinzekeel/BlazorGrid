@@ -5,8 +5,8 @@ namespace BlazorGrid.Components
 {
     public partial class StaticGridCol : ColBase, IGridCol
     {
-        Expression? IGridCol.For => null;
-        public override string? PropertyName => null;
+        Expression IGridCol.For => null;
+        public override string PropertyName => null;
 
         public override bool IsFilterable => false;
 
@@ -18,6 +18,6 @@ namespace BlazorGrid.Components
             }
         }
 
-        public override string GetCaptionOrDefault() => Caption ?? string.Empty;
+        public override string GetCaptionOrDefault() => Caption;
     }
 }

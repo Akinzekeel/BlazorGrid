@@ -3,7 +3,7 @@
     "BlazorGrid.Demo": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "https://localhost:5001/examples/on-click",
+      "launchUrl": "https://localhost:5001/examples/buttons",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

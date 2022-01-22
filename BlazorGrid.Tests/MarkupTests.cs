@@ -36,16 +36,15 @@ namespace BlazorGrid.Tests
 
         private static void VerifyColumnCount(IRenderedComponent<BlazorGrid<MyDto>> grid, int expectedColumnCount)
         {
-            grid.Instance.Columns.Count.Should().Be(expectedColumnCount);
+            Assert.AreEqual(expectedColumnCount, grid.Instance.Columns.Count());
 
             // Verify number of column headers
-            var headerCells = grid.FindAll(".grid-header-cell");
-            headerCells.Count().Should().Be(expectedColumnCount);
+            var header = grid.Find(".grid-row.grid-header");
+            Assert.AreEqual(expectedColumnCount, header.Children.Count());
 
             // Verify number of cells per row
-            var row = grid.FindAll(".grid-cell")
-                .Where(x => !x.ClassList.Contains("grid-cell-row-anchor"));
-            row.Count().Should().Be(expectedColumnCount);
+            var row = grid.Find(".grid-row");
+            Assert.AreEqual(expectedColumnCount, row.Children.Count());
 
             // Verify the number of column widths
             var scroller = grid.Find(".grid-scrollview");
@@ -55,7 +54,7 @@ namespace BlazorGrid.Tests
                 .Split(' ')
                 .Where(x => x == "max-content" || x.StartsWith("minmax"));
 
-            colSizes.Count().Should().Be(expectedColumnCount);
+            Assert.AreEqual(expectedColumnCount, colSizes.Count());
         }
 
         [TestMethod]
@@ -160,7 +159,7 @@ namespace BlazorGrid.Tests
             var scroller = grid.Find(".grid-scrollview");
             var style = scroller.GetAttribute("style");
 
-            style.Should().Be("grid-template-columns: minmax(auto, 1fr) max-content 0;");
+            Assert.AreEqual("grid-template-columns: minmax(auto, 1fr) max-content;", style);
         }
 
         [TestMethod]
@@ -175,10 +174,8 @@ namespace BlazorGrid.Tests
                 })
             );
 
-            var th = grid.Find(".grid-header-cell");
-            th.ClassList.Should().Contain("sortable")
-                .And.Contain("grid-cell")
-                .And.HaveCount(3);
+            var th = grid.Find(".grid-header > *");
+            Assert.AreEqual("sortable", th.ClassName.Trim());
         }
 
         [TestMethod]
@@ -195,12 +192,10 @@ namespace BlazorGrid.Tests
                 })
             );
 
-            grid.Markup.Should().NotBeNullOrWhiteSpace();
+            Assert.IsFalse(string.IsNullOrWhiteSpace(grid.Markup));
 
-            var th = grid.Find(".grid-header-cell");
-            th.ClassList.Should().Contain("my-custom-class")
-                .And.Contain("grid-cell")
-                .And.HaveCount(3);
+            var th = grid.Find(".grid-header > *");
+            Assert.AreEqual("my-custom-class", th.ClassName.Trim());
         }
 
         [TestMethod]
@@ -225,10 +220,11 @@ namespace BlazorGrid.Tests
             );
 
             // Verify that two columns are rendered
-            var headerCells = grid.FindAll(".grid-header-cell");
-            headerCells.MarkupMatches(
-                "<div class=\"grid-cell grid-header-cell sortable\">Name<span class=\"blazor-grid-sort-icon\"></span></div>" +
-                "<div class=\"grid-cell grid-header-cell sortable\">Also name<span class=\"blazor-grid-sort-icon\"></span></div>"
+            var rowElement = grid.FindAll(".grid-row").First();
+            rowElement.MarkupMatches("<header class=\"grid-row grid-header\">" +
+                "<div class=\"sortable\">Name<span class=\"blazor-grid-sort-icon\"></span></div>" +
+                "<div class=\"sortable\">Also name<span class=\"blazor-grid-sort-icon\"></span></div>" +
+                "</header>"
             );
 
             VerifyColumnCount(grid, 2);
@@ -247,9 +243,10 @@ namespace BlazorGrid.Tests
             Assert.AreEqual(3, grid.RenderCount);
 
             // Verify that only one column is rendered
-            headerCells = grid.FindAll(".grid-header-cell");
-            headerCells.MarkupMatches(
-                "<div class=\"grid-cell grid-header-cell sortable\">Name<span class=\"blazor-grid-sort-icon\"></span></div>"
+            rowElement = grid.FindAll(".grid-row").First();
+            rowElement.MarkupMatches("<header class=\"grid-row grid-header\">" +
+                "<div class=\"sortable\">Name<span class=\"blazor-grid-sort-icon\"></span></div>" +
+                "</header>"
             );
 
             VerifyColumnCount(grid, 1);
@@ -270,13 +267,14 @@ namespace BlazorGrid.Tests
                 })
             );
 
-            grid.RenderCount.Should().Be(5);
+            Assert.AreEqual(5, grid.RenderCount);
 
             // Verify that two columns are rendered
-            headerCells = grid.FindAll(".grid-header-cell");
-            headerCells.MarkupMatches(
-                "<div class=\"grid-cell grid-header-cell sortable\">Name<span class=\"blazor-grid-sort-icon\"></span></div>" +
-                "<div class=\"grid-cell grid-header-cell sortable\">Also name<span class=\"blazor-grid-sort-icon\"></span></div>"
+            rowElement = grid.FindAll(".grid-row").First();
+            rowElement.MarkupMatches("<header class=\"grid-row grid-header\">" +
+                "<div class=\"sortable\">Name<span class=\"blazor-grid-sort-icon\"></span></div>" +
+                "<div class=\"sortable\">Also name<span class=\"blazor-grid-sort-icon\"></span></div>" +
+                "</header>"
             );
 
             VerifyColumnCount(grid, 2);
@@ -308,8 +306,8 @@ namespace BlazorGrid.Tests
                 })
             );
 
-            var rowElement = grid.FindAll(".grid-cell:not(.grid-cell-row-anchor)").Last();
-            rowElement.MarkupMatches("<div class=grid-cell title=\"Hello world\">Unit test</div>");
+            var rowElement = grid.FindAll(".grid-row").Last();
+            rowElement.MarkupMatches("<div class=\"grid-row\"><div title=\"Hello world\">Unit test</div></div>");
         }
 
         [TestMethod]
@@ -328,8 +326,8 @@ namespace BlazorGrid.Tests
                 })
             );
 
-            var rowElement = grid.FindAll(".grid-header-cell").First();
-            rowElement.MarkupMatches("<div class=\"grid-cell grid-header-cell sortable\"><span class=blazor-grid-sort-icon></span></div>");
+            var rowElement = grid.FindAll(".grid-row").First();
+            rowElement.MarkupMatches("<header class=\"grid-row grid-header\"><div class=\"sortable\"><span class=\"blazor-grid-sort-icon\"></span></div></header>");
         }
 
         [TestMethod]

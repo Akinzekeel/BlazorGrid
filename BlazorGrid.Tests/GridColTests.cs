@@ -85,13 +85,10 @@ namespace BlazorGrid.Tests
                 })
             );
 
-            providerCallCount.Should().Be(1);
+            Assert.AreEqual(1, providerCallCount);
 
-            var rowElement = grid.FindAll(".grid-cell")
-                .Where(x => !x.ClassList.Contains("grid-cell-row-anchor"))
-                .Last();
-
-            rowElement.MarkupMatches("<div class=\"grid-cell text-right my-custom-class\">Unit test</div>");
+            var rowElement = grid.FindAll(".grid-row").Last();
+            rowElement.MarkupMatches("<div class=\"grid-row\"><div class=\"text-right my-custom-class\">Unit test</div></div>");
         }
 
         [TestMethod]

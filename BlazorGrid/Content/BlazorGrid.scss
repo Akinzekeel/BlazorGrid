@@ -31,7 +31,7 @@
             background-color: inherit;
             min-width: 0;
 
-            > *:not(.grid-cell) {
+            > *:not(.grid-row), .grid-row-span-all {
                 grid-column: 1/-1;
             }
 
@@ -39,8 +39,32 @@
                 justify-self: stretch;
                 height: 100%;
             }
+        }
 
-            .grid-cell {
+        .grid-row {
+            display: contents;
+
+            &.grid-row-placeholder .grid-cell-placeholder {
+                display: block;
+                user-select: none;
+                border-radius: $bzg-placeholder-border-radius;
+                background: $bzg-placeholder-bg;
+                overflow: hidden;
+                position: relative;
+
+                > span {
+                    top: 0;
+                    position: absolute;
+                    display: block;
+                    width: 400px;
+                    height: 100%;
+                    animation: placeholderBackground 5s infinite ease-in-out;
+                    background: linear-gradient(270deg, transparent, $bzg-placeholder-foreground, $bzg-placeholder-foreground, transparent);
+                    background-size: 400px 100%;
+                }
+            }
+
+            > * {
                 padding: $bzg-cell-padding-x $bzg-cell-padding-y;
                 border-bottom: $bzg-cell-border-bottom-width solid $bzg-cell-border-color;
                 border-left: $bzg-header-cell-hover-left-border-width solid transparent;
@@ -50,126 +74,99 @@
                 white-space: nowrap;
                 min-width: 0;
                 overflow: visible;
+            }
 
-                &.grid-cell-placeholder > div {
-                    display: block;
-                    user-select: none;
-                    border-radius: $bzg-placeholder-border-radius;
-                    background: $bzg-placeholder-bg;
-                    overflow: hidden;
-                    position: relative;
+            &.grid-header {
+                background-color: inherit;
 
-                    > span {
-                        top: 0;
-                        position: absolute;
-                        display: block;
-                        width: 400px;
-                        height: 100%;
-                        animation: placeholderBackground 5s infinite ease-in-out;
-                        background: linear-gradient(270deg, transparent, $bzg-placeholder-foreground, $bzg-placeholder-foreground, transparent);
-                        background-size: 400px 100%;
+                > * {
+                    top: 0;
+                    position: sticky;
+                    white-space: nowrap;
+                    background: $bzg-header-bg-color;
+                    z-index: 10;
+                    font-weight: bold;
+
+                    &:first-child {
+                        border-left-color: transparent !important;
                     }
-                }
 
-                &.grid-cell-row-anchor {
-                    padding: 0;
-                    z-index: -1;
-                    overflow: visible;
-                    background-color: none;
-                    box-sizing: content-box;
-                    transform: translateX(-100%);
-                    border-left: 100vw solid transparent;
-
-                    &.highlighted, &.highlighted.clickable {
-                        background: $bzg-cell-highlighted-bg !important;
+                    .blazor-grid-sort-icon::after {
+                        opacity: $bzg-header-sort-icon-opacity;
+                        content: $bzg-header-sort-icon-content;
+                        font-size: $bzg-header-sort-icon-font-size;
+                        letter-spacing: $bzg-header-sort-icon-letter-spacing;
+                        line-height: 100%;
+                        display: inline-block;
+                        min-width: 1.5rem;
+                        text-align: center;
                     }
-                }
 
-                &.clickable {
-                    cursor: pointer;
+                    &.sorted {
+                        .blazor-grid-sort-icon::after {
+                            opacity: $bzg-header-sort-icon-active-opacity !important;
+                            color: $bzg-header-sort-icon-active-color;
+                            letter-spacing: $bzg-header-sort-icon-active-letter-spacing;
+                        }
 
-                    &:hover,
-                    &:focus {
-                        ~ .grid-cell-row-anchor {
-                            background-color: $bzg-cell-hover-bg;
+                        .blazor-grid-sort-icon.sorted-asc::after {
+                            content: $bzg-header-sort-icon-asc-content;
+                        }
 
-                            ~ .grid-cell-row-anchor {
-                                background-color: transparent;
-                            }
+                        .blazor-grid-sort-icon.sorted-desc::after {
+                            content: $bzg-header-sort-icon-desc-content;
                         }
                     }
 
-                    &:active {
-                        ~ .grid-cell-row-anchor {
-                            background-color: $bzg-cell-active-bg;
+                    &.sortable {
+                        cursor: pointer;
 
-                            ~ .grid-cell-row-anchor {
-                                background-color: transparent;
+                        &:hover,
+                        &:focus {
+                            color: $bzg-header-cell-hover-color !important;
+                            background: $bzg-header-cell-hover-bg;
+
+                            .blazor-grid-sort-icon::after {
+                                opacity: 0.5;
                             }
                         }
+
+                        &:active {
+                            background: $bzg-cell-active-bg;
+                        }
+                    }
+                }
+
+                &:hover {
+                    > *:not(:first-child) {
+                        border-left: $bzg-header-cell-hover-left-border-width solid $bzg-header-cell-hover-bg;
                     }
                 }
             }
 
-            .grid-cell.grid-header-cell {
-                top: 0;
-                position: sticky;
-                white-space: nowrap;
-                background: $bzg-header-bg-color;
-                z-index: 10;
-                font-weight: bold;
-
-                &:first-child {
-                    border-left-color: transparent !important;
+            &.highlighted, &.highlighted.clickable {
+                > *, &:hover > * {
+                    background: $bzg-cell-highlighted-bg;
+                    color: $bzg-cell-highlighted-color;
                 }
+            }
 
-                .blazor-grid-sort-icon::after {
-                    opacity: $bzg-header-sort-icon-opacity;
-                    content: $bzg-header-sort-icon-content;
-                    font-size: $bzg-header-sort-icon-font-size;
-                    letter-spacing: $bzg-header-sort-icon-letter-spacing;
-                    line-height: 100%;
-                    display: inline-block;
-                    min-width: 1.5rem;
-                    text-align: center;
-                }
+            &.clickable {
+                cursor: pointer;
 
-                &.sorted {
-                    .blazor-grid-sort-icon::after {
-                        opacity: $bzg-header-sort-icon-active-opacity !important;
-                        color: $bzg-header-sort-icon-active-color;
-                        letter-spacing: $bzg-header-sort-icon-active-letter-spacing;
-                    }
-
-                    .blazor-grid-sort-icon.sorted-asc::after {
-                        content: $bzg-header-sort-icon-asc-content;
-                    }
-
-                    .blazor-grid-sort-icon.sorted-desc::after {
-                        content: $bzg-header-sort-icon-desc-content;
+                &:hover,
+                &:focus {
+                    > * {
+                        background-color: $bzg-cell-hover-bg;
+                        color: $bzg-cell-hover-color;
                     }
                 }
 
-                &.sortable {
-                    cursor: pointer;
-
-                    &:hover,
-                    &:focus {
-                        color: $bzg-header-cell-hover-color !important;
-                        background: $bzg-header-cell-hover-bg;
-
-                        .blazor-grid-sort-icon::after {
-                            opacity: 0.5;
-                        }
+                &:active {
+                    > * {
+                        background-color: $bzg-cell-active-bg;
+                        color: $bzg-cell-active-color;
                     }
-
-                    &:active {
-                        background: $bzg-cell-active-bg;
-                    }
-                }
-
-                &:hover:not(:first-child) {
-                    border-left: $bzg-header-cell-hover-left-border-width solid $bzg-header-cell-hover-bg;
                 }
             }
         }

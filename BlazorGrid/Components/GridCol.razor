@@ -3,8 +3,8 @@
 @inherits ColBase
 @if (Register == null)
 {
-    <div @attributes="FinalAttributes" @onclick="OnClickBinder">
-        @if (ChildContent is null)
+    <div @attributes="FinalAttributes">
+        @if (ChildContent == null)
         {
             @GetAutoValue()
         }

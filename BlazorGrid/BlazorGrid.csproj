@@ -1,10 +1,11 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+<Project Sdk="Microsoft.NET.Sdk.Razor">
 
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
+		<RazorLangVersion>3.0</RazorLangVersion>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<PackageId>Akinzekeel.BlazorGrid</PackageId>
-		<Version>1.0.9-preview</Version>
+		<Version>1.0.8</Version>
 		<Preview></Preview>
 		<Authors>Majid Iqbal</Authors>
 		<Company />
@@ -14,7 +15,6 @@
 		<RepositoryUrl>https://github.com/Akinzekeel/BlazorGrid</RepositoryUrl>
 		<PackageReleaseNotes></PackageReleaseNotes>
 		<PackageTags>Blazor, data grid</PackageTags>
-		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
 	<ItemGroup>
