@@ -30,7 +30,7 @@ namespace BlazorGrid.Components
         [Inject] private NavigationManager Nav { get; set; }
 
         [Parameter] public ProviderDelegate<TRow> Provider { get; set; }
-        [Parameter] public int VirtualItemSize { get; set; } = 50;
+        [Parameter] public float VirtualItemSize { get; set; } = 50;
         [Parameter] public RenderFragment<TRow> ChildContent { get; set; }
         [Parameter] public TRow EmptyRow { get; set; }
         [Parameter] public string Query { get; set; }
@@ -51,7 +51,6 @@ namespace BlazorGrid.Components
         internal ICollection<IGridCol> Columns = new List<IGridCol>();
         private Exception LoadingError { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Modifizierer \"readonly\" hinzufügen", Justification = "<Ausstehend>")]
         private Virtualize<RowWrapper<TRow>> VirtualizeRef;
 
         private async ValueTask<ItemsProviderResult<RowWrapper<TRow>>> GetItemsVirtualized(ItemsProviderRequest request)
