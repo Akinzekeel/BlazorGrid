@@ -13,4 +13,4 @@ The primary goals of this component are:
 - High performance by intelligently preventing unnecessary render events
 
 Check out the website for more information & demos:
-## [blazorgrid.z6.web.core.windows.net](https://blazorgrid.z6.web.core.windows.net/)
+## [blazorgrid.majidcodes.net](https://blazorgrid.majidcodes.net/)

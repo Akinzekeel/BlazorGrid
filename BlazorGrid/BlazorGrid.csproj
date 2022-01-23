@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Razor">
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
@@ -11,7 +11,7 @@
 		<Company />
 		<Description>A light weight data grid component for Blazor, focused on remote data. Supports sorting, virtualization, row-highlighting, JSON, gRPC and custom providers.</Description>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<PackageProjectUrl>https://blazorgrid.z6.web.core.windows.net/</PackageProjectUrl>
+		<PackageProjectUrl>https://blazorgrid.majidcodes.net/</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/Akinzekeel/BlazorGrid</RepositoryUrl>
 		<PackageReleaseNotes></PackageReleaseNotes>
 		<PackageTags>Blazor, data grid</PackageTags>

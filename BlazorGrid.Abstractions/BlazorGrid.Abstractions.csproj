@@ -9,7 +9,7 @@
     <Company />
     <Description>Common models, interfaces &amp; extension methods for BlazorGrid</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://blazorgrid.z6.web.core.windows.net/</PackageProjectUrl>
+    <PackageProjectUrl>https://blazorgrid.majidcodes.net/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Akinzekeel/BlazorGrid</RepositoryUrl>
     <PackageReleaseNotes></PackageReleaseNotes>
   </PropertyGroup>
